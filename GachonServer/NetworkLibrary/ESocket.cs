@@ -36,6 +36,10 @@ namespace NetworkLibrary
         }
         public void Dispose()
         {
+            try { if (SR != null) SR.Dispose(); } catch { }
+            try { if (SW != null) SW.Dispose(); } catch { }
+            try { if (NS != null) NS.Dispose(); } catch { }
+            try { if (tcpClient != null) tcpClient.Dispose(); } catch { }
         }
     }
 }
