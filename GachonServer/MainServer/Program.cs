@@ -35,7 +35,7 @@ namespace MainServer
             }
 
             Console.WriteLine("\r\n\r\n");
-            GachonClass.AutoCrawlingDelay = 3; // (초단위)  3초에 한번씩 최신글을 확인
+            GachonClass.AutoCrawlingDelay = 10; // (초단위)  3초에 한번씩 최신글을 확인
             GachonClass.StartAutoCrawling = true; // 강의 최신글 크롤링 시작.
             Console.ReadKey(); //다른 키가 눌릴때까지 대기
             // 다른키가 눌렸을 경우 오토크롤링 종료
