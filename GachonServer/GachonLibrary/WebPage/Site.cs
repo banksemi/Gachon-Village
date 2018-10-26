@@ -12,6 +12,7 @@ namespace GachonLibrary
              */
         public delegate void PostData(PostItem postItem);
         public event PostData NewPost;
+        public List<BoardType> boards = new List<BoardType>();
         public string Type { get; private set; }
         public string ID { get; private set; }
         public Site(string ID, string Type)
@@ -31,7 +32,34 @@ namespace GachonLibrary
         {
             NewPost.Invoke(item);
         }
-        public abstract void PageSearch(GachonUser guser);
+        public abstract void SearchMenu(GachonUser guser);
+        public abstract List<PostItem> GetList(GachonUser guser, BoardType board);
+        public abstract void GetPage(GachonUser guserm, PostItem item);
+
+        public void PageSearch(GachonUser guser)
+        {
+            SearchMenu(guser);
+            foreach (BoardType board in boards)
+            {
+                List<PostItem> items = GetList(guser, board);
+                for (int i = 0; i < items.Count; i++)
+                {
+                    if (board.LastNo < items[i].no)
+                    {
+                        if (GachonOption.VisitPage) GetPage(guser, items[i]); //아이템 정보를 읽어서 갱신
+                        NewPostEvent(items[i]);
+                        board.LastNo = items[i].no;
+                    }
+                }
+                // 혹시 게시글이 삭제됬을경우 마지막 방문 게시글을 되돌린다.
+                int this_last_no = 0;
+                if (items.Count > 0) this_last_no = items[items.Count - 1].no;
+                if (board.LastNo > this_last_no)
+                {
+                    board.LastNo = this_last_no;
+                }
+            }
+        }
         public void Update(GachonUser guser)
         {
             // 자기 자신에게 락을 걸고 수행. 

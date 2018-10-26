@@ -12,9 +12,17 @@ namespace GachonLibrary
         {
         }
 
-        public override void PageSearch(GachonUser guser)
+        public override List<PostItem> GetList(GachonUser guser, BoardType board)
         {
-            throw new NotImplementedException();
+            return null;
+        }
+
+        public override void GetPage(GachonUser guserm, PostItem item)
+        {
+        }
+
+        public override void SearchMenu(GachonUser guser)
+        {
         }
     }
 }
