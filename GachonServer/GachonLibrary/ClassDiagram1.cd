@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GachonLibrary.GachonUser">
+    <Position X="0.5" Y="0.5" Width="3.5" />
+    <Members>
+      <Field Name="_department" Hidden="true" />
+      <Field Name="_email" Hidden="true" />
+      <Field Name="_name" Hidden="true" />
+      <Field Name="_phone" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EAAAIAAAACAAgAAEAAAAgAYAUAAAABAAAAAQIgAACBE=</HashCode>
+      <FileName>GachonUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.GachonClass">
+    <Position X="8.75" Y="0.5" Width="5.75" />
+    <NestedTypes>
+      <Delegate Name="GachonLibrary.GachonClass.ClassPostData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GachonClass.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAEhCQAAAAggFwEBAAAAAAAAACAAAAAABAAAAAQRAA=</HashCode>
+      <FileName>GachonClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.Site">
+    <Position X="6.25" Y="2.75" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="GachonLibrary.Site.PostData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>WebPage\Site.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQABAAAACAAgAQAAAAAAAAAAAAAAAAAAQAAAAAAAEA=</HashCode>
+      <FileName>WebPage\Site.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.PostItem" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAQAAAAAIEAAAAIAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WebPage\PostItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.GachonBoard" Collapsed="true">
+    <Position X="3.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAABAAAAQAAAAAAAAAAAQAAAAAACAAAAAAAAI=</HashCode>
+      <FileName>WebPage\GachonBoard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.GachonCyberCampus" Collapsed="true">
+    <Position X="9" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WebPage\GachonCyberCampus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.GachonCafe" Collapsed="true">
+    <Position X="2" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WebPage\GachonCafe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GachonLibrary.GachonEClass" Collapsed="true">
+    <Position X="4.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WebPage\GachonEClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
