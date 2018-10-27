@@ -44,9 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client.cs" />
+    <Compile Include="SocketEvent.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ESocket.cs" />
+    <Compile Include="UserSocket.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
