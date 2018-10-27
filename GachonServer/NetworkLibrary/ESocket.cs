@@ -18,6 +18,7 @@ namespace NetworkLibrary
         public event SocketEvent.Connect Connect;
         public event SocketEvent.Receive Receive;
         public event SocketEvent.Exit Exit;
+        public bool isClosed { get; private set; }
         TcpClient tcpClient = null;
         NetworkStream NS = null;
         StreamReader SR = null;
@@ -48,25 +49,46 @@ namespace NetworkLibrary
             while(true)
             {
                 String message = null;
-                message = SR.ReadLine();
-                if (message == null) break;
-                if (Receive != null) Receive(this, message);
+                try
+                {
+                    message = SR.ReadLine();
+                    if (message == null) break;
+                    if (Receive != null) Receive(this, message);
+                }
+                catch(IOException e) // e.InnerException.GetType().Name == SocketException
+                {
+                    // 소켓통신에서 오류가 발생할경우 커넥션 강제 종료 (Ex 연결이 끊긴경우)
+                    break;
+                }
             }
             Dispose();
         }
-        public void Send(string message)
+        public bool Send(string message)
         {
-            SW.WriteLine(message);
-            SW.Flush();
+            try
+            {
+                SW.WriteLine(message);
+                SW.Flush();
+                return true;
+            }
+            catch (System.ObjectDisposedException e)
+            {
+                // 오브젝트가 종료된경우, 더이상 메세지를 보내지 않고 무시함.
+            }
+            return false;
         }
         public void Dispose()
         {
-            if (Exit != null) Exit(this);
-            try { if (SR != null) SR.Dispose(); } catch { }
-            try { if (SW != null) SW.Dispose(); } catch { }
-            try { if (NS != null) NS.Dispose(); } catch { }
-            try { if (tcpClient != null) tcpClient.Dispose(); } catch { }
-            try { if (thread != null) thread.Abort(); } catch { }
+            lock (this)
+            {
+                if (Exit != null) Exit(this);
+                isClosed = true;
+                try { if (SR != null) SR.Dispose(); } catch { }
+                try { if (SW != null) SW.Dispose(); } catch { }
+                try { if (NS != null) NS.Dispose(); } catch { }
+                try { if (tcpClient != null) tcpClient.Dispose(); } catch { }
+                try { if (thread != null) thread.Abort(); } catch { }
+            }
         }
     }
 }
