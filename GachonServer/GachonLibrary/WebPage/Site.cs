@@ -69,5 +69,9 @@ namespace GachonLibrary
                 PageSearch(guser);
             }
         }
+        protected void NewBoard(BoardType.PostType type, string name, Uri baseUri, string href)
+        {
+            boards.Add(new BoardType(type, new Uri(baseUri,href).AbsoluteUri));
+        }
     }
 }
