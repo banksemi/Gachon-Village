@@ -57,6 +57,7 @@ namespace NetworkLibrary
         public void Send(string message)
         {
             SW.WriteLine(message);
+            SW.Flush();
         }
         public void Dispose()
         {
