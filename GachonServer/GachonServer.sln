@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GachonLibrary", "GachonLibr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSupport", "WebSupport\WebSupport.csproj", "{B0512E58-1C25-413E-A852-6118BDAF6607}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkLibrary", "NetworkLibrary\NetworkLibrary.csproj", "{27AA39A8-A284-4054-A84C-72CEC54ED6BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B0512E58-1C25-413E-A852-6118BDAF6607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0512E58-1C25-413E-A852-6118BDAF6607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0512E58-1C25-413E-A852-6118BDAF6607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27AA39A8-A284-4054-A84C-72CEC54ED6BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27AA39A8-A284-4054-A84C-72CEC54ED6BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27AA39A8-A284-4054-A84C-72CEC54ED6BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27AA39A8-A284-4054-A84C-72CEC54ED6BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
