@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +45,6 @@ namespace GachonLibrary
 
         public override void SearchMenu(GachonUser guser)
         {
-            if (ID != "37984") return;
             Uri baseuri = new Uri("http://cyber.gachon.ac.kr/mod/ubboard/index.php?id=" + ID);
             HtmlDocument dom = guser.VisitPage(baseuri);
             HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[contains(@class,'boards')]//tr/td[1]");
