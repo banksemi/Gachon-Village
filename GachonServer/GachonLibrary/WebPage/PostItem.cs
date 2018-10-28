@@ -31,6 +31,7 @@ namespace GachonLibrary
         {
             get
             {
+                if (Content == null) return "Not Content";
                 if (Content.Length < 30) return Content;
                 else return Content.Substring(0, 30) + " . . .";
             }
