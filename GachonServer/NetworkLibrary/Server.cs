@@ -59,7 +59,7 @@ namespace NetworkLibrary
             if (Exit != null) Exit(socket);
         }
 
-        private void Client_Receive(ESocket socket, string Message)
+        private void Client_Receive(ESocket socket, JObject Message)
         {
             if (Receive != null) Receive(socket, Message);
         }

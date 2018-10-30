@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NetworkLibrary;
 namespace MainClient
 {
@@ -18,11 +19,13 @@ namespace MainClient
             while (true)
             {
                 System.Threading.Thread.Sleep(1000);
-                server.Send("Hi");
+                JObject json = new JObject();
+                json["test"] = "Hi";
+                server.Send(json);
             }
         }
 
-        private static void Server_Receive(ESocket socket, string Message)
+        private static void Server_Receive(ESocket socket, JObject Message)
         {
             Console.WriteLine(socket.GetHashCode() + " : " + Message);
         }

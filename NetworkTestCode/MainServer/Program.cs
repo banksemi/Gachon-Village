@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetworkLibrary;
+using Newtonsoft.Json.Linq;
 namespace MainServer
 {
     class Program
@@ -20,9 +21,9 @@ namespace MainServer
             }
         }
 
-        private static void Server_Receive(ESocket socket, string Message)
+        private static void Server_Receive(ESocket socket, JObject Message)
         {
-            Console.WriteLine(socket.GetHashCode() + " : " + Message);
+            Console.WriteLine(socket.GetHashCode() + " : " + Message["test"]);
             // return
             socket.Send(Message);
         }

@@ -53,7 +53,8 @@ namespace NetworkLibrary
                 {
                     message = SR.ReadLine();
                     if (message == null) break;
-                    if (Receive != null) Receive(this, message);
+                    JObject json = JObject.Parse(message);
+                    if (Receive != null) Receive(this, json);
                 }
                 catch(IOException e) // e.InnerException.GetType().Name == SocketException
                 {
@@ -63,11 +64,11 @@ namespace NetworkLibrary
             }
             Dispose();
         }
-        public bool Send(string message)
+        public bool Send(JObject message)
         {
             try
             {
-                SW.WriteLine(message);
+                SW.WriteLine(JsonConvert.SerializeObject(message));
                 SW.Flush();
                 return true;
             }
