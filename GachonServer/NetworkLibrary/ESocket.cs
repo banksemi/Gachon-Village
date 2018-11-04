@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -87,7 +86,7 @@ namespace NetworkLibrary
                 try { if (SR != null) SR.Dispose(); } catch { }
                 try { if (SW != null) SW.Dispose(); } catch { }
                 try { if (NS != null) NS.Dispose(); } catch { }
-                try { if (tcpClient != null) tcpClient.Dispose(); } catch { }
+                try { if (tcpClient != null) tcpClient.Close(); } catch { }
                 try { if (thread != null) thread.Abort(); } catch { }
             }
         }
