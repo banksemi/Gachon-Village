@@ -17,8 +17,8 @@ namespace GachonLibrary
         public override List<PostItem> GetList(GachonUser guser, BoardType board)
         {
             List<PostItem> result = new List<PostItem>();
-            HtmlDocument dom = guser.VisitPage(board.url);
-            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[contains(@class,'article-board')]//table//tr");
+            HtmlDocument dom = guser.VisitPage(board.url, Encoding.Default);
+            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[contains(@class,'article-board')]//div[contains(@class,'inner_list')]");
             //timer.Print();
             if (sets != null)
             {
