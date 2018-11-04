@@ -46,7 +46,7 @@ namespace GachonLibrary
         public override void SearchMenu(GachonUser guser)
         {
             Uri baseuri = new Uri("https://cafe.naver.com/" + ID);
-            HtmlDocument dom = guser.VisitPage(baseuri);         
+            HtmlDocument dom = guser.VisitPage(baseuri, Encoding.Default);         
             HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//ul[(@class='cafe-menu-list')]//li");
             foreach (HtmlNode node in sets)
             {
