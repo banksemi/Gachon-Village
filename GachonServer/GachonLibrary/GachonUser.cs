@@ -125,7 +125,7 @@ namespace GachonLibrary
                 }
                 HtmlDocument eclassinfo = null;
                 if (need_eclass_info.Count > 0)
-                    eclassinfo = WebPacket.Web_GET_Html(cookie, "http://eclass.gachon.ac.kr/index.jsp");
+                    eclassinfo = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "http://eclass.gachon.ac.kr/index.jsp");
                 // 새로운 클래스가 생겼으니 eclass 정보를 읽어서 새로 생긴 클래스와 연결한다.
                 foreach (GachonClass newclass in need_eclass_info)
                 {
@@ -160,7 +160,7 @@ namespace GachonLibrary
         public void GetUserInfo()
         {
             if (LoginOk == false) return; // 마지막 로그인을 실패했을경우
-            HtmlDocument data = WebPacket.Web_GET_Html(cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
+            HtmlDocument data = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
             Name = data.GetElementbyId("id_firstname").Attributes["value"].Value;
             Email = data.GetElementbyId("id_email").Attributes["value"].Value;
             Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
@@ -203,13 +203,15 @@ namespace GachonLibrary
             else
                 return ToString();
         }
-        public HtmlDocument VisitPage(Uri url)
+        public HtmlDocument VisitPage(Uri url, Encoding encoding = null)
         {
-            return WebPacket.Web_GET_Html(cookie, url.AbsoluteUri);
+            if (encoding == null) encoding = Encoding.UTF8;
+            return WebPacket.Web_GET_Html(encoding, cookie, url.AbsoluteUri);
         }
-        public HtmlDocument VisitPage(string url)
+        public HtmlDocument VisitPage(string url, Encoding encoding = null)
         {
-            return WebPacket.Web_GET_Html(cookie, url);
+            if (encoding == null) encoding = Encoding.UTF8;
+            return WebPacket.Web_GET_Html(encoding, cookie, url);
         }
 
     }
