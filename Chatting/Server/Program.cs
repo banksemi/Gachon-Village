@@ -30,7 +30,7 @@ namespace Server
         private static void Server_Connect(ESocket socket)
         {
             list.Add(socket, new User());
-            list[socket].name = list.GetHashCode().ToString();
+            list[socket].name = socket.GetHashCode().ToString();
         }
         private static void Server_Receive(ESocket socket, JObject Message)
         {
