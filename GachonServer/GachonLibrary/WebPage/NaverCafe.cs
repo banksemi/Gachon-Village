@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,7 @@ namespace GachonLibrary
         {
             List<PostItem> result = new List<PostItem>();
             HtmlDocument dom = guser.VisitPage(board.url);
-            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[@class='list']//table//tr");
+            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[contains(@class,'article-board')]//table//tr");
             //timer.Print();
             if (sets != null)
             {
@@ -47,7 +47,7 @@ namespace GachonLibrary
         {
             Uri baseuri = new Uri("https://cafe.naver.com/" + ID);
             HtmlDocument dom = guser.VisitPage(baseuri, Encoding.Default);         
-            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//ul[(@class='cafe-menu-list')]//li");
+            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//ul[@class='cafe-menu-list']//li");
             foreach (HtmlNode node in sets)
             {
                 string menu_title = ParseSupport.StringFromHtml(node.InnerText);
