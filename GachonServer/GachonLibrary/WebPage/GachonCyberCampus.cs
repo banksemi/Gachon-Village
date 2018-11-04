@@ -39,8 +39,11 @@ namespace GachonLibrary
             return result;
         }
 
-        public override void GetPage(GachonUser guserm, PostItem item)
+        public override void GetPage(GachonUser guser, PostItem post)
         {
+            HtmlDocument dom = guser.VisitPage(post.url);
+            post.Title = ParseSupport.StringFromHtml(dom.DocumentNode.SelectSingleNode("//div[@class='subject']").InnerText);
+            post.Content = ParseSupport.StringFromHtml(dom.DocumentNode.SelectSingleNode("//div[@class='ubboard']//div[contains(@class,'text_to_html')]").InnerText);
         }
 
         public override void SearchMenu(GachonUser guser)
