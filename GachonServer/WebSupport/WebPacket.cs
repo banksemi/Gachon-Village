@@ -13,7 +13,7 @@ namespace WebSupport
     public static class WebPacket
     {
         private static string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
-        public static string Web_Get(CookieContainer Cookie, string url, string referer = null)
+        public static string Web_Get(Encoding encoding, CookieContainer Cookie, string url, string referer = null)
         {
             HttpWebRequest hreq = (HttpWebRequest)WebRequest.Create(url);
             hreq.Method = "GET";
@@ -29,7 +29,7 @@ namespace WebSupport
             if (hres.StatusCode == HttpStatusCode.OK)
             {
                 Stream dataStream = hres.GetResponseStream();
-                StreamReader sr = new StreamReader(dataStream, Encoding.UTF8);
+                StreamReader sr = new StreamReader(dataStream, encoding);
                 string result = sr.ReadToEnd();
 
                 hres.Close();
@@ -64,9 +64,9 @@ namespace WebSupport
             }
             return null;
         }
-        public static HtmlDocument Web_GET_Html(CookieContainer Cookie, string url, string referer = null)
+        public static HtmlDocument Web_GET_Html(Encoding encoding, CookieContainer Cookie, string url, string referer = null)
         {
-            string data = Web_Get(Cookie, url, referer);
+            string data = Web_Get(encoding, Cookie, url, referer);
             if (data == null) return null;
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(data);
