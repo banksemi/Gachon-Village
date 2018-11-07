@@ -72,7 +72,7 @@ namespace WebSupport
                     }
                 }
             }
-            return temp;
+            return StringFromHtml(temp);
         }
     }
 }
