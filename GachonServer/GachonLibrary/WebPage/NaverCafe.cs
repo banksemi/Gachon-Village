@@ -18,7 +18,7 @@ namespace GachonLibrary
         {
             List<PostItem> result = new List<PostItem>();
             HtmlDocument dom = guser.VisitPage(board.url, Encoding.Default);
-            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[contains(@class,'article-board')]//div[contains(@class,'inner_list')]");
+            HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//div[@id='main-area']//tr");
             //timer.Print();
             if (sets != null)
             {
@@ -26,13 +26,24 @@ namespace GachonLibrary
                 {
                     if (node.InnerText.IndexOf("No registered post") < 0 && node.InnerText.IndexOf("등록된 게시글이 없습니다") < 0 && node.ChildNodes["th"] == null)
                     {
-                        HtmlNodeCollection datas = node.SelectNodes(".//td");
-                        string url = ParseSupport.StringFromHtml(datas[1].ChildNodes["a"].Attributes["href"].Value);
+                        HtmlNodeCollection datas = node.SelectNodes("./td");
+                        HtmlNodeCollection TitleDivs = datas[0].SelectNodes("./div");
+                        
+                        if ((datas.Count ==5) &&(!TitleDivs[0].InnerText.Equals("공지")))
+                        {
+                            TitleDivs[1] = TitleDivs[1].SelectSingleNode(".//a");
+                            datas[1] = datas[1].SelectSingleNode(".//a");
+                            string url = ParseSupport.StringFromHtml(TitleDivs[1].Attributes["href"].Value);
+                      
+                            result.Insert(0, new PostItem(board.type, 
+                                this, 
+                                url, 
+                                Int32.Parse(TitleDivs[0].InnerText),
+                                ParseSupport.StringFromHtml(TitleDivs[1].InnerText).Trim(),
+                                datas[1].InnerText.Trim(),
+                                DateTime.Parse(datas[2].InnerText)));
+                        }
 
-                        result.Insert(0, new PostItem(board.type, this, url, Int32.Parse(datas[0].InnerText),
-                            ParseSupport.StringFromHtml(datas[1].InnerText),
-                            datas[2].InnerText,
-                             DateTime.Parse(datas[3].InnerText)));
                     }
                 }
             }
