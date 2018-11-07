@@ -46,5 +46,33 @@ namespace WebSupport
             text = text.Replace("&gt;", ">");
             return text;
         }
+        public static string StringFromHtmlNode(HtmlNode node)
+        {
+            string temp;
+            temp = node.InnerHtml;
+            temp = temp.Replace("</p>", "\n");
+            temp = temp.Replace("</div>", "\n");
+            temp = temp.Replace("</tr>", "\n");
+            temp = temp.Replace("</td>", " ");
+
+            for (int i = 0; i < temp.Length; i++)
+            {
+                if (temp[i].Equals('<'))
+                {
+                    int start_tag = i;
+                    for (int j = i + 1; j < temp.Length; j++)
+                    {
+                        if (temp[j].Equals('>'))
+                        {
+                            int end_tag = j;
+                            temp = temp.Substring(0, start_tag) + temp.Substring(end_tag + 1, temp.Length - end_tag - 1);
+                            i--;
+                            break;
+                        }
+                    }
+                }
+            }
+            return StringFromHtml(temp);
+        }
     }
 }
