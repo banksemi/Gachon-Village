@@ -26,6 +26,7 @@ namespace GachonLibrary
         /// </summary>
         public string ID { get; private set; }
         private string password = null;
+        private string escape_password { get { return Uri.EscapeDataString(password); } }
         #region 유저 정보값 변수 설정
         /// <summary>
         ///  해당 학생의 이름입니다.
@@ -81,11 +82,33 @@ namespace GachonLibrary
         private string _phone = null;
         private string _email = null;
         #endregion
-        public GachonUser(string ID, string password)
+        private GachonUser(string ID, string password)
         {
             this.ID = ID;
-            this.password = Uri.EscapeDataString(password);
+            this.password = password;
             Login();
+        }
+        public static GachonUser GetObject(string ID, string password)
+        {
+            if (GachonObjects.AllUser.ContainsKey(ID))
+            {
+                if (GachonObjects.AllUser[ID].password == password) return GachonObjects.AllUser[ID];
+                else return null;
+            }
+            else
+            {
+                GachonUser user = new GachonUser(ID, password);
+                if (user.LoginOk)
+                {
+                    GachonObjects.AllUser.Add(ID, user);
+                    return user;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
         }
         /// <summary>
         /// 로그인 세션을 강제로 실행시킵니다.
@@ -98,11 +121,11 @@ namespace GachonLibrary
             string a = WebPacket.Web_POST(cookie,
                 "https://sson.kyungwon.ac.kr/sso/pmi-sso-login-uid-password2.jsp",
                 "https://www.gachon.ac.kr/site/login_sso.jsp",
-                "return_url=&uid=" + ID + "&password=" + password + "&x=41&y=20");
+                "return_url=&uid=" + ID + "&password=" + escape_password + "&x=41&y=20");
             if (a.IndexOf("location.href='https://www.gachon.ac.kr:443/site/login.jsp'") >= 0)
             {
                 // 사이버 캠퍼스에 로그인을 하면서 강의 정보 불러옴.
-                HtmlDocument data = WebPacket.Web_POST_Html(cookie, "https://cyber.gachon.ac.kr/login/index.php", "https://cyber.gachon.ac.kr/login.php", "username=" + ID + "&password=" + password);
+                HtmlDocument data = WebPacket.Web_POST_Html(cookie, "https://cyber.gachon.ac.kr/login/index.php", "https://cyber.gachon.ac.kr/login.php", "username=" + ID + "&password=" + escape_password);
                 List<GachonClass> need_eclass_info = new List<GachonClass>();
                 foreach (HtmlNode node in data.DocumentNode.SelectNodes("//div[@class='course_box']"))
                 {
@@ -113,14 +136,12 @@ namespace GachonLibrary
                     {
                         if (!GachonObjects.AllClass.ContainsKey(key))
                         {
-                            GachonClass newclass = new GachonClass(title,key);
+                            GachonClass newclass =GachonClass.GetObject(title, key, true);
                             JObject urlq = ParseSupport.UrlQueryParser(node.SelectSingleNode(".//a[@class='course_link']").Attributes["href"].Value);
                             newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
-                            GachonObjects.AllClass.Add(newclass.Key, newclass);
                             need_eclass_info.Add(newclass);
                         }
-                        Takes.Add(GachonObjects.AllClass[key]);
-                        GachonObjects.AllClass[key].Users.Add(this);
+                        CombineClass(GachonObjects.AllClass[key]);
                     }
                 }
                 HtmlDocument eclassinfo = null;
@@ -153,6 +174,15 @@ namespace GachonLibrary
             {
                 gc.Users.Remove(this);
             }
+            GachonObjects.AllUser.Remove(ID);
+        }
+        public void Dispose()
+        {
+            Logout();
+        }
+        public void CombineClass(GachonClass gachonClass)
+        {
+            gachonClass.CombineTakeUser(this);
         }
         /// <summary>
         /// 해당 학생의 개인정보를 강제로 갱신합니다.

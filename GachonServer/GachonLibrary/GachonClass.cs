@@ -50,13 +50,40 @@ namespace GachonLibrary
         public List<GachonUser> Users = new List<GachonUser>();
         private Thread AutoCrawlingThread = null;
         private static bool _startautocrawling = false;
-        public GachonClass(string Title, string key)
+        private GachonClass(string Title, string key, bool Formal = false)
         {
             if (GachonObjects.AllClass.ContainsKey(key)) throw new DuplicationError();
+            // 규칙을 가진 강의일경우 (Year(4) + ID(5) + Sec_ID(3))
+            if (Formal == true)
+            {
+                Initialization(Title, Int32.Parse(key.Substring(0, 4)), key.Substring(4, 5), key.Substring(9, 3));
+            }
+            else
+            {
+                Initialization(Title, DateTime.Now.Year, key, "001");
+            }
+        }
+        public static GachonClass GetObject(string Title, string key, bool Formal = false)
+        {
+            if (GachonObjects.AllClass.ContainsKey(key)) return GachonObjects.AllClass[key];
+            else
+            {
+                GachonClass gachonClass = new GachonClass(Title, key, Formal);
+                GachonObjects.AllClass.Add(key, gachonClass);
+                return gachonClass;
+            }
+        }
+        public void CombineTakeUser(GachonUser gachonUser)
+        {
+            if (!gachonUser.Takes.Contains(this)) gachonUser.Takes.Add(this);
+            if (!Users.Contains(gachonUser)) Users.Add(gachonUser);
+        }
+        private void Initialization(string Title, int year, string ID, string Sec_ID)
+        {
             this.Title = Title;
-            year = Int32.Parse(key.Substring(0, 4));
-            ID = key.Substring(4, 5);
-            Sec_ID = key.Substring(9, 3);
+            this.year = year;
+            this.ID = ID;
+            this.Sec_ID = Sec_ID;
             if (StartAutoCrawling == true)
             {
                 AutoCrawlingThread = new Thread(CheckNewPost_Thread);
