@@ -10,5 +10,6 @@ namespace GachonLibrary
     {
         public static Dictionary<string, GachonClass> AllClass = new Dictionary<string, GachonClass>();
         public static Dictionary<string, Site> AllSite = new Dictionary<string, Site>();
+        public static Dictionary<string, GachonUser> AllUser = new Dictionary<string, GachonUser>();
     }
 }
