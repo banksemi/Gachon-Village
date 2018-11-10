@@ -375,3 +375,6 @@ private_data(git).cs
 # Builds
 [Uu]nity [Cc]lient/**/*.apk
 [Uu]nity [Cc]lient/**/*.unitypackage
+
+# Not Upload NGUI
+[Uu]nity [Cc]lient/**/Assets/NGUI/
