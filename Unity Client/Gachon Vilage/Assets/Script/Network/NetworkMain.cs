@@ -5,9 +5,11 @@ using UnityEngine;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Threading;
 public class NetworkMain : MonoBehaviour {
     private LinkedList<JObject> queue = new LinkedList<JObject>();
     private static Client server;
+    private Thread thread;
     public GameObject TipMessageObject;
     public static void SendMessage(JObject json)
     {
@@ -17,10 +19,15 @@ public class NetworkMain : MonoBehaviour {
     void Start()
     {
         DontDestroyOnLoad(this);
-        server = new Client("easyrobot.co.kr", 1119);
-        server.Connect += Server_Connect;
-        server.Receive += Server_Receive;
-        server.Start();
+        thread = new Thread(
+            delegate ()
+            {
+                server = new Client("easyrobot.co.kr", 1119);
+                server.Connect += Server_Connect;
+                server.Receive += Server_Receive;
+                server.Start();
+            });
+        thread.Start();
     }
     private void TipMessage(string Message)
     {
@@ -61,6 +68,7 @@ public class NetworkMain : MonoBehaviour {
     }
     void OnDestroy()
     {
+        thread.Abort();
         server.Dispose();
 
     }
