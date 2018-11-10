@@ -378,3 +378,4 @@ private_data(git).cs
 
 # Not Upload NGUI
 [Uu]nity [Cc]lient/**/Assets/NGUI/
+[Uu]nity [Cc]lient/**/Assets/NGUI.meta
