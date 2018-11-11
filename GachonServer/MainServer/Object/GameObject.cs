@@ -93,7 +93,6 @@ namespace MainServer
             {
                 if (user.isStart) // 월드에 들어와있는 유저들에게만
                 {
-                    Console.WriteLine("보냄");
                     user.socket.Send(json);
                 }
             }

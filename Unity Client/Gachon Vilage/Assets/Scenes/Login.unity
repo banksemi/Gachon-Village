@@ -1014,7 +1014,7 @@ Prefab:
     - target: {fileID: 114269292510568814, guid: ee53d28d70039294ea3fb7dfedc0e91d,
         type: 2}
       propertyPath: mValue
-      value: banksemi
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee53d28d70039294ea3fb7dfedc0e91d, type: 2}
@@ -1178,7 +1178,7 @@ Prefab:
     - target: {fileID: 114269292510568814, guid: ee53d28d70039294ea3fb7dfedc0e91d,
         type: 2}
       propertyPath: mValue
-      value: gacsh98+
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee53d28d70039294ea3fb7dfedc0e91d, type: 2}

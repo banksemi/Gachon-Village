@@ -75,11 +75,9 @@ public class Character : MonoBehaviour {
             }
             else if (movelist.Count == 0 && movetime > NetworkMain.MoveDeley * 2)
             {
-                //Debug.Log("ㅇㄴㄻㅉㄸㄻ");
                // transform.position = nextmove;
             }
             movetime += Time.deltaTime;
-            Debug.Log(movelist.Count);
         }
 
     }
