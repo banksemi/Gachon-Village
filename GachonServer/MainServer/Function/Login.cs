@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetworkLibrary;
 using GachonLibrary;
+using Newtonsoft.Json.Linq;
 namespace MainServer
 {
     static class Function
@@ -21,15 +22,26 @@ namespace MainServer
                 NetworkMessageList.TipMessage(socket, "비밀번호를 입력해주세요.");
                 return;
             }
-            GachonUser user = GachonUser.GetObject(id, password);
-            if (user == null)
+            GachonUser gachonAccount = GachonUser.GetObject(id, password);
+            if (gachonAccount == null)
             {
                 NetworkMessageList.TipMessage(socket, "로그인에 실패했습니다.");
+                return;
             }
-            else
+            User user = null;
+            try
             {
-                NetworkMessageList.TipMessage(socket, "로그인에 성공했습니다.");
+                user = new User(socket, gachonAccount);
             }
+            catch (DuplicationError e)
+            {
+                NetworkMessageList.TipMessage(socket, "이 계정은 다른 클라이언트에서 접속중입니다.");
+                return;
+            }
+            JObject json = new JObject();
+            json["type"] = NetworkProtocol.EnterWorld;
+            json["no"] = user.no; // 플레이어를 나타내는 객체가 무엇인지 알려준다.
+            socket.Send(json);
         }
     }
 }

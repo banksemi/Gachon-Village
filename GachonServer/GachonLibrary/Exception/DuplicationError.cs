@@ -8,5 +8,13 @@ namespace GachonLibrary
 {
     public class DuplicationError : System.Exception
     {
+        public DuplicationError()
+        {
+
+        }
+        public DuplicationError(string message) : base(message)
+        {
+
+        }
     }
 }

@@ -25,6 +25,10 @@ namespace MainServer
 
         private static void Server_Exit(ESocket socket)
         {
+            if (User.Items.ContainsKey(socket))
+            {
+                User.Items[socket].Dispose();
+            }
         }
 
         private static void Server_Receive(ESocket socket, Newtonsoft.Json.Linq.JObject Message)
@@ -33,6 +37,9 @@ namespace MainServer
             {
                 case NetworkProtocol.Login:
                     Function.Login(socket, (string)Message["id"], (string)Message["password"]);
+                    break;
+                case NetworkProtocol.EnterWorld:
+                    User.Items[socket].Start();
                     break;
             }
         }
