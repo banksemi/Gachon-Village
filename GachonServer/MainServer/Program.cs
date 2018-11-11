@@ -68,6 +68,7 @@ namespace MainServer
                     }
                     time =  time.AddMilliseconds(delay);
                 }
+                System.Threading.Thread.Sleep(5);
             }
         }
         private static void Server_Connect(ESocket socket)
