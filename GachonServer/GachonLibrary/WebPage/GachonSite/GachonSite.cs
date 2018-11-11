@@ -26,26 +26,30 @@ namespace GachonLibrary
                 foreach(HtmlNode node in sets)
                 {
                     string menu_title = node.InnerText;
-                    if (menu_title == "HOME")
-                        continue;
-                    if (menu_title == "공지사항")
+                    string href = ParseSupport.StringFromHtml(node.Attributes["href"].Value);
+
+                    switch (menu_title)
                     {
-                        string href = ParseSupport.StringFromHtml(node.Attributes["href"].Value);
-                        boards.Add(new BoardType(BoardType.PostType.Notice, new Uri(baseuri, href).AbsoluteUri));
-                    }
-                    else if (menu_title == "강의자료실" || menu_title == "토론/시험자료실")
-                    {
-                        string href = ParseSupport.StringFromHtml(node.Attributes["href"].Value);
-                        boards.Add(new BoardType(BoardType.PostType.Lecture, new Uri(baseuri, href).AbsoluteUri));
-                    }
-                    else if (menu_title == "레포트제출실")
-                    {
-                    }
-                    else
-                    {
-                        string href = ParseSupport.StringFromHtml(node.Attributes["href"].Value);
-                        boards.Add(new BoardType(BoardType.PostType.ETC, new Uri(baseuri, href)));
-                    }
+                        case "공지사항":
+                            boards.Add(new BoardType(BoardType.PostType.Notice, new Uri(baseuri, href).AbsoluteUri));
+                            break;
+
+                        case "강의자료실":
+                        case "토론/시험자료실":
+                            boards.Add(new BoardType(BoardType.PostType.Lecture, new Uri(baseuri, href).AbsoluteUri));
+                            break;
+
+                        case "레포트제출실":
+                            boards.Add(new BoardType(BoardType.PostType.Homework, new Uri(baseuri, href).AbsoluteUri));
+                            break;
+
+                        case "HOME":
+                            break;
+
+                        default:
+                            boards.Add(new BoardType(BoardType.PostType.ETC, new Uri(baseuri, href)));
+                            break;                         
+                    }              
                 }
             }
         }
@@ -63,13 +67,49 @@ namespace GachonLibrary
                     if (node.InnerText.IndexOf("등록된 글이") < 0)
                     {
                         HtmlNodeCollection datas = node.SelectNodes(".//td");
-                        string url = datas[1].InnerHtml;
-                        Regex reg = new Regex(@"javascript:goPage\([0-9]+,([0-9]+)\)");
-                        url = board.url.Replace("list.jsp", "view.jsp") + "&article_no=" + reg.Match(url).Groups[1].Value;
-                        result.Insert(0,new PostItem(board.type, this ,url,Int32.Parse(datas[0].InnerText),
-                            ParseSupport.StringFromHtml(datas[1].InnerText),
-                            datas[2].InnerText,
-                             DateTime.Parse(datas[3].InnerText)));
+                        string url = datas[1].SelectSingleNode(".//a").Attributes["href"].Value;
+                        url = ParseSupport.StringFromHtml(url);
+
+                        string no = null;
+                        if (url.IndexOf("java") == 0)
+                        {
+                            Regex reg = new Regex(@"javascript:goPage\([0-9]+,([0-9]+)\)");
+                            no = reg.Match(url).Groups[1].Value;
+                            url = board.url.Replace("list.jsp", "view.jsp") + "&article_no=" + no;                            
+                        }
+                        else
+                        {
+                            Uri uri = new Uri(new Uri(board.url), url);
+                            url = uri.AbsoluteUri;
+                            no = ParseSupport.UrlQueryParser(url)["article_no"].ToString();
+                        }
+                        PostItem item;
+                        if (board.type == BoardType.PostType.Homework)
+                        {
+                            item = new PostItem(BoardType.PostType.Homework)
+                            {
+                                source = this,
+                                url = url,
+                                no = Int32.Parse(no),
+                                Title = ParseSupport.StringFromHtml(datas[1].InnerText),
+                                s_time = DateTime.Parse(datas[2].InnerText.Substring(0, 10)),
+                                e_time = DateTime.Parse(datas[2].InnerText.Substring(13, 10)),
+                                num_submitted = Int32.Parse(datas[5].InnerText.Split('/')[0])
+                            };                                  
+                        }
+                        else
+                        {
+                            item = new PostItem(BoardType.PostType.Homework)
+                            {
+                                source = this,
+                                url = url,
+                                no = Int32.Parse(no),
+                                Title = ParseSupport.StringFromHtml(datas[1].InnerText),
+                                Publisher = datas[2].InnerText,
+                                time = DateTime.Parse(datas[3].InnerText)
+                            };
+                        }
+                        result.Insert(0, item);
                     }
                 }
             }
