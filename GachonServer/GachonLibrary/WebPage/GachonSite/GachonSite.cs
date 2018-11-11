@@ -99,7 +99,7 @@ namespace GachonLibrary
                         }
                         else
                         {
-                            item = new PostItem(BoardType.PostType.Homework)
+                            item = new PostItem(board.type)
                             {
                                 source = this,
                                 url = url,
