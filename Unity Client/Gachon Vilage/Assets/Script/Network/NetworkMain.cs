@@ -14,7 +14,8 @@ public class NetworkMain : MonoBehaviour {
     private Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
     public GameObject TipMessageObject;
     public GameObject NewGameObject;
-    public int myNo;
+    public static int myNo;
+    public static float MoveDeley = 0.1f;
     public static void SendMessage(JObject json)
     {
         server.Send(json);
@@ -51,7 +52,7 @@ public class NetworkMain : MonoBehaviour {
     private void Server_Connect(ESocket socket)
     {
     }
-    private bool isPlayer(JObject json)
+    private static bool isPlayer(JObject json)
     {
         return myNo == (int)json["no"];
     }
@@ -86,6 +87,7 @@ public class NetworkMain : MonoBehaviour {
                     gameObjects.Add((int)json["no"], gameObject.GetComponent<Character>());
                 }
                 character = GetGameObject(json);
+                character.No = (int)json["no"];
                 character.Name = (string)json["name"];
                 character.transform.position = new Vector3((int)json["x"], (int)json["y"], (int)json["z"]);
                 break;
@@ -93,6 +95,10 @@ public class NetworkMain : MonoBehaviour {
                 character = GetGameObject(json);
                 gameObjects.Remove((int)json["no"]);
                 DestroyImmediate(character.gameObject);
+                break;
+            case NetworkProtocol.Move:
+                character = GetGameObject(json);
+                character.Move(new Vector3((float)json["x"], (float)json["y"], (float)json["z"]));
                 break;
         }
     }

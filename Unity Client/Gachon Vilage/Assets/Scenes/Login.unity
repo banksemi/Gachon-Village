@@ -593,7 +593,6 @@ MonoBehaviour:
   TipMessageObject: {fileID: 1496106428209250, guid: 10c4217cb5d57414babf4c6373d4c029,
     type: 2}
   NewGameObject: {fileID: 0}
-  myNo: 0
 --- !u!4 &737580953
 Transform:
   m_ObjectHideFlags: 0
@@ -1012,6 +1011,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114269292510568814, guid: ee53d28d70039294ea3fb7dfedc0e91d,
+        type: 2}
+      propertyPath: mValue
+      value: banksemi
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee53d28d70039294ea3fb7dfedc0e91d, type: 2}
   m_IsPrefabAsset: 0
@@ -1170,6 +1174,11 @@ Prefab:
         type: 2}
       propertyPath: inputType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114269292510568814, guid: ee53d28d70039294ea3fb7dfedc0e91d,
+        type: 2}
+      propertyPath: mValue
+      value: gacsh98+
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee53d28d70039294ea3fb7dfedc0e91d, type: 2}

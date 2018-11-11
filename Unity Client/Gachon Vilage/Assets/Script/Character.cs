@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,11 @@ public class Character : MonoBehaviour {
     private Collider col;
     public int No;
     private string _name;
+    private List<Vector3> movelist = new List<Vector3>();
+    public float movetime = 1;
+    public Vector3 startmove;
+    public Vector3 nextmove;
+    public bool LastMove = false;
     public string Name
     {
         get { return _name; }
@@ -44,10 +50,50 @@ public class Character : MonoBehaviour {
             label.transform.localPosition = screenPos;
             label.gameObject.SetActive(true);
         }
+        // 캐릭터 움직임
+        if (No != NetworkMain.myNo)
+        {
+            if (movetime >= NetworkMain.MoveDeley)
+            {
+                if (movelist.Count > 0)
+                {
+                    startmove = transform.position;
+                    nextmove = movelist[0];
+                    movelist.RemoveAt(0);
+                    if (LastMove == true)
+                        movetime -= NetworkMain.MoveDeley;
+                    else
+                        movetime = 0;
+                }
+            }
+            LastMove = false;
+            if (movetime <= NetworkMain.MoveDeley)
+            {
+                transform.position += (nextmove - startmove) * (Time.deltaTime) / NetworkMain.MoveDeley;
+                LastMove = true;
+                // transform.position = Vector3.Lerp(startmove, nextmove, movetime / NetworkMain.MoveDeley);
+            }
+            else if (movelist.Count == 0 && movetime > NetworkMain.MoveDeley * 2)
+            {
+                //Debug.Log("ㅇㄴㄻㅉㄸㄻ");
+               // transform.position = nextmove;
+            }
+            movetime += Time.deltaTime;
+            Debug.Log(movelist.Count);
+        }
 
     }
     void OnDestroy()
     {
         Destroy(label.gameObject);
+    }
+
+    public void Move(Vector3 vector3)
+    {
+        if (movelist.Count == 10)
+        {
+            movelist.RemoveAt(0);
+        }
+        movelist.Add(vector3);
     }
 }

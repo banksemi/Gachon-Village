@@ -19,6 +19,7 @@ namespace MainServer
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
             server.Exit += Server_Exit;
+            new System.Threading.Thread(UpdateThread).Start();
             while (true)
                 System.Threading.Thread.Sleep(1000);
         }
@@ -41,9 +42,34 @@ namespace MainServer
                 case NetworkProtocol.EnterWorld:
                     User.Items[socket].Start();
                     break;
+                case NetworkProtocol.Move:
+                    User.Items[socket].Move(new Vector3((float)Message["x"], (float)Message["y"], (float)Message["z"]));
+                    break;
             }
         }
-
+        public static void UpdateThread()
+        {
+            int delay = 100;
+            DateTime time = DateTime.Now;
+            while(true)
+            {
+                if ((DateTime.Now - time).TotalMilliseconds >= delay)
+                {
+                    try
+                    {
+                        foreach(GameObject gameObject in GameObject.Items.Values)
+                        {
+                            gameObject.Update();
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    time =  time.AddMilliseconds(delay);
+                }
+            }
+        }
         private static void Server_Connect(ESocket socket)
         {
             Console.WriteLine("로그인");

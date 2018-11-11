@@ -14,5 +14,6 @@ public static class NetworkProtocol
     public const int EnterWorld = 4;
     public const int NewObject = 5;
     public const int RemoveObject = 6;
+    public const int Move = 7;
 }
 

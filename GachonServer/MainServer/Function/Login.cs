@@ -38,6 +38,8 @@ namespace MainServer
                 NetworkMessageList.TipMessage(socket, "이 계정은 다른 클라이언트에서 접속중입니다.");
                 return;
             }
+
+            user.position = new Vector3(-69.30f, 5.33f, 47.17f);
             JObject json = new JObject();
             json["type"] = NetworkProtocol.EnterWorld;
             json["no"] = user.no; // 플레이어를 나타내는 객체가 무엇인지 알려준다.
