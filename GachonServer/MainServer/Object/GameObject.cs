@@ -118,7 +118,6 @@ namespace MainServer
                 Items.Remove(no);
             }
         }
-
         public void ChatMessage(string message)
         {
             JObject json = new JObject();
