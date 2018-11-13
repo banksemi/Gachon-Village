@@ -6,11 +6,16 @@ using NetworkLibrary;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Threading;
+using UnityEngine.SceneManagement;
 public class NetworkMain : MonoBehaviour {
     private LinkedList<JObject> queue = new LinkedList<JObject>();
     private static Client server;
     private Thread thread;
+    private Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
     public GameObject TipMessageObject;
+    public GameObject NewGameObject;
+    public static int myNo;
+    public static float MoveDeley = 0.1f;
     public static void SendMessage(JObject json)
     {
         server.Send(json);
@@ -47,12 +52,53 @@ public class NetworkMain : MonoBehaviour {
     private void Server_Connect(ESocket socket)
     {
     }
+    private static bool isPlayer(JObject json)
+    {
+        return myNo == (int)json["no"];
+    }
+    private Character GetGameObject(JObject json)
+    {
+        if (isPlayer(json) && !gameObjects.ContainsKey((int)json["no"]))
+        {
+            gameObjects.Add(myNo, GameObject.Find("Player").GetComponent<Character>());
+        }
+        return gameObjects[(int)json["no"]];
+    }
     public void Receive(JObject json)
     {
+        Debug.Log(json);
+        Character character;
         switch ((int)json["type"])
         {
-            case 1:
+            case NetworkProtocol.TipMessage:
                 TipMessage((string)json["message"]);
+                break;
+            case NetworkProtocol.EnterWorld:
+                myNo = (int)json["no"];
+                SceneManager.LoadScene("Game");
+                // 들어온 다음에 로딩 완료 메세지를 보낸다.
+                SendMessage(json);
+                break;
+            case NetworkProtocol.NewObject:
+                if (!isPlayer(json))
+                {
+                    // 새로운 객체 생성
+                    GameObject gameObject = Instantiate(Preset.objects.NewGameObject);
+                    gameObjects.Add((int)json["no"], gameObject.GetComponent<Character>());
+                }
+                character = GetGameObject(json);
+                character.No = (int)json["no"];
+                character.Name = (string)json["name"];
+                character.transform.position = new Vector3((int)json["x"], (int)json["y"], (int)json["z"]);
+                break;
+            case NetworkProtocol.RemoveObject:
+                character = GetGameObject(json);
+                gameObjects.Remove((int)json["no"]);
+                DestroyImmediate(character.gameObject);
+                break;
+            case NetworkProtocol.Move:
+                character = GetGameObject(json);
+                character.Move(new Vector3((float)json["x"], (float)json["y"], (float)json["z"]));
                 break;
         }
     }

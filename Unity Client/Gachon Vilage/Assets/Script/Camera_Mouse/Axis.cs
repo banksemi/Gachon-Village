@@ -5,7 +5,7 @@ using UnityEngine;
 public class Axis : MonoBehaviour
 {
     public Quaternion TargetRotation;
-    private Vector3 Gap;               // 회전 축적 값.
+    public Vector3 Gap;               // 회전 축적 값.
     public float RotationSpeed;  
     // 공개
     public float Distance;          // 카메라와의 거리.
@@ -19,6 +19,9 @@ public class Axis : MonoBehaviour
     {
         MainCamera = Camera.main.transform;
         CameraVector = transform.parent;
+        TargetRotation = Quaternion.Euler(Gap);
+
+        transform.rotation = TargetRotation;
     }
 
     // Update is called once per frame

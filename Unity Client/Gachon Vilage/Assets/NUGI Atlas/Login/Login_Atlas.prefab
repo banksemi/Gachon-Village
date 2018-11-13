@@ -53,6 +53,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 72e04d7fd9552264b9d4a843982be52a, type: 2}
   mSprites:
+  - name: Fill
+    x: 0
+    y: 43
+    width: 1
+    height: 1
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Fill 1
+    x: 0
+    y: 45
+    width: 9
+    height: 9
+    borderLeft: 5
+    borderRight: 5
+    borderTop: 5
+    borderBottom: 5
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: InputForm
     x: 0
     y: 55

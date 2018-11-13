@@ -50,11 +50,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Function\Login.cs" />
+    <Compile Include="Network\NetworkSend.cs" />
+    <Compile Include="Object\GameObject.cs" />
     <Compile Include="Network\NetworkMessageList.cs" />
     <Compile Include="Network\NetworkProtocol.cs" />
     <Compile Include="private_data%28git%29.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Object\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

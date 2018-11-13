@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class Player : MonoBehaviour {
     private CharacterController cc;
@@ -8,6 +9,8 @@ public class Player : MonoBehaviour {
     public GameObject man;
     // Use this for initialization
     public float VSpeed = 0;
+    public float movetime = 0;
+    public bool moveok = false;
 	void Start () {
         cc = GetComponent<CharacterController>();
 	}
@@ -38,7 +41,32 @@ public class Player : MonoBehaviour {
         VSpeed -= 40 * Time.deltaTime;
         v.y = VSpeed;
         v = transform.rotation * v;
+        Vector3 vc = transform.position;
         cc.Move(v * Time.deltaTime);
+        if (moveok)
+        {
+            if (movetime >= NetworkMain.MoveDeley)
+            {
+                moveok = false;
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.Move;
+                json["x"] = vc.x;
+                json["y"] = vc.y;
+                json["z"] = vc.z;
+                NetworkMain.SendMessage(json);
+                movetime -= NetworkMain.MoveDeley;
+            }
+        }
+        if (vc != transform.position)
+        {
+            if (movetime > NetworkMain.MoveDeley)
+            {
+                movetime = 0;
+            }
+
+            moveok = true;
+        }
+        movetime += Time.deltaTime;
 
     }
 }
