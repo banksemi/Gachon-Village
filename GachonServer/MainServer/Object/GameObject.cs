@@ -118,5 +118,14 @@ namespace MainServer
                 Items.Remove(no);
             }
         }
+        public void ChatMessage(string message)
+        {
+            JObject json = new JObject();
+            json["type"] = NetworkProtocol.Chat;
+            json["no"] = no; // 보낸사람의 고유번호
+            json["sender"] = name; // 보낸사람 이름
+            json["message"] = message;
+            NetworkSend.SendAllUser(json);
+        }
     }
 }
