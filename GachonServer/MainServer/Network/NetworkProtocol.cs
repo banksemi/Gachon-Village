@@ -15,5 +15,6 @@ namespace MainServer
         public const int NewObject = 5;
         public const int RemoveObject = 6;
         public const int Move = 7;
+        public const int Chat = 8;
     }
 }
