@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311912, g: 0.3807398, b: 0.3587271, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -626,6 +626,7 @@ GameObject:
   m_Component:
   - component: {fileID: 809419856}
   - component: {fileID: 809419857}
+  - component: {fileID: 809419858}
   m_Layer: 5
   m_Name: Form
   m_TagString: Untagged
@@ -703,6 +704,20 @@ MonoBehaviour:
   mAtlas: {fileID: 114305039119608782, guid: 5822c4db1afb09b4f9a645385bebe10e, type: 2}
   mSpriteName: LoginForm
   mFillCenter: 1
+--- !u!114 &809419858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 809419855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c74416a91e303244a940fa4eb7d7ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIInputs:
+  - {fileID: 1297336808}
+  - {fileID: 586163939}
 --- !u!1 &1026323891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,6 +1194,16 @@ Prefab:
         type: 2}
       propertyPath: mValue
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114269292510568814, guid: ee53d28d70039294ea3fb7dfedc0e91d,
+        type: 2}
+      propertyPath: onSubmit.Array.data[0].mTarget
+      value: 
+      objectReference: {fileID: 1026323896}
+    - target: {fileID: 114269292510568814, guid: ee53d28d70039294ea3fb7dfedc0e91d,
+        type: 2}
+      propertyPath: onSubmit.Array.data[0].mMethodName
+      value: OnClick
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee53d28d70039294ea3fb7dfedc0e91d, type: 2}

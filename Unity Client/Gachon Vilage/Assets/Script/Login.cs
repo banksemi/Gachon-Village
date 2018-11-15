@@ -16,7 +16,7 @@ public class Login : MonoBehaviour
 	void Update () {
 		
 	}
-    void OnClick()
+    public void OnClick()
     {
         JObject json = new JObject();
         json["type"] = NetworkProtocol.Login;
