@@ -10,7 +10,7 @@ namespace GachonLibrary
 {
     public class NaverCafe : Site
     {
-        public NaverCafe(string ID) : base(ID, "Naver")
+        public NaverCafe(string ID) : base(ID, "Navercafe")
         {
         }
 

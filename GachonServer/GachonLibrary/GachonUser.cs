@@ -97,6 +97,10 @@ namespace GachonLibrary
             }
             else
             {
+                if (!GachonObjects.Did_init)
+                {
+                    GachonObjects.Get_SQL_value();
+                }
                 GachonUser user = new GachonUser(ID, password);
                 if (user.LoginOk)
                 {

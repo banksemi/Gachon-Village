@@ -17,6 +17,11 @@ namespace SQL_Library
         #region
         public string GetString(string name)
         {
+          
+            if (Reader[name] is DBNull)
+            {
+                return "";
+            }
             return Reader.GetString(name);
         }
         #endregion
