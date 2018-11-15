@@ -14,7 +14,6 @@ public class ChatInputBox : MonoBehaviour
 
     public void OnSubmit()
     {
-        Debug.Log(mInput.value);
         string text = NGUIText.StripSymbols(mInput.value);
 
         if (!string.IsNullOrEmpty(text))

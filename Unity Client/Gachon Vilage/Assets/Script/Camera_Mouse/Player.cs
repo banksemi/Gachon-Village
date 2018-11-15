@@ -22,15 +22,19 @@ public class Player : MonoBehaviour {
     }
     void Run()
     {
-        int ButtonDown = 0;
+        bool JumpButton = false;
         Vector3 v = new Vector3();
-        if (Input.GetKey(KeyCode.A)) v += Vector3.left;
-        if (Input.GetKey(KeyCode.D)) v -= Vector3.left;
-        if (Input.GetKey(KeyCode.W)) v += Vector3.forward;
-        if (Input.GetKey(KeyCode.S)) v -= Vector3.forward;
+        if (UIInput.selection == null) // 다른 UIInput에 입력중이 아닌경우
+        {
+            if (Input.GetKey(KeyCode.A)) v += Vector3.left;
+            if (Input.GetKey(KeyCode.D)) v -= Vector3.left;
+            if (Input.GetKey(KeyCode.W)) v += Vector3.forward;
+            if (Input.GetKey(KeyCode.S)) v -= Vector3.forward;
+            if (Input.GetKey(KeyCode.Space)) JumpButton = true;
+        }
         if (cc.isGrounded)
         {
-            if (Input.GetKey(KeyCode.Space)) VSpeed = 14;
+            if (JumpButton) VSpeed = 14;
             if (VSpeed < 0) VSpeed = 0;
         }
         if (Input.GetMouseButton(1))
