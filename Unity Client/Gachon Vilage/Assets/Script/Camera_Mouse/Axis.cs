@@ -50,7 +50,7 @@ public class Axis : MonoBehaviour
 
             CameraVector.transform.rotation = q;
         }
-        if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+        if (UICamera.Raycast(Input.mousePosition) == false  && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
         {
             // 값을 축적.
             Gap.x += Input.GetAxis("Mouse Y") * RotationSpeed * -1;

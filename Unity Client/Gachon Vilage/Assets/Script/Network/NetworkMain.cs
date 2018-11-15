@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -99,6 +99,10 @@ public class NetworkMain : MonoBehaviour {
             case NetworkProtocol.Move:
                 character = GetGameObject(json);
                 character.Move(new Vector3((float)json["x"], (float)json["y"], (float)json["z"]));
+                break;
+            case NetworkProtocol.Chat:
+                GetGameObject(json).ChatMessage((string)json["message"]);
+                Preset.objects.ChatBox.Add(string.Format("{0} : {1}", json["sender"], json["message"]));
                 break;
         }
     }

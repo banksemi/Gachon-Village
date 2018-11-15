@@ -17,6 +17,8 @@ class Preset : MonoBehaviour
     }
     public GameObject NewGameObject;
     public GameObject NameUI;
+    public UITextList ChatBox;
+    public GameObject MessageBox;
     void Start()
     {
     }
