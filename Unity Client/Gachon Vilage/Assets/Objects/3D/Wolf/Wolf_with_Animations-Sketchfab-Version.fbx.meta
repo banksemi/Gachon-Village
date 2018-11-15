@@ -1,0 +1,218 @@
+fileFormatVersion: 2
+guid: ab094ec18a55c1640a5329e79fe4f5f6
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: aug_L
+    100002: aug_lied_O_L
+    100004: aug_lied_O_R
+    100006: aug_lied_U_L
+    100008: aug_lied_U_R
+    100010: Aug_R
+    100012: Augen_con
+    100014: Bauch
+    100016: Bauch_001
+    100018: Bauch_003
+    100020: Becken
+    100022: Braun_O_L
+    100024: Braun_O_R
+    100026: Brust
+    100028: Hals
+    100030: Hals_fett
+    100032: Hemi
+    100034: IK_Aug_L
+    100036: IK_Aug_R
+    100038: Kopf
+    100040: Kopf_002
+    100042: Mauloben
+    100044: Maulunten
+    100046: MundW_L
+    100048: MundW_R
+    100050: Oberarm_L
+    100052: Oberarm_R
+    100054: Oberschenkel_L
+    100056: Oberschenkel_R
+    100058: Ohr_L
+    100060: Ohr_R
+    100062: Pfote1_L
+    100064: Pfote1_R
+    100066: Pfote2_L
+    100068: Pfote2_R
+    100070: Plane
+    100072: Schalterplatte_L
+    100074: Schalterplatte_R
+    100076: Schwanz
+    100078: Schwanz_001
+    100080: Schwanz_002
+    100082: Schwanz_003
+    100084: Unterarm_L
+    100086: Unterarm_R
+    100088: Unterkiefer
+    100090: Unterschenkel_L
+    100092: Unterschenkel_R
+    100094: Vorderpfote_L
+    100096: Vorderpfote_R
+    100098: Wolf
+    100100: Wolf1
+    100102: Wolf2
+    100104: Wolf3
+    100106: //RootNode
+    400000: aug_L
+    400002: aug_lied_O_L
+    400004: aug_lied_O_R
+    400006: aug_lied_U_L
+    400008: aug_lied_U_R
+    400010: Aug_R
+    400012: Augen_con
+    400014: Bauch
+    400016: Bauch_001
+    400018: Bauch_003
+    400020: Becken
+    400022: Braun_O_L
+    400024: Braun_O_R
+    400026: Brust
+    400028: Hals
+    400030: Hals_fett
+    400032: Hemi
+    400034: IK_Aug_L
+    400036: IK_Aug_R
+    400038: Kopf
+    400040: Kopf_002
+    400042: Mauloben
+    400044: Maulunten
+    400046: MundW_L
+    400048: MundW_R
+    400050: Oberarm_L
+    400052: Oberarm_R
+    400054: Oberschenkel_L
+    400056: Oberschenkel_R
+    400058: Ohr_L
+    400060: Ohr_R
+    400062: Pfote1_L
+    400064: Pfote1_R
+    400066: Pfote2_L
+    400068: Pfote2_R
+    400070: Plane
+    400072: Schalterplatte_L
+    400074: Schalterplatte_R
+    400076: Schwanz
+    400078: Schwanz_001
+    400080: Schwanz_002
+    400082: Schwanz_003
+    400084: Unterarm_L
+    400086: Unterarm_R
+    400088: Unterkiefer
+    400090: Unterschenkel_L
+    400092: Unterschenkel_R
+    400094: Vorderpfote_L
+    400096: Vorderpfote_R
+    400098: Wolf
+    400100: Wolf1
+    400102: Wolf2
+    400104: Wolf3
+    400106: //RootNode
+    2100000: unnamed
+    2100002: fur__fella3_jpg_001
+    2100004: Material__wolf_col_tga
+    2100006: eyes
+    2100008: claws
+    2100010: teeth__nor2_tga
+    2300000: Plane
+    3300000: Plane
+    4300000: Plane
+    4300002: Wolf2
+    4300004: Wolf1
+    4300006: Wolf3
+    7400000: 01_Run
+    7400002: 02_walk
+    7400004: 03_creep
+    7400006: 04_Idle
+    7400008: 05_site
+    9500000: //RootNode
+    10800000: Hemi
+    13700000: Wolf1
+    13700002: Wolf2
+    13700004: Wolf3
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

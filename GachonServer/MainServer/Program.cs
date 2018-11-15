@@ -7,19 +7,81 @@ using GachonLibrary;
 using System.Diagnostics;
 using System.IO;
 using HtmlAgilityPack;
+using NetworkLibrary;
+using Newtonsoft.Json.Linq;
 namespace MainServer
 {
     class Program
     {
         static void Main(string[] args)
         {
+            Server server = new Server(1119);
+            server.Connect += Server_Connect;
+            server.Receive += Server_Receive;
+            server.Exit += Server_Exit;
+            new System.Threading.Thread(UpdateThread).Start();
+            while (true)
+                System.Threading.Thread.Sleep(1000);
         }
+
+        private static void Server_Exit(ESocket socket)
+        {
+            if (User.Items.ContainsKey(socket))
+            {
+                User.Items[socket].Dispose();
+            }
+        }
+
+        private static void Server_Receive(ESocket socket, Newtonsoft.Json.Linq.JObject Message)
+        {
+            switch((int)Message["type"])
+            {
+                case NetworkProtocol.Login:
+                    Function.Login(socket, (string)Message["id"], (string)Message["password"]);
+                    break;
+                case NetworkProtocol.EnterWorld:
+                    User.Items[socket].Start();
+                    break;
+                case NetworkProtocol.Move:
+                    User.Items[socket].Move(new Vector3((float)Message["x"], (float)Message["y"], (float)Message["z"]));
+                    break;
+            }
+        }
+        public static void UpdateThread()
+        {
+            int delay = 100;
+            DateTime time = DateTime.Now;
+            while(true)
+            {
+                if ((DateTime.Now - time).TotalMilliseconds >= delay)
+                {
+                    try
+                    {
+                        foreach(GameObject gameObject in GameObject.Items.Values)
+                        {
+                            gameObject.Update();
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    time =  time.AddMilliseconds(delay);
+                }
+                System.Threading.Thread.Sleep(5);
+            }
+        }
+        private static void Server_Connect(ESocket socket)
+        {
+            Console.WriteLine("로그인");
+            NetworkMessageList.TipMessage(socket, "서버에 연결되었습니다.");
+       }
+
         static void Debug()
         {
             GachonClass.NewPost += GachonClass_NewPost;
             //가천대 학생 객체 만들기 (학교 아이디와 패스워드로 로그인)
             GachonUser a = GachonUser.GetObject(private_data.id, private_data.password);
-            GachonUser b = GachonUser.GetObject(private_data.id2, private_data.password2);
             GachonUser c = GachonUser.GetObject(private_data.id, private_data.password);
             // 해당 학생 정보 출력
             Console.WriteLine(a.ToString(true));
