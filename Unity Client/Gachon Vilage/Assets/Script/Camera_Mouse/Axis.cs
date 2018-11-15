@@ -35,7 +35,7 @@ public class Axis : MonoBehaviour
     {
         if (transform.rotation != TargetRotation)
             transform.rotation = TargetRotation;
-        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E))
+        if (UIInput.selection == null && (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E)))
         {
             if (Input.GetKey(KeyCode.Q))
                 Gap.y -= 0.5f * RotationSpeed;
@@ -50,7 +50,7 @@ public class Axis : MonoBehaviour
 
             CameraVector.transform.rotation = q;
         }
-        if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+        if (UICamera.Raycast(Input.mousePosition) == false  && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
         {
             // 값을 축적.
             Gap.x += Input.GetAxis("Mouse Y") * RotationSpeed * -1;
@@ -75,8 +75,8 @@ public class Axis : MonoBehaviour
 
         void DisCamera()
     {
-
-        Distance += Input.GetAxis("Mouse ScrollWheel") * ZoomSpeed * -1;
+        if (UICamera.Raycast(Input.mousePosition) == false)
+            Distance += Input.GetAxis("Mouse ScrollWheel") * ZoomSpeed * -1;
         Distance = Mathf.Clamp(Distance, 5f, 30f);
 
 

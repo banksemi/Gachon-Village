@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour {
-
+    private MessageBox Message;
+    private float MessageTime = 0;
     private UILabel label;
     private Collider col;
     public int No;
@@ -28,8 +29,23 @@ public class Character : MonoBehaviour {
         label.text = Name;
         label.transform.localScale = new Vector3(1, 1, 1);
     }
+    public void ChatMessage(string message)
+    {
+        if (Message != null) Destroy(Message.gameObject);
+        Message = Instantiate(Preset.objects.MessageBox).GetComponent<MessageBox>();
+        Message.Set(Name, message);
+        Message.transform.parent = GameObject.FindWithTag("CCG").transform;
+        Message.transform.localScale = new Vector3(1, 1, 1);
+        MessageTime = 0;
+    }
     void Update()
     {
+        MessageTime += Time.deltaTime;
+        if (Message != null && MessageTime >= 2f)
+        {
+            Destroy(Message.gameObject);
+            Message = null;
+        }
         Vector3 aa = col.bounds.center;
         aa.y += col.bounds.size.y / 2 + 0.5f;
         Vector3 screenPos = Camera.main.WorldToScreenPoint(aa);
@@ -45,10 +61,19 @@ public class Character : MonoBehaviour {
                 a.a = (100 - screenPos.z) * 5 / 100f;
                 label.color = a;
             }
-
-            screenPos.y += 15;
-            label.transform.localPosition = screenPos;
-            label.gameObject.SetActive(true);
+            if (Message == null)
+            {
+                screenPos.y += 15;
+                label.transform.localPosition = screenPos;
+                label.gameObject.SetActive(true);
+            }
+            else
+            {
+                screenPos.y += 35;
+                Message.transform.localPosition = screenPos;
+                Message.gameObject.SetActive(true);
+                label.gameObject.SetActive(false);
+            }
         }
         // 캐릭터 움직임
         if (No != NetworkMain.myNo)
