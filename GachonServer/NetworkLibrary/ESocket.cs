@@ -71,6 +71,11 @@ namespace NetworkLibrary
                 SW.Flush();
                 return true;
             }
+            catch (SocketException e)
+            {
+                // 소켓통신 에러일경우 
+                Dispose();
+            }
             catch (System.ObjectDisposedException e)
             {
                 // 오브젝트가 종료된경우, 더이상 메세지를 보내지 않고 무시함.
