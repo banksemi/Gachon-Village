@@ -27628,7 +27628,6 @@ GameObject:
   - component: {fileID: 1925166613}
   - component: {fileID: 1925166612}
   - component: {fileID: 1925166611}
-  - component: {fileID: 1925166609}
   m_Layer: 5
   m_Name: Chat Input
   m_TagString: Untagged
@@ -27651,20 +27650,6 @@ Transform:
   m_Father: {fileID: 221482546}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1925166609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1925166607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 049a2bcd8df653c4d9cb9d39404363a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keyCode: 13
-  modifier: 0
-  action: 1
 --- !u!114 &1925166610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27700,11 +27685,7 @@ MonoBehaviour:
   activeTextColor: {r: 1, g: 1, b: 1, a: 1}
   caretColor: {r: 0.41791046, g: 0.41791046, b: 0.41791046, a: 0.8}
   selectionColor: {r: 1, g: 0.8153639, b: 0.3537736, a: 0.5019608}
-  onSubmit:
-  - mTarget: {fileID: 1925166610}
-    mMethodName: OnSubmit
-    mParameters: []
-    oneShot: 0
+  onSubmit: []
   onChange: []
   mValue: 
 --- !u!65 &1925166612

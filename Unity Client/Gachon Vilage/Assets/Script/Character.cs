@@ -55,6 +55,8 @@ public class Character : MonoBehaviour {
         }
         else
         {
+            screenPos.x = (int)screenPos.x;
+            screenPos.y = (int)screenPos.y;
             if (screenPos.z > 80)
             {
                 Color a = label.color;

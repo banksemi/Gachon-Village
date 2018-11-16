@@ -15,6 +15,7 @@ public class Axis : MonoBehaviour
     private Transform MainCamera;   // 카메라 컴포넌트.
     public float ZoomSpeed = 3;
     public Transform CameraVector;
+    private bool First_Click_is_UI = false;
     void Start()
     {
         MainCamera = Camera.main.transform;
@@ -50,7 +51,12 @@ public class Axis : MonoBehaviour
 
             CameraVector.transform.rotation = q;
         }
-        if (UICamera.Raycast(Input.mousePosition) == false  && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
+        if (Input.GetMouseButton(0) == false && Input.GetMouseButton(1) == false) First_Click_is_UI = false;
+        if (UICamera.Raycast(Input.mousePosition) && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+        {
+            First_Click_is_UI = true;
+        }
+        if (First_Click_is_UI == false && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
         {
             // 값을 축적.
             Gap.x += Input.GetAxis("Mouse Y") * RotationSpeed * -1;
