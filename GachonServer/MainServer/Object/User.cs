@@ -68,7 +68,7 @@ namespace MainServer
             json["type"] = NetworkProtocol.Chat;
             json["chattype"] = Type;
             json["message"] = message;
-            NetworkSend.SendAllUser(json);
+            socket.Send(json);
         }
     }
 }
