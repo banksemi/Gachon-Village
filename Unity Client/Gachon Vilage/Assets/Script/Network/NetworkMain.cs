@@ -101,8 +101,24 @@ public class NetworkMain : MonoBehaviour {
                 character.Move(new Vector3((float)json["x"], (float)json["y"], (float)json["z"]));
                 break;
             case NetworkProtocol.Chat:
+                string color = "FFFFFF";
+                switch ((int)json["chattype"])
+                {
+                    case ChatType.Notice:
+                        color = "DBA901";
+                        break;
+                    case ChatType.Whisper:
+                        color = "F781BE";
+                        break;
+                    case ChatType.System:
+                        color = "82FA58";
+                        break;
+                }
+                if (json["no"] != null)
+                    Preset.objects.ChatBox.Add(string.Format("["+ color + "]{0} : {1}[-]", json["sender"], json["message"]));
+                else
+                    Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0}[-]", json["message"]));
                 GetGameObject(json).ChatMessage((string)json["message"]);
-                Preset.objects.ChatBox.Add(string.Format("{0} : {1}", json["sender"], json["message"]));
                 break;
         }
     }

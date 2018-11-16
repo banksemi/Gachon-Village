@@ -52,6 +52,23 @@ namespace MainServer
                 }
             }
             NetworkMessageList.TipMessage(socket, "가천 빌리지에 오신것을 환영합니다!");
+            ToChatMessage("가천 빌리지에 오신것을 환영합니다!", ChatType.Notice);
+            ToChatMessage("[컴퓨터 네트워크] 과목에 새로운 게시글이 등록되었습니다.", ChatType.System);
+            ToChatMessage("이승화 : 귓속말 테스트~~~", ChatType.Whisper);
+            ToChatMessage("위의 2개의 메세지는 디버그를 위해 출력되었습니다.", ChatType.Notice);
+        }
+        /// <summary>
+        /// 이 유저에게 채팅메세지를 전달합니다.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="Type"></param>
+        public void ToChatMessage(string message, int Type)
+        {
+            JObject json = new JObject();
+            json["type"] = NetworkProtocol.Chat;
+            json["chattype"] = Type;
+            json["message"] = message;
+            NetworkSend.SendAllUser(json);
         }
     }
 }

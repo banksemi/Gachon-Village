@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Function\Login.cs" />
+    <Compile Include="Network\ChatType.cs" />
     <Compile Include="Network\NetworkSend.cs" />
     <Compile Include="Object\GameObject.cs" />
     <Compile Include="Network\NetworkMessageList.cs" />

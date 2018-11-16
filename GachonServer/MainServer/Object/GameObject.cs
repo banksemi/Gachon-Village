@@ -118,11 +118,16 @@ namespace MainServer
                 Items.Remove(no);
             }
         }
-
-        public void ChatMessage(string message)
+        /// <summary>
+        /// 이 객체가 대화를 시작합니다.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="Type"></param>
+        public void ChatMessage(string message, int Type)
         {
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Chat;
+            json["chattype"] = Type;
             json["no"] = no; // 보낸사람의 고유번호
             json["sender"] = name; // 보낸사람 이름
             json["message"] = message;

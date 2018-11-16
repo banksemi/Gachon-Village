@@ -46,7 +46,7 @@ namespace MainServer
                     User.Items[socket].Move(new Vector3((float)Message["x"], (float)Message["y"], (float)Message["z"]));
                     break;
                 case NetworkProtocol.Chat:
-                    User.Items[socket].ChatMessage((string)Message["message"]);
+                    User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);
                     break;
             }
         }

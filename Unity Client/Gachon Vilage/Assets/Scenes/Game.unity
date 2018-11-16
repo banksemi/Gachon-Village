@@ -15211,7 +15211,7 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
+  mEffectStyle: 2
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
@@ -19396,7 +19396,7 @@ MonoBehaviour:
   mTrueTypeFont: {fileID: 12800000, guid: 2c8809c68e4f68f42bfaf7f23439771f, type: 3}
   mFont: {fileID: 0}
   mText: "\uCC44\uD305\uC744 \uD558\uB824\uBA74 Enter\uD0A4\uB97C \uB20C\uB7EC\uC8FC\uC138\uC694"
-  mFontSize: 18
+  mFontSize: 16
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
