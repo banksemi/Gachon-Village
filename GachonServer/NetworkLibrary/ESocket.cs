@@ -67,8 +67,11 @@ namespace NetworkLibrary
         {
             try
             {
-                SW.WriteLine(JsonConvert.SerializeObject(message));
-                SW.Flush();
+                lock (SW)
+                {
+                    SW.WriteLine(JsonConvert.SerializeObject(message));
+                    SW.Flush();
+                }
                 return true;
             }
             catch (SocketException e)
