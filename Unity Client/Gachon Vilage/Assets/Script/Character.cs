@@ -40,6 +40,38 @@ public class Character : MonoBehaviour {
     }
     void Update()
     {
+        // 캐릭터 움직임
+        if (No != NetworkMain.myNo)
+        {
+            if (movetime >= NetworkMain.MoveDeley)
+            {
+                if (movelist.Count > 0)
+                {
+                    startmove = transform.position;
+                    nextmove = movelist[0];
+                    movelist.RemoveAt(0);
+                    if (LastMove == true)
+                        movetime -= NetworkMain.MoveDeley;
+                    else
+                        movetime = 0;
+                }
+            }
+            LastMove = false;
+            if (movetime <= NetworkMain.MoveDeley)
+            {
+                transform.position += (nextmove - startmove) * (Time.deltaTime) / NetworkMain.MoveDeley;
+                LastMove = true;
+                // transform.position = Vector3.Lerp(startmove, nextmove, movetime / NetworkMain.MoveDeley);
+            }
+            else if (movelist.Count == 0 && movetime > NetworkMain.MoveDeley * 2)
+            {
+                // transform.position = nextmove;
+            }
+            movetime += Time.deltaTime;
+        }
+    }
+    void LateUpdate()
+    {
         MessageTime += Time.deltaTime;
         if (Message != null && MessageTime >= 2f)
         {
@@ -77,36 +109,6 @@ public class Character : MonoBehaviour {
                 label.gameObject.SetActive(false);
             }
         }
-        // 캐릭터 움직임
-        if (No != NetworkMain.myNo)
-        {
-            if (movetime >= NetworkMain.MoveDeley)
-            {
-                if (movelist.Count > 0)
-                {
-                    startmove = transform.position;
-                    nextmove = movelist[0];
-                    movelist.RemoveAt(0);
-                    if (LastMove == true)
-                        movetime -= NetworkMain.MoveDeley;
-                    else
-                        movetime = 0;
-                }
-            }
-            LastMove = false;
-            if (movetime <= NetworkMain.MoveDeley)
-            {
-                transform.position += (nextmove - startmove) * (Time.deltaTime) / NetworkMain.MoveDeley;
-                LastMove = true;
-                // transform.position = Vector3.Lerp(startmove, nextmove, movetime / NetworkMain.MoveDeley);
-            }
-            else if (movelist.Count == 0 && movetime > NetworkMain.MoveDeley * 2)
-            {
-               // transform.position = nextmove;
-            }
-            movetime += Time.deltaTime;
-        }
-
     }
     void OnDestroy()
     {
