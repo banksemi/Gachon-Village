@@ -16,7 +16,7 @@ namespace MainServer
             message_delay--;
             if (message_delay < 0)
             {
-                message_delay = rd.Next(50, 100);
+                message_delay = rd.Next(100, 300);
                 if (message_list.Count > 0)
                 {
                     ChatMessage(message_list[rd.Next(0, message_list.Count)], ChatType.NPC);
