@@ -10,7 +10,7 @@ namespace GachonLibrary
     {
         public enum PostType
         {
-            Notice, Lecture, Homework, ETC
+            Notice =1, Lecture=2, Homework=3, ETC=4
         }
         public PostType type;
         public string url;

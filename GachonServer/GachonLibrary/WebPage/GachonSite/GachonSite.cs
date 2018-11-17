@@ -92,9 +92,11 @@ namespace GachonLibrary
                                 url = url,
                                 no = Int32.Parse(no),
                                 Title = ParseSupport.StringFromHtml(datas[1].InnerText),
+                                time = DateTime.Now, 
                                 s_time = DateTime.Parse(datas[2].InnerText.Substring(0, 10)),
                                 e_time = DateTime.Parse(datas[2].InnerText.Substring(13, 10)),
-                                num_submitted = Int32.Parse(datas[5].InnerText.Split('/')[0])
+                                num_submitted = Int32.Parse(datas[5].InnerText.Split('/')[0]),
+                                Publisher = "관리자"
                             };                                  
                         }
                         else

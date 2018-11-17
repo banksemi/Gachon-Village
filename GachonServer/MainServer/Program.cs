@@ -36,11 +36,11 @@ namespace MainServer
             //GachonCafe gachonCafe = new GachonCafe("135687");
             // 컴퓨터 네트워크에 2개의 카페를 연결.
             //GachonObjects.AllClass["201809970002"].CombineSite(gachonCafe);
-            // GachonObjects.AllClass["201809372002"].CombineSite(new GachonCafe("140663"));
-
-           // GachonClass gachonClass = GachonClass.GetObject("소프트웨어", "soft");
+            //GachonObjects.AllClass["201809372002"].CombineSite(new GachonCafe("140663"));
+            
+            // GachonClass gachonClass = GachonClass.GetObject("소프트웨어", "soft");
             //gachonClass.CombineSite(new NaverCafe("gachon2010"));
-            //gachonClass.CombineTakeUser(a);
+            a.CombineClass(GachonClass.GetObject("소프트웨어", "soft"));
             Console.WriteLine("\r\n\r\n서버에 등록된 모든 강의");
             foreach (GachonClass gc in GachonObjects.AllClass.Values)
             {

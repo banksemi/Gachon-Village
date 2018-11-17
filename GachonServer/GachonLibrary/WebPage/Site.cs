@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQL_Library;
 namespace GachonLibrary
 {
     public abstract class Site
@@ -27,7 +28,6 @@ namespace GachonLibrary
         /// </summary>
         public void Start()
         {
-
         }
         protected void NewPostEvent(PostItem item)
         {
@@ -43,6 +43,27 @@ namespace GachonLibrary
             {
                 ReadBoardList = true;
                 SearchMenu(guser);
+
+                MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
+                    "select sitetype, siteid, board_name, max(no) as NO from article where siteType = ?sitetype and siteid = ?siteid group by sitetype, siteid, board_name;");
+                node["sitetype"] = Type;
+                node["siteid"] = ID;
+                using (node.ExecuteReader())
+                {
+                    while (node.Read())
+                    {
+                        string find_menuName = node.GetString("board_name");
+                        int find_count =Int32.Parse( node.GetString("NO"));
+                        foreach (BoardType board in boards)
+                        {
+                            if(board.name == find_menuName)
+                            {
+                                board.LastNo = find_count;
+                                break;
+                            }
+                        }
+                    }
+                }             
             }
             foreach (BoardType board in boards)
             {

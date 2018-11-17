@@ -35,6 +35,7 @@ namespace GachonLibrary
             this.Publisher = publisher;
             this.time = time;
             this.board_name = board_name;
+            this.Content = " ";
         }
         public string Content_Briefly
         {
