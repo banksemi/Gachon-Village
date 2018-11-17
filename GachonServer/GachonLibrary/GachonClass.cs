@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using SQL_Library;
 namespace GachonLibrary
 {
     public class GachonClass
@@ -32,6 +33,7 @@ namespace GachonLibrary
         /// 해당 강의의 이름입니다.
         /// </summary>
         public string Title;
+        public bool isCourse { get; private set; }
         /// <summary>
         /// 해당 강의의 개설 연도입니다.
         /// </summary>
@@ -39,7 +41,14 @@ namespace GachonLibrary
         /// <summary>
         /// 개설 연도, ID, 분반 정보를 하나로 합친 고유 키값입니다.
         /// </summary>
-        public string Key { get { return year + ID + Sec_ID; } }
+        public string Key
+        {
+            get
+            {
+                if (isCourse) return year + ID + Sec_ID;
+                else return ID;
+            }
+        }
         /// <summary>
         /// 해당 강의에 연결되있는 사이트(Eclass,Cafe...) 목록입니다.
         /// </summary>
@@ -52,6 +61,7 @@ namespace GachonLibrary
         private static bool _startautocrawling = false;
         private GachonClass(string Title, string key, bool Formal = false)
         {
+            isCourse = Formal;
             if (GachonObjects.AllClass.ContainsKey(key)) throw new DuplicationError();
             // 규칙을 가진 강의일경우 (Year(4) + ID(5) + Sec_ID(3))
             if (Formal == true)
@@ -63,11 +73,19 @@ namespace GachonLibrary
                 Initialization(Title, DateTime.Now.Year, key, "001");
             }
         }
-        public static GachonClass GetObject(string Title, string key, bool Formal = false)
+        public static GachonClass GetObject(string Title, string key, bool Formal = false, bool want_insert_sql = true)
         {
+            
             if (GachonObjects.AllClass.ContainsKey(key)) return GachonObjects.AllClass[key];
             else
             {
+                if (want_insert_sql)
+                {
+                    MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "INSERT into course (no, type, name) values (?key, 'Class', ?tit)");
+                    node["key"] = key;
+                    node["tit"] = Title;
+                    node.ExecuteNonQuery();                  
+                }
                 GachonClass gachonClass = new GachonClass(Title, key, Formal);
                 GachonObjects.AllClass.Add(key, gachonClass);
                 return gachonClass;
@@ -100,10 +118,17 @@ namespace GachonLibrary
         /// 동일한 사이트 생성일 경우 기존 객체를 연결시킨다.
         /// </summary>
         /// <param name="site"></param>
-        public void CombineSite(Site site)
+        public void CombineSite(Site site, bool want_insert_sql = true)
         {
             lock(Sites)
             {
+                if (want_insert_sql)
+                {
+                    MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "UPDATE course set "+ site.Type.ToLower() + " = ?site_id where no = ?key ");
+                    node["site_id"] = site.ID;
+                    node["key"] = Key;
+                    node.ExecuteNonQuery();
+                 }
                 // 이때 동일한 사이트가 존재할 경우 새로 추가하려는 객체를 추가하지 않고 
                 // 기존 객체를 연결한다.
                 if (GachonObjects.AllSite.ContainsKey(site.Type + site.ID))
@@ -126,6 +151,38 @@ namespace GachonLibrary
         /// <param name="postItem"></param>
         private void Site_NewPost(PostItem postItem)
         {
+            //여기에 SQL추가하기~ Insert
+
+            MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
+                "INSERT INTO article (course_no, board_name, no, category, publisher, title, date, content, url, sitetype, siteid)" +
+                                    "VALUES (?course_no, ?board_name, ?no, ?cate, ?pub, ?tit, ?date, ?cont, ?url, ?sitetype, ?siteid) ");
+
+            node["course_no"] = this.Key;
+            node["board_name"] = postItem.board_name;
+            node["no"] = postItem.no;
+            node["cate"] = (int) postItem.posttype;
+            node["pub"] = postItem.Publisher;
+            node["tit"] = postItem.Title;
+            node["date"] = postItem.time;
+            node["cont"] = postItem.Content;
+            node["url"] = postItem.url;
+            node["sitetype"] = postItem.source.Type;
+            node["siteid"] = postItem.source.ID;
+            node.ExecuteNonQuery();
+
+            if (postItem.posttype == BoardType.PostType.Homework)
+            {
+                MysqlNode hwnode = new MysqlNode(GachonOption.MysqlOption,
+                 "INSERT INTO homework (course_no, article_no, start_date, end_date)" +
+                                     "VALUES (?course_no, ?article_no, ?start_date, ?end_date) ");
+
+                hwnode["course_no"] = this.Key;
+                hwnode["article_no"] = postItem.no;
+                hwnode["start_date"] = postItem.s_time;
+                hwnode["end_date"] = postItem.e_time;
+                hwnode.ExecuteNonQuery();
+            }
+
             // 이 객체의 이벤트를 듣고있는 리스너에게 이벤트 메세지 전달.
             NewPost?.Invoke(this,postItem);
         }

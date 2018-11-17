@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
+using SQL_Library;
 namespace GachonLibrary
 {
     public class GachonUser
@@ -74,6 +75,18 @@ namespace GachonLibrary
             private set { _email = value; }
         }
         /// <summary>
+        /// 해당 학생의 학번입니다.
+        /// </summary>
+        public string StudentNumber
+        {
+            get
+            {
+                if (_studentnumber == null) GetUserInfo();
+                return _studentnumber;
+            }
+            private set { _studentnumber = value; }
+        }
+        /// <summary>
         /// 현재 학생이 수강중인 강의 목록입니다.
         /// </summary>
         public List<GachonClass> Takes = new List<GachonClass>();
@@ -81,6 +94,7 @@ namespace GachonLibrary
         private string _department = null;
         private string _phone = null;
         private string _email = null;
+        private string _studentnumber = null;
         #endregion
         private GachonUser(string ID, string password)
         {
@@ -97,6 +111,10 @@ namespace GachonLibrary
             }
             else
             {
+                if (!GachonObjects.Did_init)
+                {
+                    GachonObjects.Get_SQL_value();
+                }
                 GachonUser user = new GachonUser(ID, password);
                 if (user.LoginOk)
                 {
@@ -107,7 +125,6 @@ namespace GachonLibrary
                 {
                     return null;
                 }
-
             }
         }
         /// <summary>
@@ -126,35 +143,57 @@ namespace GachonLibrary
             {
                 // 사이버 캠퍼스에 로그인을 하면서 강의 정보 불러옴.
                 HtmlDocument data = WebPacket.Web_POST_Html(cookie, "https://cyber.gachon.ac.kr/login/index.php", "https://cyber.gachon.ac.kr/login.php", "username=" + ID + "&password=" + escape_password);
-                List<GachonClass> need_eclass_info = new List<GachonClass>();
-                foreach (HtmlNode node in data.DocumentNode.SelectNodes("//div[@class='course_box']"))
+                MysqlNode search_node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM takes_course WHERE student_id = ?ID");
+                search_node["ID"] = ID;
+
+                using (search_node.ExecuteReader())
                 {
-                    JObject box = ParseSupport.CyberCampusTitle(node.SelectSingleNode(".//div[@class='course-title']/h3").InnerText);
-                    string title = (string)box["title"];
-                    string key = (string)box["key"];
-                    lock (GachonObjects.AllClass)
+                    bool isExist = false;
+
+                    while (search_node.Read())
                     {
-                        if (!GachonObjects.AllClass.ContainsKey(key))
-                        {
-                            GachonClass newclass =GachonClass.GetObject(title, key, true);
-                            JObject urlq = ParseSupport.UrlQueryParser(node.SelectSingleNode(".//a[@class='course_link']").Attributes["href"].Value);
-                            newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
-                            need_eclass_info.Add(newclass);
-                        }
-                        CombineClass(GachonObjects.AllClass[key]);
+                        isExist = true;
+                        CombineClass(GachonObjects.AllClass[search_node.GetString("course_no")]);
                     }
-                }
-                HtmlDocument eclassinfo = null;
-                if (need_eclass_info.Count > 0)
-                    eclassinfo = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "http://eclass.gachon.ac.kr/index.jsp");
-                // 새로운 클래스가 생겼으니 eclass 정보를 읽어서 새로 생긴 클래스와 연결한다.
-                foreach (GachonClass newclass in need_eclass_info)
-                {
-                    HtmlNode node =  eclassinfo.DocumentNode.SelectSingleNode("//a[@title=" + newclass.ID + newclass.Sec_ID + "]");
-                    if (node != null)
+                    if (isExist == false)
                     {
-                        string e_id = ParseSupport.UrlQueryParser(node.Attributes["href"].Value)["Forum_seq"].ToString();
-                        newclass.CombineSite(new GachonEClass(e_id));
+                        List<GachonClass> need_eclass_info = new List<GachonClass>();
+                        foreach (HtmlNode node in data.DocumentNode.SelectNodes("//div[@class='course_box']"))
+                        {
+                            JObject box = ParseSupport.CyberCampusTitle(node.SelectSingleNode(".//div[@class='course-title']/h3").InnerText);
+                            string title = (string)box["title"];
+                            string key = (string)box["key"];
+                            lock (GachonObjects.AllClass)
+                            {
+                                if (!GachonObjects.AllClass.ContainsKey(key))
+                                {
+                                    GachonClass newclass = GachonClass.GetObject(title, key, true);
+                                    JObject urlq = ParseSupport.UrlQueryParser(node.SelectSingleNode(".//a[@class='course_link']").Attributes["href"].Value);
+                                    newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
+                                    need_eclass_info.Add(newclass);
+                                }
+                                MysqlNode insertCybernode = new MysqlNode(GachonOption.MysqlOption,"INSERT INTO takes_course (student_id, course_no)"+
+                                                                                                   "VALUES(?id, ?course_no)");
+                                insertCybernode["id"] = ID;
+                                insertCybernode["course_no"] = key;
+                                insertCybernode.ExecuteNonQuery();
+
+                                CombineClass(GachonObjects.AllClass[key]);
+                            }
+                        }
+                        HtmlDocument eclassinfo = null;
+                        if (need_eclass_info.Count > 0)
+                            eclassinfo = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "http://eclass.gachon.ac.kr/index.jsp");
+                        // 새로운 클래스가 생겼으니 eclass 정보를 읽어서 새로 생긴 클래스와 연결한다.
+                        foreach (GachonClass newclass in need_eclass_info)
+                        {
+                            HtmlNode node = eclassinfo.DocumentNode.SelectSingleNode("//a[@title=" + newclass.ID + newclass.Sec_ID + "]");
+                            if (node != null)
+                            {
+                                string e_id = ParseSupport.UrlQueryParser(node.Attributes["href"].Value)["Forum_seq"].ToString();
+                                newclass.CombineSite(new GachonEClass(e_id));
+                            }
+                        }
                     }
                 }
                 // 카페 도메인에도 세션을 만들어줌. 없을경우 처음 카페 접속시 리다이렉션 걸림.
@@ -190,11 +229,39 @@ namespace GachonLibrary
         public void GetUserInfo()
         {
             if (LoginOk == false) return; // 마지막 로그인을 실패했을경우
-            HtmlDocument data = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
-            Name = data.GetElementbyId("id_firstname").Attributes["value"].Value;
-            Email = data.GetElementbyId("id_email").Attributes["value"].Value;
-            Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
-            Department = data.DocumentNode.SelectSingleNode("//p[@class='department']").InnerText;
+            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM account WHERE id = ?ID");
+            node["ID"] = ID;
+
+            using (node.ExecuteReader())
+            {
+                if (node.Read())
+                {
+                    StudentNumber = node.GetString("studentnumber");
+                    Name = node.GetString("name");
+                    Email = node.GetString("email");
+                    Phone = node.GetString("phone");
+                    Department = node.GetString("department");
+                }
+                else
+                {
+                    HtmlDocument data = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
+                    StudentNumber = data.DocumentNode.SelectSingleNode("//div[@class='felement fstatic']").InnerText;
+                    Name = data.GetElementbyId("id_firstname").Attributes["value"].Value;
+                    Email = data.GetElementbyId("id_email").Attributes["value"].Value;
+                    Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
+                    Department = data.DocumentNode.SelectSingleNode("//p[@class='department']").InnerText;
+
+                    MysqlNode insert = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id, studentnumber, name, department, phone, email)" +
+                                                                               "values (?id, ?num, ?name, ?dept, ?phone, ?email )");
+                    insert["id"] = ID;
+                    insert["num"] = StudentNumber;
+                    insert["name"] = Name;
+                    insert["dept"] = Department;
+                    insert["phone"] = Phone;
+                    insert["email"] = Email;
+                    insert.ExecuteNonQuery();
+                }
+            }         
         }
         public override string ToString()
         {
@@ -215,6 +282,7 @@ namespace GachonLibrary
                 {
                     sb.AppendLine("로그인 상태 : 성공");
                     sb.AppendLine("이름 : " + Name);
+                    sb.AppendLine("학번 : " + StudentNumber);
                     sb.AppendLine("학과 : " + Department);
                     sb.AppendLine("이메일 : " + Email);
                     sb.AppendLine("핸드폰 : " + Phone);
@@ -243,6 +311,5 @@ namespace GachonLibrary
             if (encoding == null) encoding = Encoding.UTF8;
             return WebPacket.Web_GET_Html(encoding, cookie, url);
         }
-
     }
 }

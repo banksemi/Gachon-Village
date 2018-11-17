@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using SQL_Library;
 namespace GachonLibrary
 {
     public static class GachonOption
@@ -13,5 +13,6 @@ namespace GachonLibrary
         /// false로 설정할경우 타이틀이 짤리거나, 게시글 내용을 확인할수 없지만, 게시글의 조회수가 늘어나지는 않습니다.
         /// </summary>
         public static bool VisitPage = true;
+        public static MysqlOption MysqlOption = null;
     }
 }

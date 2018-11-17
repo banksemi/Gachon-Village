@@ -10,7 +10,7 @@ namespace GachonLibrary
 {
     public class NaverCafe : Site
     {
-        public NaverCafe(string ID) : base(ID, "Naver")
+        public NaverCafe(string ID) : base(ID, "Navercafe")
         {
         }
 
@@ -41,9 +41,9 @@ namespace GachonLibrary
                                 Int32.Parse(TitleDivs[0].InnerText),
                                 ParseSupport.StringFromHtml(TitleDivs[1].InnerText).Trim(),
                                 datas[1].InnerText.Trim(),
-                                DateTime.Parse(datas[2].InnerText)));
+                                DateTime.Parse(datas[2].InnerText),
+                                board.name));
                         }
-
                     }
                 }
             }

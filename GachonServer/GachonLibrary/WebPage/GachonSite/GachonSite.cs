@@ -31,23 +31,23 @@ namespace GachonLibrary
                     switch (menu_title)
                     {
                         case "공지사항":
-                            boards.Add(new BoardType(BoardType.PostType.Notice, new Uri(baseuri, href).AbsoluteUri));
+                            boards.Add(new BoardType(BoardType.PostType.Notice, menu_title, new Uri(baseuri, href).AbsoluteUri));
                             break;
 
                         case "강의자료실":
                         case "토론/시험자료실":
-                            boards.Add(new BoardType(BoardType.PostType.Lecture, new Uri(baseuri, href).AbsoluteUri));
+                            boards.Add(new BoardType(BoardType.PostType.Lecture, menu_title, new Uri(baseuri, href).AbsoluteUri));
                             break;
 
                         case "레포트제출실":
-                            boards.Add(new BoardType(BoardType.PostType.Homework, new Uri(baseuri, href).AbsoluteUri));
+                            boards.Add(new BoardType(BoardType.PostType.Homework, menu_title, new Uri(baseuri, href).AbsoluteUri));
                             break;
 
                         case "HOME":
                             break;
 
                         default:
-                            boards.Add(new BoardType(BoardType.PostType.ETC, new Uri(baseuri, href)));
+                            boards.Add(new BoardType(BoardType.PostType.ETC, menu_title, new Uri(baseuri, href)));
                             break;                         
                     }              
                 }
@@ -86,20 +86,22 @@ namespace GachonLibrary
                         PostItem item;
                         if (board.type == BoardType.PostType.Homework)
                         {
-                            item = new PostItem(BoardType.PostType.Homework)
+                            item = new PostItem(BoardType.PostType.Homework, board.name)
                             {
                                 source = this,
                                 url = url,
                                 no = Int32.Parse(no),
                                 Title = ParseSupport.StringFromHtml(datas[1].InnerText),
+                                time = DateTime.Now, 
                                 s_time = DateTime.Parse(datas[2].InnerText.Substring(0, 10)),
                                 e_time = DateTime.Parse(datas[2].InnerText.Substring(13, 10)),
-                                num_submitted = Int32.Parse(datas[5].InnerText.Split('/')[0])
+                                num_submitted = Int32.Parse(datas[5].InnerText.Split('/')[0]),
+                                Publisher = "관리자"
                             };                                  
                         }
                         else
                         {
-                            item = new PostItem(board.type)
+                            item = new PostItem(board.type, board.name)
                             {
                                 source = this,
                                 url = url,

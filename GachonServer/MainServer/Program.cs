@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +9,15 @@ using System.IO;
 using HtmlAgilityPack;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
+using SQL_Library;
 namespace MainServer
 {
     class Program
     {
+        static MysqlOption SqlOption = private_data.mysqlOption;
         static void Main(string[] args)
         {
+            GachonOption.MysqlOption = SqlOption;
             Function.Init_Load();
             Server server = new Server(1119);
             server.Connect += Server_Connect;
@@ -92,14 +95,14 @@ namespace MainServer
             Console.WriteLine(a.ToString(true));
             // b.Name b.Department   b.Email   b.Phone 등으로 참조 가능
 
-            GachonCafe gachonCafe = new GachonCafe("135687");
+            //GachonCafe gachonCafe = new GachonCafe("135687");
             // 컴퓨터 네트워크에 2개의 카페를 연결.
-            GachonObjects.AllClass["201809970002"].CombineSite(gachonCafe);
-            // GachonObjects.AllClass["201809372002"].CombineSite(new GachonCafe("140663"));
-
-            GachonClass gachonClass = GachonClass.GetObject("소프트웨어", "soft");
-            gachonClass.CombineSite(new NaverCafe("gachon2010"));
-            gachonClass.CombineTakeUser(a);
+            //GachonObjects.AllClass["201809970002"].CombineSite(gachonCafe);
+            //GachonObjects.AllClass["201809372002"].CombineSite(new GachonCafe("140663"));
+            
+            // GachonClass gachonClass = GachonClass.GetObject("소프트웨어", "soft");
+            //gachonClass.CombineSite(new NaverCafe("gachon2010"));
+            a.CombineClass(GachonClass.GetObject("소프트웨어", "soft"));
             Console.WriteLine("\r\n\r\n서버에 등록된 모든 강의");
             foreach (GachonClass gc in GachonObjects.AllClass.Values)
             {

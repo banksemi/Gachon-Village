@@ -32,7 +32,7 @@ namespace GachonLibrary
                         result.Insert(0, new PostItem(board.type, this, url, Int32.Parse(datas[0].InnerText),
                             ParseSupport.StringFromHtml(datas[1].InnerText),
                             datas[2].InnerText,
-                             DateTime.Parse(datas[3].InnerText)));
+                            DateTime.Parse(datas[3].InnerText),board.name));
                     }
                 }
             }
