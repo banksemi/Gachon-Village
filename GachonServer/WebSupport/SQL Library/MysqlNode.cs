@@ -19,6 +19,14 @@ namespace SQL_Library
         {
             return Reader.GetString(name);
         }
+        public int GetInt(string name)
+        {
+            return Reader.GetInt32(name);
+        }
+        public float GetFloat(string name)
+        {
+            return Reader.GetFloat(name);
+        }
         #endregion
         public MysqlNode(MysqlOption option ,string sql)
         {
