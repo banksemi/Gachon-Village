@@ -11,6 +11,7 @@ namespace GachonLibrary
         public BoardType.PostType posttype;
         public Site source;
         public int no;
+        public string board_name;
         public string Title;
         public string Publisher;
         public string Content = null;
@@ -19,11 +20,12 @@ namespace GachonLibrary
         public DateTime s_time;
         public DateTime e_time;
         public int num_submitted;
-        public PostItem(BoardType.PostType postType)
+        public PostItem(BoardType.PostType postType, string board_name)
         {
             this.posttype = postType;
+            this.board_name = board_name;           
         }
-        public PostItem(BoardType.PostType posttype, Site source,string url, int no, string title, string publisher, DateTime time)
+        public PostItem(BoardType.PostType posttype, Site source,string url, int no, string title, string publisher, DateTime time, string board_name)
         {
             this.url = url;
             this.posttype = posttype;
@@ -32,22 +34,8 @@ namespace GachonLibrary
             this.Title = title;
             this.Publisher = publisher;
             this.time = time;
-
+            this.board_name = board_name;
         }
-
-        public PostItem(BoardType.PostType posttype, Site source, string url, int no, string title, DateTime s_time, DateTime e_time, int num_submitted)
-        {
-            this.url = url;
-            this.posttype = posttype;
-            this.source = source;
-            this.no = no;
-            this.Title = title;
-            this.s_time = s_time;
-            this.e_time = e_time;
-            this.num_submitted = num_submitted;
-        } 
-
-
         public string Content_Briefly
         {
             get

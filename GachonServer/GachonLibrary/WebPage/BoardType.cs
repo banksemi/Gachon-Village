@@ -14,15 +14,18 @@ namespace GachonLibrary
         }
         public PostType type;
         public string url;
+        public string name;
         public int LastNo = 0;
-        public BoardType(PostType type, string url)
+        public BoardType(PostType type, string name, string url)
         {
             this.type = type;
+            this.name = name;
             this.url = url;
         }
-        public BoardType(PostType type, Uri uri)
+        public BoardType(PostType type, string name, Uri uri)
         {
             this.type = type;
+            this.name = name;
             this.url = uri.AbsoluteUri;
         }
     }

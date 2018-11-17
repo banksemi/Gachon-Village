@@ -311,6 +311,5 @@ namespace GachonLibrary
             if (encoding == null) encoding = Encoding.UTF8;
             return WebPacket.Web_GET_Html(encoding, cookie, url);
         }
-
     }
 }

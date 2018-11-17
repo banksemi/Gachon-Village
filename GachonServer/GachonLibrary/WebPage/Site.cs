@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +79,7 @@ namespace GachonLibrary
         }
         protected void NewBoard(BoardType.PostType type, string name, Uri baseUri, string href)
         {
-            boards.Add(new BoardType(type, new Uri(baseUri,href).AbsoluteUri));
+            boards.Add(new BoardType(type, name, new Uri(baseUri, href).AbsoluteUri));
         }
     }
 }

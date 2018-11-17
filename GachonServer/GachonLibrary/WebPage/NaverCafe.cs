@@ -41,9 +41,9 @@ namespace GachonLibrary
                                 Int32.Parse(TitleDivs[0].InnerText),
                                 ParseSupport.StringFromHtml(TitleDivs[1].InnerText).Trim(),
                                 datas[1].InnerText.Trim(),
-                                DateTime.Parse(datas[2].InnerText)));
+                                DateTime.Parse(datas[2].InnerText),
+                                board.name));
                         }
-
                     }
                 }
             }

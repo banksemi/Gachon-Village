@@ -151,6 +151,30 @@ namespace GachonLibrary
         /// <param name="postItem"></param>
         private void Site_NewPost(PostItem postItem)
         {
+            //여기에 SQL추가하기~ Insert
+            
+            if (postItem.posttype != BoardType.PostType.Homework)
+            {
+                MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
+                "INSERT INTO article (course_no, board_name, no, category, publisher, title, date, content, url, sitetype)" +
+                                    "VALUES (?course_no, ?board_name, ?no, ?cate, ?pub, ?tit, ?date, ?cont, ?url, ?sitetype) ");
+                node["course_no"] = this.Key;
+                node["board_name"] = postItem.board_name;
+                node["no"] = postItem.no;
+                node["cate"] = postItem.posttype.ToString();
+                node["pub"] = postItem.Publisher;
+                node["tit"] = postItem.Title;
+                node["date"] = postItem.time;
+                node["cont"] = postItem.Content;
+                node["url"] = postItem.url;
+                node["sitetype"] = postItem.source.Type;
+                node.ExecuteNonQuery();
+            }
+            else
+            {
+
+
+            }
             // 이 객체의 이벤트를 듣고있는 리스너에게 이벤트 메세지 전달.
             NewPost?.Invoke(this,postItem);
         }
