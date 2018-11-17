@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
+using SQL_Library;
 namespace GachonLibrary
 {
     public class GachonUser
@@ -74,6 +75,18 @@ namespace GachonLibrary
             private set { _email = value; }
         }
         /// <summary>
+        /// 해당 학생의 학번입니다.
+        /// </summary>
+        public string StudentNumber
+        {
+            get
+            {
+                if (_studentnumber == null) GetUserInfo();
+                return _studentnumber;
+            }
+            private set { _studentnumber = value; }
+        }
+        /// <summary>
         /// 현재 학생이 수강중인 강의 목록입니다.
         /// </summary>
         public List<GachonClass> Takes = new List<GachonClass>();
@@ -81,6 +94,7 @@ namespace GachonLibrary
         private string _department = null;
         private string _phone = null;
         private string _email = null;
+        private string _studentnumber = null;
         #endregion
         private GachonUser(string ID, string password)
         {
@@ -194,11 +208,40 @@ namespace GachonLibrary
         public void GetUserInfo()
         {
             if (LoginOk == false) return; // 마지막 로그인을 실패했을경우
-            HtmlDocument data = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
-            Name = data.GetElementbyId("id_firstname").Attributes["value"].Value;
-            Email = data.GetElementbyId("id_email").Attributes["value"].Value;
-            Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
-            Department = data.DocumentNode.SelectSingleNode("//p[@class='department']").InnerText;
+            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM account WHERE id = '?ID'");
+            node["ID"] = ID;
+
+            using (node.ExecuteReader())
+            {
+                if (node.Read())
+                {
+                    StudentNumber = node.GetString("studentnumber");
+                    Name = node.GetString("name");
+                    Email = node.GetString("email");
+                    Phone = node.GetString("phone");
+                    Department = node.GetString("department");
+                }
+                else
+                {
+                    HtmlDocument data = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
+                    StudentNumber = data.DocumentNode.SelectSingleNode("//div[@class='felement fstatic']").InnerText;
+                    Name = data.GetElementbyId("id_firstname").Attributes["value"].Value;
+                    Email = data.GetElementbyId("id_email").Attributes["value"].Value;
+                    Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
+                    Department = data.DocumentNode.SelectSingleNode("//p[@class='department']").InnerText;
+
+                    MysqlNode insert = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id, studentnumber, name, department, phone, email)" +
+                                                                               "values (?id, ?num, ?name, ?dept, ?phone, ?email )");
+
+                    insert["id"] = ID;
+                    insert["num"] = StudentNumber;
+                    insert["name"] = Name;
+                    insert["dept"] = Department;
+                    insert["phone"] = Phone;
+                    insert["email"] = Email;
+                    insert.ExecuteNonQuery();
+                }
+            }         
         }
         public override string ToString()
         {
