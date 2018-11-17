@@ -16,6 +16,7 @@ public class Axis : MonoBehaviour
     public float ZoomSpeed = 3;
     public Transform CameraVector;
     private bool First_Click_is_UI = false;
+    private Vector3 LastFrameMouse;
     void Start()
     {
         MainCamera = Camera.main.transform;
@@ -52,15 +53,20 @@ public class Axis : MonoBehaviour
             CameraVector.transform.rotation = q;
         }
         if (Input.GetMouseButton(0) == false && Input.GetMouseButton(1) == false) First_Click_is_UI = false;
-        if (UICamera.Raycast(Input.mousePosition) && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
-            First_Click_is_UI = true;
+            if (UICamera.Raycast(Input.mousePosition))
+                First_Click_is_UI = true;
+            LastFrameMouse = Input.mousePosition;
         }
         if (First_Click_is_UI == false && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
         {
+            Vector3 axis =  Input.mousePosition - LastFrameMouse;
+            axis /= 10;
+            LastFrameMouse = Input.mousePosition;
             // 값을 축적.
-            Gap.x += Input.GetAxis("Mouse Y") * RotationSpeed * -1;
-            Gap.y += Input.GetAxis("Mouse X") * RotationSpeed;
+            Gap.x += axis.y * RotationSpeed * -1;
+            Gap.y += axis.x * RotationSpeed;
             // 카메라 회전범위 제한.
             Gap.x = Mathf.Clamp(Gap.x, -5f, 85f);
             // 회전 값을 변수에 저장.
@@ -70,12 +76,12 @@ public class Axis : MonoBehaviour
             Quaternion q = TargetRotation;
             q.x = q.z = 0;
             CameraVector.transform.rotation = q;
-           Cursor.lockState = CursorLockMode.Locked;
+           //Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
 
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
         }
     }
 
