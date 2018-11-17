@@ -28,6 +28,7 @@ namespace MainServer
                 gachonAccount = user;
                 Items.Add(socket, this);
                 name = gachonAccount.Name;
+                skin = "Eve";
             }
         }
         public void Dispose()

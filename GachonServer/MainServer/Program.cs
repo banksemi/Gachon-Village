@@ -15,6 +15,7 @@ namespace MainServer
     {
         static void Main(string[] args)
         {
+            Function.Init_Load();
             Server server = new Server(1119);
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
@@ -43,7 +44,7 @@ namespace MainServer
                     User.Items[socket].Start();
                     break;
                 case NetworkProtocol.Move:
-                    User.Items[socket].Move(new Vector3((float)Message["x"], (float)Message["y"], (float)Message["z"]));
+                    User.Items[socket].Move(new Vector4((float)Message["x"], (float)Message["y"], (float)Message["z"], (float)Message["q"]));
                     break;
                 case NetworkProtocol.Chat:
                     User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);

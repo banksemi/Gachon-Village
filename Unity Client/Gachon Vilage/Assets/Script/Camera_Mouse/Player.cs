@@ -11,14 +11,16 @@ public class Player : MonoBehaviour {
     public float VSpeed = 0;
     public float movetime = 0;
     public bool moveok = false;
-	void Start () {
+
+    float q = 0;
+    void Start () {
         cc = GetComponent<CharacterController>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         Run();
-
     }
     void Run()
     {
@@ -57,12 +59,14 @@ public class Player : MonoBehaviour {
                 json["x"] = vc.x;
                 json["y"] = vc.y;
                 json["z"] = vc.z;
+                json["q"] = transform.rotation.eulerAngles.y;
                 NetworkMain.SendMessage(json);
                 movetime -= NetworkMain.MoveDeley;
             }
         }
-        if (vc != transform.position)
+        if (vc != transform.position || q != transform.rotation.eulerAngles.y)
         {
+            q = transform.rotation.eulerAngles.y;
             if (movetime > NetworkMain.MoveDeley)
             {
                 movetime = 0;

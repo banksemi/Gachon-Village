@@ -10,10 +10,10 @@ public class Character : MonoBehaviour {
     private Collider col;
     public int No;
     private string _name;
-    private List<Vector3> movelist = new List<Vector3>();
+    private List<Vector4> movelist = new List<Vector4>();
     public float movetime = 1;
-    public Vector3 startmove;
-    public Vector3 nextmove;
+    public Vector4 startmove;
+    public Vector4 nextmove;
     public bool LastMove = false;
     public string Name
     {
@@ -23,7 +23,6 @@ public class Character : MonoBehaviour {
     public string ID;
     void Start()
     {
-        col = transform.GetComponent<Collider>();
         label = Instantiate(Preset.objects.NameUI).GetComponent<UILabel>();
         label.transform.parent = GameObject.FindWithTag("CCG").transform;
         label.text = Name;
@@ -40,6 +39,14 @@ public class Character : MonoBehaviour {
     }
     void Update()
     {
+        if (col == null)
+        {
+            if (transform.childCount == 0) return;
+            else
+            {
+                col = transform.GetChild(0).GetComponent<Collider>();
+            }
+        }
         // 캐릭터 움직임
         if (No != NetworkMain.myNo)
         {
@@ -59,7 +66,9 @@ public class Character : MonoBehaviour {
             LastMove = false;
             if (movetime <= NetworkMain.MoveDeley)
             {
-                transform.position += (nextmove - startmove) * (Time.deltaTime) / NetworkMain.MoveDeley;
+                Vector4 move = nextmove - startmove;
+                transform.position += (Vector3)move * (Time.deltaTime) / NetworkMain.MoveDeley;
+                transform.rotation = Quaternion.Euler(0, nextmove.w, 0);
                 LastMove = true;
                 // transform.position = Vector3.Lerp(startmove, nextmove, movetime / NetworkMain.MoveDeley);
             }
@@ -72,41 +81,44 @@ public class Character : MonoBehaviour {
     }
     void LateUpdate()
     {
-        MessageTime += Time.deltaTime;
-        if (Message != null && MessageTime >= 2f)
+        if (col != null)
         {
-            Destroy(Message.gameObject);
-            Message = null;
-        }
-        Vector3 aa = col.bounds.center;
-        aa.y += col.bounds.size.y / 2 + 0.5f;
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(aa);
-        if (screenPos.z < 0 || screenPos.z > 100)
-        {
-            label.gameObject.SetActive(false);
-        }
-        else
-        {
-            screenPos.x = (int)screenPos.x;
-            screenPos.y = (int)screenPos.y;
-            if (screenPos.z > 80)
+            MessageTime += Time.deltaTime;
+            if (Message != null && MessageTime >= 2f)
             {
-                Color a = label.color;
-                a.a = (100 - screenPos.z) * 5 / 100f;
-                label.color = a;
+                Destroy(Message.gameObject);
+                Message = null;
             }
-            if (Message == null)
+            Vector3 aa = col.bounds.center;
+            aa.y += col.bounds.size.y / 2 + 0.5f;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(aa);
+            if (screenPos.z < 0 || screenPos.z > 100)
             {
-                screenPos.y += 15;
-                label.transform.localPosition = screenPos;
-                label.gameObject.SetActive(true);
+                label.gameObject.SetActive(false);
             }
             else
             {
-                screenPos.y += 35;
-                Message.transform.localPosition = screenPos;
-                Message.gameObject.SetActive(true);
-                label.gameObject.SetActive(false);
+                screenPos.x = (int)screenPos.x;
+                screenPos.y = (int)screenPos.y;
+                if (screenPos.z > 80)
+                {
+                    Color a = label.color;
+                    a.a = (100 - screenPos.z) * 5 / 100f;
+                    label.color = a;
+                }
+                if (Message == null)
+                {
+                    screenPos.y += 15;
+                    label.transform.localPosition = screenPos;
+                    label.gameObject.SetActive(true);
+                }
+                else
+                {
+                    screenPos.y += 35;
+                    Message.transform.localPosition = screenPos;
+                    Message.gameObject.SetActive(true);
+                    label.gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -115,12 +127,12 @@ public class Character : MonoBehaviour {
         Destroy(label.gameObject);
     }
 
-    public void Move(Vector3 vector3)
+    public void Move(Vector4 vector4)
     {
         if (movelist.Count == 10)
         {
             movelist.RemoveAt(0);
         }
-        movelist.Add(vector3);
+        movelist.Add(vector4);
     }
 }

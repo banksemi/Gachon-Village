@@ -8,29 +8,32 @@ using GachonLibrary;
 using Newtonsoft.Json.Linq;
 namespace MainServer
 {
-    public class Vector3
+    public class Vector4
     {
         public float x;
         public float y;
         public float z;
-        public Vector3(float x, float y, float z)
+        public float q;
+        public Vector4(float x, float y, float z, float q)
         {
             this.x = x;
             this.y = y;
             this.z = z;
+            this.q = q;
         }
     }
     public class GameObject
     {
         public static Dictionary<int, GameObject> Items = new Dictionary<int, GameObject>();
         public bool isStart = false;
-        public Vector3 position = new Vector3(0, 0, 0);
+        public Vector4 position = new Vector4(0, 0, 0, 0);
         public int no = 0;
         private static int no_count = 0;
         public string name;
         private Object No_Lock = new object();
-        private List<Vector3> movelist = new List<Vector3>();
+        private List<Vector4> movelist = new List<Vector4>();
         private const int MaxmoveSize = 10;
+        public string skin = "PostBox";
         public GameObject()
         {
             lock(No_Lock)
@@ -38,7 +41,7 @@ namespace MainServer
                 no = no_count++;
             }
         }
-        public void Move(Vector3 vector)
+        public void Move(Vector4 vector)
         {
             lock (movelist)
             {
@@ -65,6 +68,7 @@ namespace MainServer
                     json["x"] = position.x;
                     json["y"] = position.y;
                     json["z"] = position.z;
+                    json["q"] = position.q;
                     if (this is User)
                         NetworkSend.SendAllUser(json, (User)this);
                     else
@@ -77,9 +81,11 @@ namespace MainServer
             JObject json = new JObject();
             json["name"] = name;
             json["no"] = no;
+            json["skin"] = skin;
             json["x"] = position.x;
             json["y"] = position.y;
             json["z"] = position.z;
+            json["q"] = position.q;
             return json;
         }
         public virtual void Start()
@@ -98,7 +104,7 @@ namespace MainServer
             }
             Items.Add(no, this);
         }
-        public void Update()
+        public virtual void Update()
         {
             MoveUnit();
         }

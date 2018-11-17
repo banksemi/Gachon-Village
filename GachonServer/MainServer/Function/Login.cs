@@ -8,7 +8,7 @@ using GachonLibrary;
 using Newtonsoft.Json.Linq;
 namespace MainServer
 {
-    static class Function
+    static partial class Function
     {
         public static void Login(ESocket socket, string id, string password)
         {
@@ -39,7 +39,7 @@ namespace MainServer
                 return;
             }
 
-            user.position = new Vector3(-69.30f, 5.33f, 47.17f);
+            user.position = new Vector4(-69.30f, 5.33f, 47.17f, 0f);
             JObject json = new JObject();
             json["type"] = NetworkProtocol.EnterWorld;
             json["no"] = user.no; // 플레이어를 나타내는 객체가 무엇인지 알려준다.

@@ -87,9 +87,15 @@ public class NetworkMain : MonoBehaviour {
                     gameObjects.Add((int)json["no"], gameObject.GetComponent<Character>());
                 }
                 character = GetGameObject(json);
+                GameObject skin = Instantiate(Resources.Load("Object/" + (string)json["skin"]) as GameObject);
+               // Debug.Log(skin);
+                skin.transform.parent = character.transform;
+                skin.transform.localPosition = Vector3.zero;
+                skin.transform.localRotation = Quaternion.identity;
                 character.No = (int)json["no"];
                 character.Name = (string)json["name"];
-                character.transform.position = new Vector3((int)json["x"], (int)json["y"], (int)json["z"]);
+                character.transform.position = new Vector3((float)json["x"], (float)json["y"], (float)json["z"]);
+                character.transform.rotation = Quaternion.Euler(0, (float)json["q"], 0);
                 break;
             case NetworkProtocol.RemoveObject:
                 character = GetGameObject(json);
@@ -98,7 +104,7 @@ public class NetworkMain : MonoBehaviour {
                 break;
             case NetworkProtocol.Move:
                 character = GetGameObject(json);
-                character.Move(new Vector3((float)json["x"], (float)json["y"], (float)json["z"]));
+                character.Move(new Vector4((float)json["x"], (float)json["y"], (float)json["z"], (float)json["q"]));
                 break;
             case NetworkProtocol.Chat:
                 string color = "FFFFFF";
@@ -115,10 +121,12 @@ public class NetworkMain : MonoBehaviour {
                         break;
                 }
                 if (json["no"] != null)
-                    Preset.objects.ChatBox.Add(string.Format("["+ color + "]{0} : {1}[-]", json["sender"], json["message"]));
+                {
+                    if ((int)json["chattype"] != ChatType.NPC) Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0} : {1}[-]", json["sender"], json["message"]));
+                    GetGameObject(json).ChatMessage((string)json["message"]);
+                }
                 else
                     Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0}[-]", json["message"]));
-                GetGameObject(json).ChatMessage((string)json["message"]);
                 break;
         }
     }
