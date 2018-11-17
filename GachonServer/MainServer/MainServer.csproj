@@ -51,12 +51,14 @@
   <ItemGroup>
     <Compile Include="Function\Init_Load.cs" />
     <Compile Include="Function\Login.cs" />
+    <Compile Include="GachonSocket.cs" />
     <Compile Include="Network\ChatType.cs" />
     <Compile Include="Network\NetworkSend.cs" />
     <Compile Include="Object\GameObject.cs" />
     <Compile Include="Network\NetworkMessageList.cs" />
     <Compile Include="Network\NetworkProtocol.cs" />
     <Compile Include="Object\NPC.cs" />
+    <Compile Include="PostSystem.cs" />
     <Compile Include="private_data%28git%29.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

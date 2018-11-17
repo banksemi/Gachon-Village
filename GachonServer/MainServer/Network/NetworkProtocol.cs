@@ -16,5 +16,6 @@ namespace MainServer
         public const int RemoveObject = 6;
         public const int Move = 7;
         public const int Chat = 8;
+        public const int PostAlarm = 9;
     }
 }

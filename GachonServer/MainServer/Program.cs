@@ -27,6 +27,7 @@ namespace MainServer
 
         private static void Server_Exit(ESocket socket)
         {
+            GachonSocket.Exit(socket);
             if (User.Items.ContainsKey(socket))
             {
                 User.Items[socket].Dispose();

@@ -38,7 +38,7 @@ namespace MainServer
                 NetworkMessageList.TipMessage(socket, "이 계정은 다른 클라이언트에서 접속중입니다.");
                 return;
             }
-
+            GachonSocket.Connect(socket, id, true);
             user.position = new Vector4(-69.30f, 5.33f, 47.17f, 0f);
             JObject json = new JObject();
             json["type"] = NetworkProtocol.EnterWorld;
