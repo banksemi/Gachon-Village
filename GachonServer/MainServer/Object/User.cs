@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using GachonLibrary;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
-
 namespace MainServer
 {
     public class User : GameObject
@@ -15,7 +14,6 @@ namespace MainServer
         public GachonUser gachonAccount { get; private set; }
         public ESocket socket { get; private set; }
         public string ID => gachonAccount.ID;
-
         public User(ESocket socket, GachonUser user)
         {
             lock(Items)
@@ -57,6 +55,11 @@ namespace MainServer
             ToChatMessage("[컴퓨터 네트워크] 과목에 새로운 게시글이 등록되었습니다.", ChatType.System);
             ToChatMessage("이승화 : 귓속말 테스트~~~", ChatType.Whisper);
             ToChatMessage("위의 2개의 메세지는 디버그를 위해 출력되었습니다.", ChatType.Notice);
+            int NewMessage = PostSystem.GetNewMessageCount(ID);
+            if (NewMessage > 0)
+            {
+                ToChatMessage("[우편함] " + NewMessage + "개의 새로운 소식이 존재합니다!", ChatType.System);
+            }
         }
         /// <summary>
         /// 이 유저에게 채팅메세지를 전달합니다.
@@ -70,6 +73,10 @@ namespace MainServer
             json["chattype"] = Type;
             json["message"] = message;
             socket.Send(json);
+        }
+        public override void Update()
+        {
+            base.Update();
         }
     }
 }

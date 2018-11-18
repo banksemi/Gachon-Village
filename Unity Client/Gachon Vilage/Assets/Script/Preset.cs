@@ -24,9 +24,10 @@ class Preset : MonoBehaviour
 
 
     // 우편함 !!
-    public GameObject PostWindow;
+    public Window PostWindow;
     public GameObject PostItem;
     public GameObject PostItems;
+    public UILabel PostCount;
     void Start()
     {
         
@@ -37,14 +38,16 @@ class Preset : MonoBehaviour
         item.GetComponent<PostItem>().Set(json);
         item.transform.parent = PostItems.transform;
         item.transform.localScale = new Vector3(1, 1, 1);
-
-
     }
     public void PostItem_Reset()
     {
-        for (int i = 0; i < PostItems.transform.childCount; i++)
+        while (PostItems.transform.childCount > 0)
         {
-            Destroy(PostItems.transform.GetChild(i).gameObject);
+            DestroyImmediate(PostItems.transform.GetChild(0).gameObject);
         }
+    }
+    public void OpenPostWindow()
+    {
+        PostWindow.Open();
     }
 }

@@ -19,5 +19,6 @@ public static class NetworkProtocol
     public const int PostAlarm = 9;
     public const int Action = 10;
     public const int Post_Open = 11;
+    public const int Post_Detail = 12;
 }
 

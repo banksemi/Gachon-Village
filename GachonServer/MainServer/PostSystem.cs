@@ -26,7 +26,8 @@ namespace MainServer
 
         public static void GetPage(User user, int page_no)
         {
-            MysqlNode mysqlNode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?id order by date desc limit 5");
+            if (page_no < 1) page_no = 1;
+            MysqlNode mysqlNode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?id order by date desc limit "+((page_no - 1) * 5) +", 5");
             mysqlNode["id"] = user.ID;
             JArray array = new JArray();
             using (mysqlNode.ExecuteReader())
@@ -45,20 +46,64 @@ namespace MainServer
                     DateTime date = mysqlNode.GetDateTime("date");
                     if (date.DayOfYear == DateTime.Now.DayOfYear)
                     {
-                        item["date"] = date.ToString("hh:mm:ss");
+                        item["date"] = date.ToString("HH:mm:ss");
                     }
                     else
                     {
                         item["date"] = date.ToString("yyyy-MM-dd");
-
                     }
+                    item["read"] = mysqlNode.GetInt("read");
                     array.Add(item);
                 }
             }
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Post_Open;
             json["items"] = array;
+            json["newcount"] = PostSystem.GetNewMessageCount(user.ID);
+            json["count"] = PostSystem.GetMessageCount(user.ID);
+            json["page"] = page_no;
+            if ((int)json["count"] == 0) json["all_page"] = 1;
+            else json["all_page"] = ((int)json["count"] - 1) / 5 + 1;
             user.socket.Send(json);
+        }
+
+        public static void GetItem(User user, int no)
+        {
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?receiver and no=?no");
+            node["no"] = no;
+            node["receiver"] = user.ID;
+            using (node.ExecuteReader())
+            {
+                if (node.Read() == false)
+                {
+                    user.ToChatMessage("존재하지 않거나 권한이 없는 우편입니다.", ChatType.System);
+                    return;
+                }
+                if (node.GetInt("read") == 0)
+                {
+                    // 읽음 표시
+                    MysqlNode update = new MysqlNode(private_data.mysqlOption, "UPDATE post SET `read`=1 where no=?no");
+                    update["no"] = no;
+                    update.ExecuteNonQuery();
+                }
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.Post_Detail;
+                json["title"] = node.GetString("title");
+                json["content"] = node.GetString("content");
+                json["no"] = no;
+                json["sender"] = node.GetString("sender_name");
+                json["sender_id"] = node.GetString("sender");
+                DateTime date = node.GetDateTime("date");
+                if (date.DayOfYear == DateTime.Now.DayOfYear)
+                {
+                    json["date"] = date.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    json["date"] = date.ToString("yyyy-MM-dd");
+                }
+                user.socket.Send(json);
+            }
         }
 
         public static List<JObject> GetMessage(string id)
@@ -77,6 +122,26 @@ namespace MainServer
                 return result;
             }
         }
+        public static int GetNewMessageCount(string id)
+        {
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT count(*) as ncount from post where receiver=?id and `read`=0");
+            node["id"] = id;
+            using (node.ExecuteReader())
+            {
+                node.Read();
+                return node.GetInt("ncount");
+            }
+        }
+        public static int GetMessageCount(string id)
+        {
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT count(*) as ncount from post where receiver=?id");
+            node["id"] = id;
+            using (node.ExecuteReader())
+            {
+                node.Read();
+                return node.GetInt("ncount");
+            }
+        }
         public static void SendPost(string title, string content, string sender, string receiver)
         {
             DateTime date = DateTime.Now;
@@ -85,7 +150,7 @@ namespace MainServer
             Node["content"] = content;
             Node["sender"] = sender;
             Node["receiver"] = receiver;
-            Node["date"] = date;
+            Node["date"] = date.ToString("yyyy-MM-dd HH:mm:ss");
             Node.ExecuteNonQuery();
 
             JObject json = new JObject();

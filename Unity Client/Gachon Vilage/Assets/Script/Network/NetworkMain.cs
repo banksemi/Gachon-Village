@@ -135,8 +135,17 @@ public class NetworkMain : MonoBehaviour {
                 {
                     Preset.objects.PostItem_Add(arrayitem);
                 }
-
                 Preset.objects.PostItems.GetComponent<UIGrid>().repositionNow = true;
+                Preset.objects.PostWindow.TabChange("List");
+                Preset.objects.PostCount.text = "새로운 알림 (" + json["newcount"] + "/" + json["count"] + ")";
+                ((PostWindow)Preset.objects.PostWindow).pagelabel.text = json["page"] + " / " + json["all_page"];
+                ((PostWindow)Preset.objects.PostWindow).page = (int)json["page"];
+                Preset.objects.OpenPostWindow();
+                break;
+            case NetworkProtocol.Post_Detail:
+                Preset.objects.PostWindow.TabChange("Read");
+                Preset.objects.PostWindow.GetComponent<PostWindowDetail>().Set(json);
+                Preset.objects.OpenPostWindow();
                 break;
         }
     }

@@ -24,8 +24,15 @@ namespace MainServer
             server.Receive += Server_Receive;
             server.Exit += Server_Exit;
             new System.Threading.Thread(UpdateThread).Start();
+            for(int i = 0; i < 15;i++)
+            {
+               // PostSystem.SendPost("실시간 알림 테스트" + i, "Queue 테스트", "admin_keyword", "banksemi");
+            }
             while (true)
+            {
                 System.Threading.Thread.Sleep(1000);
+               // PostSystem.SendPost("실시간 알림 테스트", "Queue 테스트", "admin_keyword", "banksemi");
+            }
         }
 
         private static void Server_Exit(ESocket socket)
@@ -55,6 +62,12 @@ namespace MainServer
                     break;
                 case NetworkProtocol.Action:
                     Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
+                    break;
+                case NetworkProtocol.Post_Open:
+                    PostSystem.GetPage(User.Items[socket], (int)Message["page"]);
+                    break;
+                case NetworkProtocol.Post_Detail:
+                    PostSystem.GetItem(User.Items[socket], (int)Message["no"]);
                     break;
             }
         }
