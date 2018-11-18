@@ -16,5 +16,8 @@ public static class NetworkProtocol
     public const int RemoveObject = 6;
     public const int Move = 7;
     public const int Chat = 8;
+    public const int PostAlarm = 9;
+    public const int Action = 10;
+    public const int Post_Open = 11;
 }
 

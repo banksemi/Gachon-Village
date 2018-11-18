@@ -9,6 +9,7 @@ public class Character : MonoBehaviour {
     private UILabel label;
     private Collider col;
     public int No;
+    public string function = null;
     private string _name;
     private List<Vector4> movelist = new List<Vector4>();
     public float movetime = 1;

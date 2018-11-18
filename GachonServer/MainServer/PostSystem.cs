@@ -23,6 +23,44 @@ namespace MainServer
                 MessageQueue[id].Add(json);
             }
         }
+
+        public static void GetPage(User user, int page_no)
+        {
+            MysqlNode mysqlNode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?id order by date desc limit 5");
+            mysqlNode["id"] = user.ID;
+            JArray array = new JArray();
+            using (mysqlNode.ExecuteReader())
+            {
+                while(mysqlNode.Read())
+                {
+                    JObject item = new JObject();
+                    item["title"] = mysqlNode.GetString("title");
+                    string content = mysqlNode.GetString("content");
+                    if (content.Length < 20)
+                        item["content"] = content;
+                    else
+                        item["content"] = content.Substring(0, 20) + "...";
+                    item["no"] = mysqlNode.GetInt("no");
+                    item["sender"] = mysqlNode.GetString("sender_name");
+                    DateTime date = mysqlNode.GetDateTime("date");
+                    if (date.DayOfYear == DateTime.Now.DayOfYear)
+                    {
+                        item["date"] = date.ToString("hh:mm:ss");
+                    }
+                    else
+                    {
+                        item["date"] = date.ToString("yyyy-MM-dd");
+
+                    }
+                    array.Add(item);
+                }
+            }
+            JObject json = new JObject();
+            json["type"] = NetworkProtocol.Post_Open;
+            json["items"] = array;
+            user.socket.Send(json);
+        }
+
         public static List<JObject> GetMessage(string id)
         {
             if (!MessageQueue.ContainsKey(id)) return null;

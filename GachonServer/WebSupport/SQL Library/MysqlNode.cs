@@ -32,6 +32,10 @@ namespace SQL_Library
         {
             return Reader.GetFloat(name);
         }
+        public DateTime GetDateTime(string name)
+        {
+            return Reader.GetDateTime(name);
+        }
         #endregion
         public MysqlNode(MysqlOption option ,string sql)
         {

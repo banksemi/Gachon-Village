@@ -11,7 +11,7 @@ public class NetworkMain : MonoBehaviour {
     private LinkedList<JObject> queue = new LinkedList<JObject>();
     private static Client server;
     private Thread thread;
-    private Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
+    public static Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
     public GameObject TipMessageObject;
     public GameObject NewGameObject;
     public static int myNo;
@@ -94,6 +94,7 @@ public class NetworkMain : MonoBehaviour {
                 skin.transform.localRotation = Quaternion.identity;
                 character.No = (int)json["no"];
                 character.Name = (string)json["name"];
+                character.function = (string)json["function"];
                 character.transform.position = new Vector3((float)json["x"], (float)json["y"], (float)json["z"]);
                 character.transform.rotation = Quaternion.Euler(0, (float)json["q"], 0);
                 break;
@@ -127,6 +128,15 @@ public class NetworkMain : MonoBehaviour {
                 }
                 else
                     Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0}[-]", json["message"]));
+                break;
+            case NetworkProtocol.Post_Open:
+                Preset.objects.PostItem_Reset();
+                foreach(JObject arrayitem in (JArray)json["items"])
+                {
+                    Preset.objects.PostItem_Add(arrayitem);
+                }
+
+                Preset.objects.PostItems.GetComponent<UIGrid>().repositionNow = true;
                 break;
         }
     }

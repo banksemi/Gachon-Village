@@ -53,6 +53,9 @@ namespace MainServer
                 case NetworkProtocol.Chat:
                     User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);
                     break;
+                case NetworkProtocol.Action:
+                    Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
+                    break;
             }
         }
         public static void UpdateThread()

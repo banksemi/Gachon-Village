@@ -76,7 +76,7 @@ namespace MainServer
                 }
             }
         }
-        public JObject InfoData()
+        public virtual JObject InfoData()
         {
             JObject json = new JObject();
             json["name"] = name;

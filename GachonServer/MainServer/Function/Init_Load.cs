@@ -19,6 +19,7 @@ namespace MainServer
                     NPC npc = new NPC();
                     npc.skin = node.GetString("skin");
                     npc.name = node.GetString("name");
+                    npc.function = node.GetString("function");
                     npc.position = new Vector4(node.GetFloat("x"), node.GetFloat("y"), node.GetFloat("z"), node.GetFloat("q"));
 
                     MysqlNode messagenode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM npc_message WHERE npc_no=?no");
