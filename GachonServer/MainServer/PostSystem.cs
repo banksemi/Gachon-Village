@@ -27,6 +27,12 @@ namespace MainServer
         public static void GetPage(User user, int page_no)
         {
             if (page_no < 1) page_no = 1;
+            int newcount = PostSystem.GetNewMessageCount(user.ID);
+            int count = PostSystem.GetMessageCount(user.ID);
+            int all_page = 1;
+            if (count == 0) all_page = 1;
+            else all_page = (count - 1) / 5 + 1;
+            if (page_no > all_page) page_no = all_page;
             MysqlNode mysqlNode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?id order by date desc limit "+((page_no - 1) * 5) +", 5");
             mysqlNode["id"] = user.ID;
             JArray array = new JArray();
@@ -59,11 +65,10 @@ namespace MainServer
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Post_Open;
             json["items"] = array;
-            json["newcount"] = PostSystem.GetNewMessageCount(user.ID);
-            json["count"] = PostSystem.GetMessageCount(user.ID);
+            json["newcount"] = newcount;
+            json["count"] = count;
             json["page"] = page_no;
-            if ((int)json["count"] == 0) json["all_page"] = 1;
-            else json["all_page"] = ((int)json["count"] - 1) / 5 + 1;
+            json["all_page"] = all_page;
             user.socket.Send(json);
         }
 
