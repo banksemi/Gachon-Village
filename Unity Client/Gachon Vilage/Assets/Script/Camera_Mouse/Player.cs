@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
     public bool moveok = false;
 
     float q = 0;
+    private BoxCollider col;
     void Start () {
         cc = GetComponent<CharacterController>();
 	}
@@ -20,6 +21,15 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (col == null)
+        {
+            if (transform.childCount == 0) return;
+            else
+            {
+                col = transform.GetChild(0).GetComponent<BoxCollider>();
+                cc.center = col.center;
+            }
+        }
         Run();
     }
     void Run()

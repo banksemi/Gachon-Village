@@ -69,6 +69,9 @@ namespace MainServer
                 case NetworkProtocol.Post_Detail:
                     PostSystem.GetItem(User.Items[socket], (int)Message["no"]);
                     break;
+                case NetworkProtocol.NewStudy:
+                    StudySystem.NewStudy(User.Items[socket], Message);
+                    break;
             }
         }
         public static void UpdateThread()

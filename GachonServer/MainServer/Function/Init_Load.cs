@@ -36,6 +36,22 @@ namespace MainServer
                     Console.WriteLine("NPC " + npc.name + " 추가");
                 }
             }
+
+
+            Group_Load();
+        }
+        private static void Group_Load()
+        {
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM course join `group` on group.group_name=course.no");
+            using (node.ExecuteReader())
+            {
+                while (node.Read())
+                {
+                    Study group = new Study(node.GetString("group_name"), new Vector4(node.GetFloat("x"), node.GetFloat("y"), node.GetFloat("z"), node.GetFloat("q")));
+                    group.Start();
+                    Console.WriteLine("Group " + group.name + " 추가");
+                }
+            }
         }
     }
 }

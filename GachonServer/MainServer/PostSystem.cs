@@ -42,7 +42,7 @@ namespace MainServer
                 {
                     JObject item = new JObject();
                     item["title"] = mysqlNode.GetString("title");
-                    string content = mysqlNode.GetString("content");
+                    string content = WebSupport.ParseSupport.NoEnterString(mysqlNode.GetString("content"));
                     if (content.Length < 20)
                         item["content"] = content;
                     else
@@ -168,7 +168,10 @@ namespace MainServer
             ESocket socket = GachonSocket.GetOnlineUser(receiver);
             if (socket != null)
             {
-                socket.Send(json);
+                if (User.Items.ContainsKey(socket))
+                    User.Items[socket].ToChatMessage("[우편함] 새로운 메세지가 도착했습니다.", ChatType.System);
+                else
+                    socket.Send(json);
             }
             else
             {

@@ -58,7 +58,7 @@ namespace MainServer
             int NewMessage = PostSystem.GetNewMessageCount(ID);
             if (NewMessage > 0)
             {
-                ToChatMessage("[우편함] " + NewMessage + "개의 새로운 소식이 존재합니다!", ChatType.System);
+                ToChatMessage("[우편함] " + NewMessage + "개의 읽지 않은 우편이 존재합니다!", ChatType.System);
             }
         }
         /// <summary>

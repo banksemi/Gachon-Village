@@ -46,6 +46,10 @@ namespace WebSupport
             text = text.Replace("&gt;", ">");
             return text;
         }
+        public static string NoEnterString(string text)
+        {
+            return text.Replace("\r\n", " ").Replace("\n", " ");
+        }
         public static string StringFromHtmlNode(HtmlNode node)
         {
             string temp;

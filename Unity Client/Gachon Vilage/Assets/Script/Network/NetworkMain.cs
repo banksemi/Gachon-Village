@@ -147,6 +147,9 @@ public class NetworkMain : MonoBehaviour {
                 Preset.objects.PostWindow.GetComponent<PostWindowDetail>().Set(json);
                 Preset.objects.OpenPostWindow();
                 break;
+            case NetworkProtocol.CloseNewStudy:
+                Preset.objects.NewStudyWindow.Close();
+                break;
         }
     }
     // Update is called once per frame

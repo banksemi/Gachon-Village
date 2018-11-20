@@ -28,6 +28,8 @@ class Preset : MonoBehaviour
     public GameObject PostItem;
     public GameObject PostItems;
     public UILabel PostCount;
+
+    public Window NewStudyWindow;
     void Start()
     {
         

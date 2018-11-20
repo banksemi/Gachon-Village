@@ -104,7 +104,18 @@ namespace SQL_Library
         public int ExecuteNonQuery()
         {
             MySqlCommand cmd = Open();
-            int result = cmd.ExecuteNonQuery();
+            int result = 0;
+            try
+            {
+                result = cmd.ExecuteNonQuery();
+            }
+            catch (MySqlException e)
+            {
+                if (e.Number == 1062)
+                    return -1;
+                else
+                    throw e;
+            }
             AllClose();
             return result;
         }

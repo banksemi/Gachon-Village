@@ -20,5 +20,7 @@ public static class NetworkProtocol
     public const int Action = 10;
     public const int Post_Open = 11;
     public const int Post_Detail = 12;
+    public const int NewStudy = 13;
+    public const int CloseNewStudy = 14;
 }
 

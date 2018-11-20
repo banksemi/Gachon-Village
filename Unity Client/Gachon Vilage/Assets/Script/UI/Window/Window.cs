@@ -24,11 +24,12 @@ public class Window : MonoBehaviour
             else Toggle[i].SetActive(false);
         }
     }
-    public void Close()
+    public virtual void Close()
     {
+        UIInput.selection = null;
         gameObject.SetActive(false);
     }
-    public void Open()
+    public virtual void Open()
     {
         gameObject.SetActive(true);
     }

@@ -11,7 +11,7 @@ namespace MainServer
     {
         public static void NPC_Action(NPC npc, User user)
         {
-            user.ToChatMessage(npc.function + "를 선택", ChatType.System);
+            //user.ToChatMessage(npc.function + "를 선택", ChatType.System);
             if (npc.function == "우편함 열기")
             {
                 PostSystem.GetPage(user, 1);
