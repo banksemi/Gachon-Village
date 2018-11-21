@@ -22,7 +22,22 @@ namespace MainClient
             NetworkFile file = new NetworkFile("./123.png", true);
             JObject json = new JObject();
             json["himessage"] = "ㅋㅋ";
+            file.Start += delegate (NetworkFile networkFile)
+            {
+                Console.WriteLine("난 시작했단걸 알아챘어!");
+            };
+            file.Process += delegate (NetworkFile networkFile)
+            {
+                Console.WriteLine(networkFile.FileName + "을 보내는 중이야");
+            };
+            file.End += delegate (NetworkFile networkFile)
+            {
+                Console.WriteLine(networkFile.FileName + "을 보내는 중이야");
+            };
+
+            Console.WriteLine("서버로 요청을 해볼게!");
             server.SendFile(json, file);
+
             while (true)
             {
                 System.Threading.Thread.Sleep(1000);

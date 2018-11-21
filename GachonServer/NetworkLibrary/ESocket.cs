@@ -62,6 +62,10 @@ namespace NetworkLibrary
                         {
                             FileInfoReceive(this, (JObject)json["message"], new NetworkFile((JObject)json["file"]));
                         }
+                        else if((int)json["type"]==-2)
+                        {
+                            NetworkFile.NetFiles[(int)json["no"]].StartInSender((int)json["serverkey"]);
+                        }
                         else
                         {
                             Receive(this, json);

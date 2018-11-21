@@ -25,6 +25,7 @@ namespace MainServer
 
         private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
         {
+            file.StartFileTransmission(socket);
             Console.WriteLine(Message.ToString());
         }
 
