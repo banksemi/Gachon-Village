@@ -3139,6 +3139,11 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114836116366010160, guid: 8d6815d61179b264a92c0d044ddb1174,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114266681568847684, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
@@ -18667,7 +18672,7 @@ MonoBehaviour:
   mClipping: 3
   mClipRange: {x: 275, y: -135, z: 550, w: 290}
   mClipSoftness: {x: 4, y: 4}
-  mDepth: 2
+  mDepth: 35
   mSortingOrder: 0
   mSortingLayerName: 
   mClipOffset: {x: 0, y: -9.999802}
