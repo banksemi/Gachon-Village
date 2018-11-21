@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
+using NetworkLibrary.File;
 namespace MainServer
 {
     class Program
@@ -14,11 +15,17 @@ namespace MainServer
             Server server = new Server(10000);
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
+            server.FileInfoReceive += Server_FileInfoReceive;
             server.Exit += Server_Exit;
             while(true)
             {
                 System.Threading.Thread.Sleep(1000);
             }
+        }
+
+        private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+        {
+            Console.WriteLine(Message.ToString());
         }
 
         private static void Server_Receive(ESocket socket, JObject Message)

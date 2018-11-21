@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using NetworkLibrary.File;
 namespace NetworkLibrary
 {
     public class Server
@@ -17,6 +18,7 @@ namespace NetworkLibrary
         public event SocketEvent.Connect Connect;
         public event SocketEvent.Receive Receive;
         public event SocketEvent.Exit Exit;
+        public event SocketEvent.FileInfoReceive FileInfoReceive;
         private TcpListener Listener;
         Thread Update_Thread = null;
         public int port { get; private set; }
@@ -38,6 +40,7 @@ namespace NetworkLibrary
                     client = new UserSocket(Listener.AcceptTcpClient());
                     client.Connect += Client_Connect;
                     client.Receive += Client_Receive;
+                    client.FileInfoReceive += FileInfoReceive;
                     client.Exit += Client_Exit;
                     client.Start();
                 }
@@ -61,6 +64,10 @@ namespace NetworkLibrary
         private void Client_Receive(ESocket socket, JObject Message)
         {
             if (Receive != null) Receive(socket, Message);
+        }
+        private void Client_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+        {
+            if (FileInfoReceive != null) FileInfoReceive(socket, Message, file);
         }
     }
 }

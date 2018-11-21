@@ -10,12 +10,14 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using NetworkLibrary.File;
 namespace NetworkLibrary
 {
     public class ESocket
     {
         public event SocketEvent.Connect Connect;
         public event SocketEvent.Receive Receive;
+        public event SocketEvent.FileInfoReceive FileInfoReceive;
         public event SocketEvent.Exit Exit;
         public bool isClosed { get; private set; }
         TcpClient tcpClient = null;
@@ -53,7 +55,18 @@ namespace NetworkLibrary
                     message = SR.ReadLine();
                     if (message == null) break;
                     JObject json = JObject.Parse(message);
-                    if (Receive != null) Receive(this, json);
+
+                    if (Receive != null)
+                    {
+                        if ((int)json["type"] == -1)
+                        {
+                            FileInfoReceive(this, (JObject)json["message"], new NetworkFile((JObject)json["file"]));
+                        }
+                        else
+                        {
+                            Receive(this, json);
+                        }
+                    }
                 }
                 catch(IOException e) // e.InnerException.GetType().Name == SocketException
                 {
@@ -84,6 +97,14 @@ namespace NetworkLibrary
                 // 오브젝트가 종료된경우, 더이상 메세지를 보내지 않고 무시함.
             }
             return false;
+        }
+        public void SendFile(JObject message, NetworkFile file)
+        {
+            JObject jObject = new JObject();
+            jObject["type"] = -1;
+            jObject["message"] = message;
+            jObject["file"] = file.Information;
+            Send(jObject);
         }
         public void Dispose()
         {
