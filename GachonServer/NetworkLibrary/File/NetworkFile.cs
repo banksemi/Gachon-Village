@@ -42,18 +42,10 @@ namespace NetworkLibrary.File
         public event FileAction Process;
         public event FileAction End;
         public event FileAction Error;
-        public void ErrorEvent()
-        {
-            Error?.Invoke(this);
-        }
-        public void EndEvent()
-        {
-            End?.Invoke(this);
-        }
-        public void ProcessEvent()
-        {
-            Process?.Invoke(this);
-        }
+        /// <summary>
+        /// 업로드 모드로 작성할 새로운 파일입니다.
+        /// </summary>
+        /// <param name="Path"></param>
         public NetworkFile(string Path)
         {
             this.Path = Path;
@@ -62,19 +54,32 @@ namespace NetworkLibrary.File
             FileSize = info.Length;
             FileName = info.Name;
             No = NewNumber;
+            ServerKey = No;
             NetFiles.Add(No, this);
         }
+        /// <summary>
+        /// 다운로드 요청이 온 새로운 파일입니다.
+        /// </summary>
+        /// <param name="json"></param>
         public NetworkFile(JObject json)
         {
             this.upload = false;
             FileSize = (long)json["size"];
             FileName = (string)json["name"];
-            No = (int)json["no"];
-            ServerKey  = 10000 + NewNumber;
-
-            NetFiles.Add(ServerKey, this);
+            if (this is NClientFile)
+            {
+                No = NewNumber;
+                ServerKey = (int)json["no"];
+                NetFiles.Add(No, this);
+            }
+            else
+            {
+                No = (int)json["no"];
+                ServerKey = NewNumber;
+                NetFiles.Add(ServerKey, this);
+            }
         }
-        public void StartUpload(TcpClient socket)
+        private void StartUpload(TcpClient socket)
         {
             NetworkStream ns = socket.GetStream();
             // 파일보내기
@@ -101,7 +106,7 @@ namespace NetworkLibrary.File
                 socket.Close();
             }
         }
-        public void StartDownload(TcpClient socket)
+        private void StartDownload(TcpClient socket)
         {
             NetworkStream ns = socket.GetStream();
             FileStream filestream = new FileStream(Path, FileMode.Create);
@@ -120,11 +125,15 @@ namespace NetworkLibrary.File
             filestream.Close();
             socket.Close();
         }
+        /// <summary>
+        /// 서로간의 파일 전용 소켓이 만들어졌고, 헤더정보가 교환됬을때 실행되는 함수입니다. 라이브러리 내부에서만 사용됩니다.
+        /// </summary>
+        /// <param name="client"></param>
         public void StartEvent(TcpClient client)
         {
             try
             {
-                Console.WriteLine("[NetworkFile] " + ServerKey + " : 정상 시작");
+                Console.WriteLine("[NetworkFile : "+No+"] " + ServerKey + " : 정상 시작");
                 Start?.Invoke(this);
                 if (upload == true)
                 {
@@ -142,6 +151,16 @@ namespace NetworkLibrary.File
                 Console.WriteLine("[NetworkFile] " + ServerKey + " : " + e.Message);
                 Error?.Invoke(this);
             }
+        }
+        protected abstract void AcceptFile(string path);
+        /// <summary>
+        /// 파일을 다운로드에 동의합니다.
+        /// </summary>
+        /// <param name="path"></param>
+        public void Accept(string path)
+        {
+            if (upload == true) throw new Exception("업로드 주체는 상대방의 동의없이 전송을 시작할 수 없습니다.");
+            AcceptFile(path);
         }
     }
 }

@@ -23,6 +23,15 @@ namespace NetworkLibrary.File
         {
             this.server = server;
         }
+        protected override void AcceptFile(string path)
+        {
+            if (path != null)
+            {
+                if (upload) throw new Exception("업로드 모드일때는 경로를 수정할 수 없습니다.");
+                else this.Path = path;
+            }
+            ConnectFileServer();
+        }
         public void ConnectFileServer()
         {
             new Thread(

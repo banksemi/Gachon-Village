@@ -20,11 +20,10 @@ namespace NetworkLibrary.File
         {
             this.socket = socket;
         }
-
         /// <summary>
         /// 이 파일에 대해서 업로드 요청을 허락합니다. 한번만 실행되야합니다.
         /// </summary>
-        public void StartFileTransmission(string path)
+        protected override void AcceptFile(string path)
         {
             this.Path = path;
             JObject jObject = new JObject();

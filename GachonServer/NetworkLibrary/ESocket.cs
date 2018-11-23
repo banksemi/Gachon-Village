@@ -69,7 +69,7 @@ namespace NetworkLibrary
                             {
                                 file = new NServerFile(this, (JObject)json["file"]);
                             }
-                            FileInfoReceive(this, (JObject)json["message"], file);
+                            FileInfoReceive?.Invoke(this, (JObject)json["message"], file);
                         }
                         else if((int)json["type"]==-2)
                         {

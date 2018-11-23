@@ -27,7 +27,16 @@ namespace MainServer
         private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
         {
             Console.WriteLine(Message.ToString());
-            ((NServerFile)file).StartFileTransmission("./U" + file.FileName);
+            file.Accept("./U" + file.FileName);
+            if (file.FileName == "3.png")
+            {
+                file.End += delegate (NetworkFile file5)
+                {
+                    Console.WriteLine("3번 파일 전송 끝");
+                    NServerFile newfile = new NServerFile(socket, "./U7.png");
+                    socket.SendFile(Message, newfile);
+                };
+            }
         }
 
         private static void Server_Receive(ESocket socket, JObject Message)

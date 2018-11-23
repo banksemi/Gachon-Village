@@ -16,6 +16,7 @@ namespace MainClient
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
             server.Exit += Server_Exit;
+            server.FileInfoReceive += Server_FileInfoReceive;
             server.Start();
 
 
@@ -24,18 +25,18 @@ namespace MainClient
             json["himessage"] = "ㅋㅋ";
 
             Console.WriteLine("서버로 요청을 해볼게!");
-            server.SendFile(json, new NClientFile(server, "./1.png"));
-            server.SendFile(json, new NClientFile(server, "./2.png"));
+            server.SendFile(json, new NClientFile(server, "./113.png"));
             server.SendFile(json, new NClientFile(server, "./3.png"));
-            server.SendFile(json, new NClientFile(server, "./4.png"));
-            server.SendFile(json, new NClientFile(server, "./5.png"));
-            server.SendFile(json, new NClientFile(server, "./6.png"));
-            server.SendFile(json, new NClientFile(server, "./7.png"));
 
             while (true)
             {
                 System.Threading.Thread.Sleep(1000);
             }
+        }
+
+        private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+        {
+            file.Accept("./다운.png");
         }
 
         private static void Server_Receive(ESocket socket, JObject Message)
