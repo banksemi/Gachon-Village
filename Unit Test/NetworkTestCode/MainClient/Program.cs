@@ -19,24 +19,18 @@ namespace MainClient
             server.Start();
 
 
-            NetworkFile file = new NetworkFile("./123.png", true);
+            NetworkFile file = new NClientFile(server, "./123.pptx");
             JObject json = new JObject();
             json["himessage"] = "ㅋㅋ";
-            file.Start += delegate (NetworkFile networkFile)
-            {
-                Console.WriteLine("난 시작했단걸 알아챘어!");
-            };
-            file.Process += delegate (NetworkFile networkFile)
-            {
-                Console.WriteLine(networkFile.FileName + "을 보내는 중이야");
-            };
-            file.End += delegate (NetworkFile networkFile)
-            {
-                Console.WriteLine(networkFile.FileName + "을 보내는 중이야");
-            };
 
             Console.WriteLine("서버로 요청을 해볼게!");
-            server.SendFile(json, file);
+            server.SendFile(json, new NClientFile(server, "./1.png"));
+            server.SendFile(json, new NClientFile(server, "./2.png"));
+            server.SendFile(json, new NClientFile(server, "./3.png"));
+            server.SendFile(json, new NClientFile(server, "./4.png"));
+            server.SendFile(json, new NClientFile(server, "./5.png"));
+            server.SendFile(json, new NClientFile(server, "./6.png"));
+            server.SendFile(json, new NClientFile(server, "./7.png"));
 
             while (true)
             {

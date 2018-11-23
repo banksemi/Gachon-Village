@@ -63,48 +63,23 @@ namespace NetworkLibrary
                 TcpClient client = null;
                 try
                 {
-                    
                     client = FileListener.AcceptTcpClient();
-                    new Thread(new ThreadStart(
-                        delegate
+                    new Thread(
+                        delegate ()
                         {
-                            Console.WriteLine("누군가 파일서버에 커넥션을 요청 :)");
+                            Console.WriteLine("[File Server] 새로운 커넥션");
                             NetworkStream ns = client.GetStream();
-                            if (ns.ReadByte() == 1)
+                            byte[] aa = new byte[4];
+                            ns.Read(aa, 0, 4);
+                            int Serverkey = BitConverter.ToInt32(aa, 0);
+                            NServerFile file = (NServerFile)NetworkFile.NetFiles[Serverkey];
+                            if (file.is_started)
                             {
-                                byte[] aa = new byte[4];
-                                ns.Read(aa, 0, 4);
-                                int Serverkey = BitConverter.ToInt32(aa, 0);
-                                Console.WriteLine("이사람의 서버키는 " + Serverkey + "이었음.");
-                                NetworkFile file = NetworkFile.NetFiles[Serverkey];
-                                if (file.is_started)
-                                {
-                                    client.Close();
-                                }
-                                Console.WriteLine("나는 " + file.FileSize+
-                                    "바이트의 " +
-                                    file.FileName +
-                                    "파일을 " +
-                                    "받을 준비가 되었다.");
-                                FileStream filestream = new FileStream("./temp.png", FileMode.CreateNew);
-                                long remained = file.FileSize;
-                                while (remained > 0)
-                                {
-                                    int temp = 1024;
-                                    if (remained < 1024) temp = (int)remained;
-                                    byte[] temp_byte = new byte[1024];
-                                    ns.Read(temp_byte, 0, temp);
-                                    filestream.Write(temp_byte, 0, temp);
-
-                                    remained -= temp;
-                                }
-                                filestream.Flush();
-                                filestream.Close();
-                                Console.WriteLine("파일을 전부 받았으니 확인해보세요");
-
+                                client.Close();
                             }
+                            file.is_started = true;
+                            file.StartEvent(client);
                         }
-                        )
                         ).Start();
                 }
                 catch (Exception e)

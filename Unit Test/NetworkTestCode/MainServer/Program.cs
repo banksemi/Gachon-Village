@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetworkLibrary;
+using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
 using NetworkLibrary.File;
 namespace MainServer
@@ -25,8 +26,8 @@ namespace MainServer
 
         private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
         {
-            file.StartFileTransmission(socket);
             Console.WriteLine(Message.ToString());
+            ((NServerFile)file).StartFileTransmission("./U" + file.FileName);
         }
 
         private static void Server_Receive(ESocket socket, JObject Message)

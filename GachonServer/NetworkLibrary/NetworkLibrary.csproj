@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="File\NClientFile.cs" />
+    <Compile Include="File\NServerFile.cs" />
     <Compile Include="File\NetworkFile.cs" />
     <Compile Include="SocketEvent.cs" />
     <Compile Include="Server.cs" />

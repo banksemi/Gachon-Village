@@ -18,6 +18,8 @@ namespace NetworkLibrary
         public int port { get; private set; }
         public Client(string ip, int port) : base(new TcpClient(ip,port))
         {
+            this.ip = ip;
+            this.port = port;
         }
     }
 }
