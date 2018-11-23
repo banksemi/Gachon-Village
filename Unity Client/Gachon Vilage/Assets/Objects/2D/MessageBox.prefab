@@ -215,7 +215,7 @@ MonoBehaviour:
   rightAnchor:
     target: {fileID: 4274546157931800}
     relative: 0
-    absolute: 90
+    absolute: 120
   bottomAnchor:
     target: {fileID: 4274546157931800}
     relative: 1
