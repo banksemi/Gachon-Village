@@ -78,16 +78,28 @@ namespace NetworkLibrary.File
         {
             NetworkStream ns = socket.GetStream();
             // 파일보내기
-            BinaryReader realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open));
-            int count = (int)(FileSize / 1024) + 1;
-            for (int i = 0; i < count; i++)
+            BinaryReader realFile = null;
+            try
             {
-                byte[] bs = realFile.ReadBytes(1024);
-                ns.Write(bs, 0, bs.Length);
-                ns.Flush();
+                realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open));
+                int count = (int)(FileSize / 1024) + 1;
+                for (int i = 0; i < count; i++)
+                {
+                    byte[] bs = realFile.ReadBytes(1024);
+                    ns.Write(bs, 0, bs.Length);
+                    ns.Flush();
+                }
             }
-            ns.Close();
-            socket.Close();
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                if (realFile != null) realFile.Close();
+                ns.Close();
+                socket.Close();
+            }
         }
         public void StartDownload(TcpClient socket)
         {
