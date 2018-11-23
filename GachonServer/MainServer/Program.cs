@@ -72,6 +72,12 @@ namespace MainServer
                 case NetworkProtocol.NewStudy:
                     StudySystem.NewStudy(User.Items[socket], Message);
                     break;
+                case NetworkProtocol.Keyword_Remove:
+                    KeywordSystem.RemoveItem(User.Items[socket], (string)Message["keyword"]);
+                    break;
+                case NetworkProtocol.Keyword_Add:
+                    KeywordSystem.AddItem(User.Items[socket], (string)Message["keyword"]);
+                    break;
             }
         }
         public static void UpdateThread()

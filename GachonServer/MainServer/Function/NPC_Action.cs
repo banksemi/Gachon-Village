@@ -15,7 +15,10 @@ namespace MainServer
             if (npc.function == "우편함 열기")
             {
                 PostSystem.GetPage(user, 1);
-
+            }
+            if (npc.function == "키워드 알림 설정")
+            {
+                KeywordSystem.GetList(user);
             }
         }
     }
