@@ -101,8 +101,8 @@ namespace NetworkLibrary.File
                 byte[] temp_byte = new byte[1024];
                 int r = ns.Read(temp_byte, 0, temp);
 
-                filestream.Write(temp_byte, 0, temp);
-                remained -= temp;
+                filestream.Write(temp_byte, 0, r);
+                remained -= r;
             }
             filestream.Flush();
             filestream.Close();
