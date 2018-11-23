@@ -25,6 +25,7 @@ namespace NetworkLibrary.File
         public string Path { get; protected set; }
         public long FileSize { get; private set; }
         public string FileName { get; private set; }
+        public long FinishByte { get; private set; }
         public bool upload { get; private set; }
         public JObject Information
         {
@@ -93,6 +94,11 @@ namespace NetworkLibrary.File
                     byte[] bs = realFile.ReadBytes(1024);
                     ns.Write(bs, 0, bs.Length);
                     ns.Flush();
+                    if (i % 16 == 15)
+                    {
+                        FinishByte = (i + 1) * 1024;
+                        Process?.Invoke(this);
+                    }
                 }
             }
             catch (Exception e)
@@ -111,6 +117,7 @@ namespace NetworkLibrary.File
             NetworkStream ns = socket.GetStream();
             FileStream filestream = new FileStream(Path, FileMode.Create);
             long remained = FileSize;
+            int i = 0;
             while (remained > 0)
             {
                 int temp = 1024;
@@ -120,6 +127,12 @@ namespace NetworkLibrary.File
 
                 filestream.Write(temp_byte, 0, r);
                 remained -= r;
+                if (i % 16 == 15)
+                {
+                    FinishByte = FileSize - remained;
+                    Process?.Invoke(this);
+                }
+                i++;
             }
             filestream.Flush();
             filestream.Close();

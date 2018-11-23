@@ -13,7 +13,7 @@ namespace MainServer
     {
         static void Main(string[] args)
         {
-            Server server = new Server(10000);
+            Server server = new Server(10001);
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
             server.FileInfoReceive += Server_FileInfoReceive;
@@ -34,6 +34,10 @@ namespace MainServer
                 {
                     Console.WriteLine("3번 파일 전송 끝");
                     NServerFile newfile = new NServerFile(socket, "./U7.png");
+                    newfile.Process += delegate (NetworkFile file56)
+                    {
+                        Console.WriteLine("받은 바이트" + ((double)newfile.FinishByte / (double)newfile.FileSize));
+                    };
                     socket.SendFile(Message, newfile);
                 };
             }
