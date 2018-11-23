@@ -86,6 +86,21 @@ namespace NetworkLibrary
                                     file.FileName +
                                     "파일을 " +
                                     "받을 준비가 되었다.");
+                                FileStream filestream = new FileStream("./temp.png", FileMode.CreateNew);
+                                long remained = file.FileSize;
+                                while (remained > 0)
+                                {
+                                    int temp = 1024;
+                                    if (remained < 1024) temp = (int)remained;
+                                    byte[] temp_byte = new byte[1024];
+                                    ns.Read(temp_byte, 0, temp);
+                                    filestream.Write(temp_byte, 0, temp);
+
+                                    remained -= temp;
+                                }
+                                filestream.Flush();
+                                filestream.Close();
+                                Console.WriteLine("파일을 전부 받았으니 확인해보세요");
 
                             }
                         }

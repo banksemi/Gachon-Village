@@ -85,6 +85,17 @@ namespace NetworkLibrary.File
             ns.Flush();
             Start?.Invoke(this);
 
+            // 파일보내기
+            BinaryReader realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open));
+            int count = (int)(FileSize / 1024) + 1;
+            for(int i=0; i<count; i++)
+            {
+                byte[] bs = realFile.ReadBytes(1024);
+                ns.Write(bs, 0, bs.Length);
+                ns.Flush();
+            }
+            ns.Close();
+            client.Close();
         }
     }
 }
