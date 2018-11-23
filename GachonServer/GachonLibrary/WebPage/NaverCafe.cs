@@ -29,7 +29,7 @@ namespace GachonLibrary
                         HtmlNodeCollection datas = node.SelectNodes("./td");
                         HtmlNodeCollection TitleDivs = datas[0].SelectNodes("./div");
                         
-                        if ((datas.Count ==5) &&(!TitleDivs[0].InnerText.Equals("공지")))
+                        if ((datas.Count ==5) &&(TitleDivs[0].InnerText.IndexOf("공지") == -1))
                         {
                             TitleDivs[1] = TitleDivs[1].SelectSingleNode(".//a");
                             datas[1] = datas[1].SelectSingleNode(".//a");
