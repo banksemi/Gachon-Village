@@ -17,6 +17,7 @@ namespace GachonLibrary
 {
     public class GachonUser
     {
+        private static Object Login_Lock = new object();
         private CookieContainer cookie = new CookieContainer();
         /// <summary>
         /// 로그인 여부를 확인합니다.
@@ -104,26 +105,34 @@ namespace GachonLibrary
         }
         public static GachonUser GetObject(string ID, string password)
         {
-            if (GachonObjects.AllUser.ContainsKey(ID))
+            /*
+             * 동시에 여러 쓰레드에서 같은 아이디에 대해 새로 로그인하는경우 문제가 있습니다.
+             * 지금은 이 함수 전체에 lock을 걸어 해결하지만, 더 나은 성능을 위해서는
+             * 각각의 유저에 대해 lock을 진행할 필요가 있습니다.
+             */
+            lock (Login_Lock)
             {
-                if (GachonObjects.AllUser[ID].password == password) return GachonObjects.AllUser[ID];
-                else return null;
-            }
-            else
-            {
-                if (!GachonObjects.Did_init)
+                if (GachonObjects.AllUser.ContainsKey(ID))
                 {
-                    GachonObjects.Get_SQL_value();
-                }
-                GachonUser user = new GachonUser(ID, password);
-                if (user.LoginOk)
-                {
-                    GachonObjects.AllUser.Add(ID, user);
-                    return user;
+                    if (GachonObjects.AllUser[ID].password == password) return GachonObjects.AllUser[ID];
+                    else return null;
                 }
                 else
                 {
-                    return null;
+                    if (!GachonObjects.Did_init)
+                    {
+                        GachonObjects.Get_SQL_value();
+                    }
+                    GachonUser user = new GachonUser(ID, password);
+                    if (user.LoginOk)
+                    {
+                        GachonObjects.AllUser.Add(ID, user);
+                        return user;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
         }
