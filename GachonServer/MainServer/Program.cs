@@ -46,32 +46,44 @@ namespace MainServer
 
         private static void Server_Receive(ESocket socket, Newtonsoft.Json.Linq.JObject Message)
         {
-            switch((int)Message["type"])
+            if ((int)Message["type"] >= 1000)
             {
-                case NetworkProtocol.Login:
-                    Function.Login(socket, (string)Message["id"], (string)Message["password"]);
-                    break;
-                case NetworkProtocol.EnterWorld:
-                    User.Items[socket].Start();
-                    break;
-                case NetworkProtocol.Move:
-                    User.Items[socket].Move(new Vector4((float)Message["x"], (float)Message["y"], (float)Message["z"], (float)Message["q"]));
-                    break;
-                case NetworkProtocol.Chat:
-                    User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);
-                    break;
-                case NetworkProtocol.Action:
-                    Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
-                    break;
-                case NetworkProtocol.Post_Open:
-                    PostSystem.GetPage(User.Items[socket], (int)Message["page"]);
-                    break;
-                case NetworkProtocol.Post_Detail:
-                    PostSystem.GetItem(User.Items[socket], (int)Message["no"]);
-                    break;
-                case NetworkProtocol.NewStudy:
-                    StudySystem.NewStudy(User.Items[socket], Message);
-                    break;
+                switch ((int)Message["type"])
+                {
+                    case AndroidProtocol.TestMessage:
+                        Console.WriteLine("안드로이드 테스트 메세지 : " + (string)Message["message"]);
+                        break;
+                }
+            }
+            else
+            {
+                switch ((int)Message["type"])
+                {
+                    case NetworkProtocol.Login:
+                        Function.Login(socket, (string)Message["id"], (string)Message["password"]);
+                        break;
+                    case NetworkProtocol.EnterWorld:
+                        User.Items[socket].Start();
+                        break;
+                    case NetworkProtocol.Move:
+                        User.Items[socket].Move(new Vector4((float)Message["x"], (float)Message["y"], (float)Message["z"], (float)Message["q"]));
+                        break;
+                    case NetworkProtocol.Chat:
+                        User.Items[socket].ChatMessage((string)Message["message"], ChatType.Normal);
+                        break;
+                    case NetworkProtocol.Action:
+                        Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
+                        break;
+                    case NetworkProtocol.Post_Open:
+                        PostSystem.GetPage(User.Items[socket], (int)Message["page"]);
+                        break;
+                    case NetworkProtocol.Post_Detail:
+                        PostSystem.GetItem(User.Items[socket], (int)Message["no"]);
+                        break;
+                    case NetworkProtocol.NewStudy:
+                        StudySystem.NewStudy(User.Items[socket], Message);
+                        break;
+                }
             }
         }
         public static void UpdateThread()

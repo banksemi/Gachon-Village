@@ -53,6 +53,7 @@
     <Compile Include="Function\Login.cs" />
     <Compile Include="Function\NPC_Action.cs" />
     <Compile Include="GachonSocket.cs" />
+    <Compile Include="Network\AndroidProtocol.cs" />
     <Compile Include="Network\ChatType.cs" />
     <Compile Include="Network\NetworkSend.cs" />
     <Compile Include="Object\GameObject.cs" />
