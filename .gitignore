@@ -382,3 +382,8 @@ private_data(git).cs
 
 # NetworkLibrary (Plugin)
 [Uu]nity [Cc]lient/**/Assets/Plugins/NetworkLibrary/
+
+#Android
+
+# IntelliJ
+[Aa]ndroid/**/*.iml
