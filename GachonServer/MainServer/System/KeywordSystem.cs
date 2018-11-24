@@ -30,13 +30,40 @@ namespace MainServer
             user.socket.Send(json);
         }
         private static bool test(string keyword, string course_name, string title)
-        {
-            // 홈워크, 컴퓨터와 네트워크, 홈워크 과제 있습니다. = true
-            // [이슬람] 홈워크, 컴퓨터와 네트워크, 홈워크 과제 있어요. = false;
-            // [네트워크] 중간고사, 네트워크와 사고, 중간고사 공지  = true;
-            // [네트워크]중간고사, 네트워크와 사고, 중간고사 공지  = true;
+        {           
+            string[] target;
+            string targetKeyword;
+            bool correspond_course = false;
+            int start = keyword.IndexOf('[');
 
-            return true;
+            //특정 과목이 지정되었을 경우
+            if (start!=-1)
+            {
+                target = keyword.Split(']');
+                target[0] = target[0].Trim(); //Target course
+                target[0] = target[0].Substring(start + 1);
+                targetKeyword = target[1].Trim(); //Target keyword
+
+                //Target Course가 일치할 경우
+                if (course_name.IndexOf(target[0]) != -1)
+                {
+                    correspond_course = true;
+                }
+            }
+            else
+            {
+                targetKeyword = keyword.Trim();
+                correspond_course = true;
+            }
+         
+            if (correspond_course)
+            {
+                if (title.IndexOf(targetKeyword) != -1)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public static void NewPost(GachonClass gclass, PostItem postItem)
         {
