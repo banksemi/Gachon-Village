@@ -29,7 +29,15 @@ namespace MainServer
             json["list"] = array;
             user.socket.Send(json);
         }
+        private static bool test(string keyword, string course_name, string title)
+        {
+            // 홈워크, 컴퓨터와 네트워크, 홈워크 과제 있습니다. = true
+            // [이슬람] 홈워크, 컴퓨터와 네트워크, 홈워크 과제 있어요. = false;
+            // [네트워크] 중간고사, 네트워크와 사고, 중간고사 공지  = true;
+            // [네트워크]중간고사, 네트워크와 사고, 중간고사 공지  = true;
 
+            return true;
+        }
         public static void NewPost(GachonClass gclass, PostItem postItem)
         {
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM keyword");
@@ -41,7 +49,7 @@ namespace MainServer
                 {
                     if (ignore_id == node.GetString("student_id")) continue;
                     string keyword = node.GetString("keyword");
-                    if (postItem.Title.IndexOf(keyword) != -1)
+                    if (test(node.GetString("student_id"), gclass.Title, postItem.Title))
                     {
                         ignore_id = node.GetString("student_id");
                         PostSystem.SendPost(
