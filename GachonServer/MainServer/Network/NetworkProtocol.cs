@@ -22,5 +22,8 @@ namespace MainServer
         public const int Post_Detail = 12;
         public const int NewStudy = 13;
         public const int CloseNewStudy = 14;
+        public const int Keyword_Open = 15;
+        public const int Keyword_Add = 16;
+        public const int Keyword_Remove = 17;
     }
 }

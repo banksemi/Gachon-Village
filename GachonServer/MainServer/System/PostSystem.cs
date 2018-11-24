@@ -147,7 +147,7 @@ namespace MainServer
                 return node.GetInt("ncount");
             }
         }
-        public static void SendPost(string title, string content, string sender, string receiver)
+        public static void SendPost(string title, string content, string sender, string receiver, bool notice = true)
         {
             DateTime date = DateTime.Now;
             MysqlNode Node = new MysqlNode(private_data.mysqlOption, "INSERT INTO post(title, content, sender, receiver, date) VALUES (?title, ?content, ?sender, ?receiver, ?date)");
@@ -164,18 +164,23 @@ namespace MainServer
             json["content"] = content;
             json["receiver"] = receiver;
             json["date"] = date;
-            // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
-            ESocket socket = GachonSocket.GetOnlineUser(receiver);
-            if (socket != null)
+            if (notice == true)
             {
-                if (User.Items.ContainsKey(socket))
-                    User.Items[socket].ToChatMessage("[우편함] 새로운 메세지가 도착했습니다.", ChatType.System);
+                // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
+                ESocket socket = GachonSocket.GetOnlineUser(receiver);
+                if (socket != null)
+                {
+                    if (User.Items.ContainsKey(socket))
+                    {
+                        User.Items[socket].ToChatMessage("[우편함] 새로운 메세지가 도착했습니다.", ChatType.System);
+                    }
+                    else
+                        socket.Send(json);
+                }
                 else
-                    socket.Send(json);
-            }
-            else
-            {
-                AddQueue(receiver, json);
+                {
+                    AddQueue(receiver, json);
+                }
             }
         }
     }
