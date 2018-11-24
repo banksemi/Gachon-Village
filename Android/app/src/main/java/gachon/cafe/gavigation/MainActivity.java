@@ -1,5 +1,7 @@
 package gachon.cafe.gavigation;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,16 +28,15 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    SwitchView(Fragment_Notifications.class);
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    SwitchView(Fragment_Notifications.class);
                     return true;
                 case R.id.navigation_study_group:
-                    mTextMessage.setText(R.string.title_study_group);
+                    SwitchView(Fragment_Notifications.class);
                     return true;
                 case R.id.navigation_setting:
-                    mTextMessage.setText(R.string.title_setting);
                     return true;
             }
             return false;
@@ -69,12 +70,30 @@ public class MainActivity extends AppCompatActivity {
         startService(intent); // 서비스 시작
 
 
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.frameview, new Fragment_Login()); fragmentTransaction.commit();
+
+
     }
     private void ReceiveMessage(JSONObject json)
     {
         Toast.makeText(getApplicationContext(),json.toString(),Toast.LENGTH_SHORT).show();
     }
+    private void SwitchView(Class fragment)
+    {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        try {
+            fragmentTransaction.replace(R.id.frameview,(android.app.Fragment)fragment.newInstance());
+        }
+        catch (Exception e)
+        {
 
+        }
+        fragmentTransaction.commit();
+    }
+    // 이벤트 처리를 위한 핸들러. 패킷 수신이 ReceiveMessage를 호출
     public static Handler handler = null;
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
