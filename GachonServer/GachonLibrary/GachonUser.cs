@@ -148,6 +148,8 @@ namespace GachonLibrary
                 "https://sson.kyungwon.ac.kr/sso/pmi-sso-login-uid-password2.jsp",
                 "https://www.gachon.ac.kr/site/login_sso.jsp",
                 "return_url=&uid=" + ID + "&password=" + escape_password + "&x=41&y=20");
+            // 가천대 서버에 접속하지 못한경우 로그인 실패
+            if (a == null) return;
             if (a.IndexOf("location.href='https://www.gachon.ac.kr:443/site/login.jsp'") >= 0)
             {
                 // 사이버 캠퍼스에 로그인을 하면서 강의 정보 불러옴.
@@ -328,13 +330,16 @@ namespace GachonLibrary
         }
         public HtmlDocument VisitPage(Uri url, Encoding encoding = null)
         {
-            if (encoding == null) encoding = Encoding.UTF8;
-            return WebPacket.Web_GET_Html(encoding, cookie, url.AbsoluteUri);
+            return VisitPage(url.AbsoluteUri, encoding);
         }
         public HtmlDocument VisitPage(string url, Encoding encoding = null)
         {
             if (encoding == null) encoding = Encoding.UTF8;
-            return WebPacket.Web_GET_Html(encoding, cookie, url);
+            HtmlDocument dom = WebPacket.Web_GET_Html(encoding, cookie, url);
+            if (dom == null)
+                throw new NoConnectPageError(url);
+            else
+                return dom;
         }
     }
 }

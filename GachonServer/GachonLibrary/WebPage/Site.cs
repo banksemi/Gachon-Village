@@ -42,7 +42,15 @@ namespace GachonLibrary
             if (ReadBoardList == false)
             {
                 ReadBoardList = true;
-                SearchMenu(guser);
+                try
+                {
+                    SearchMenu(guser);
+                }
+                catch (NoConnectPageError E)
+                {
+                    ReadBoardList = false;
+                    return;
+                }
 
                 MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
                     "select sitetype, siteid, board_name, max(no) as NO from article where siteType = ?sitetype and siteid = ?siteid group by sitetype, siteid, board_name;");
@@ -67,7 +75,12 @@ namespace GachonLibrary
             }
             foreach (BoardType board in boards)
             {
-                List<PostItem> items = GetList(guser, board);
+                List<PostItem> items = null;
+                try
+                {
+                    items = GetList(guser, board);
+                }
+                catch (NoConnectPageError e) { }
                 if (items != null)
                 {
                     for (int i = 0; i < items.Count; i++)
