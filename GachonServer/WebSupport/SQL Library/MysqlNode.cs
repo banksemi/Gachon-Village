@@ -91,7 +91,7 @@ namespace SQL_Library
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             foreach (string key in Parameters.Keys)
             {
-                cmd.Parameters.Add(new MySqlParameter(key, Parameters[key].ToString()));
+                    cmd.Parameters.Add(new MySqlParameter(key, Parameters[key]));
             }
             return cmd;
         }
