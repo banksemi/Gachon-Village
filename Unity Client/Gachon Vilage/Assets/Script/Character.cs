@@ -85,7 +85,7 @@ public class Character : MonoBehaviour {
         if (col != null)
         {
             MessageTime += Time.deltaTime;
-            if (Message != null && MessageTime >= 4f)
+            if (Message != null && MessageTime >= 6f)
             {
                 Destroy(Message.gameObject);
                 Message = null;
