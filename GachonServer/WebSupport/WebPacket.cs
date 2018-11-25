@@ -12,9 +12,11 @@ namespace WebSupport
 {
     public static class WebPacket
     {
+        public static bool Debug_NotUseWeb = false;
         private static string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
         public static string Web_Get(Encoding encoding, CookieContainer Cookie, string url, string referer = null)
         {
+            if (Debug_NotUseWeb) return null;
             HttpWebRequest hreq = (HttpWebRequest)WebRequest.Create(url);
             hreq.Method = "GET";
             hreq.Referer = referer;
@@ -25,7 +27,15 @@ namespace WebSupport
             hreq.ContentType = "application/x-www-form-urlencoded";
             hreq.CookieContainer = Cookie;
             hreq.UserAgent = UserAgent;
-            HttpWebResponse hres = (HttpWebResponse)hreq.GetResponse();
+            HttpWebResponse hres;
+            try
+            {
+                hres = (HttpWebResponse)hreq.GetResponse();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
             if (hres.StatusCode == HttpStatusCode.OK)
             {
                 Stream dataStream = hres.GetResponseStream();
@@ -41,6 +51,7 @@ namespace WebSupport
         }
         public static string Web_POST(CookieContainer Cookie, string url, string referer, string post)
         {
+            if (Debug_NotUseWeb) return null;
             HttpWebRequest hreq = (HttpWebRequest)WebRequest.Create(url);
             hreq.Method = "POST";
             hreq.Referer = referer;
