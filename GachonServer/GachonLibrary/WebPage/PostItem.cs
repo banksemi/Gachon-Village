@@ -23,19 +23,12 @@ namespace GachonLibrary
         public PostItem(BoardType.PostType postType, string board_name)
         {
             this.posttype = postType;
-            this.board_name = board_name;           
-        }
-        public PostItem(BoardType.PostType posttype, Site source,string url, int no, string title, string publisher, DateTime time, string board_name)
-        {
-            this.url = url;
-            this.posttype = posttype;
-            this.source = source;
-            this.no = no;
-            this.Title = title;
-            this.Publisher = publisher;
-            this.time = time;
             this.board_name = board_name;
-            this.Content = " ";
+        }
+        public PostItem(BoardType board)
+        {
+            this.posttype = board.type;
+            this.board_name = board.name;
         }
         public string Content_Briefly
         {

@@ -119,10 +119,6 @@ namespace GachonLibrary
                 }
                 else
                 {
-                    if (!GachonObjects.Did_init)
-                    {
-                        GachonObjects.Get_SQL_value();
-                    }
                     GachonUser user = new GachonUser(ID, password);
                     if (user.LoginOk)
                     {
@@ -152,69 +148,69 @@ namespace GachonLibrary
             {
                 // 사이버 캠퍼스에 로그인을 하면서 강의 정보 불러옴.
                 HtmlDocument data = WebPacket.Web_POST_Html(cookie, "https://cyber.gachon.ac.kr/login/index.php", "https://cyber.gachon.ac.kr/login.php", "username=" + ID + "&password=" + escape_password);
-                // 학생 테이블에 ID가 없으면 무조건 추가
-                MysqlNode search_id = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE id = ?id");               
+                // 학생 테이블에 정보가 없다면 미리 ID 튜플을 생성해준다.
+                MysqlNode search_id = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE id = ?id");
                 search_id["id"] = ID;
-                search_id.ExecuteReader();
-
-                if (!search_id.Read())
+                bool First_Login = false;
+                using (search_id.ExecuteReader())
                 {
-                    MysqlNode idnode = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id) values (?id) ");
-                    idnode["id"] = ID;
-                    idnode.ExecuteNonQuery();
-                }  //아이디만 있을수도있고 아닐수도있음
-
-                //takes_course에서 course_no가 없으면 추가
-                MysqlNode search_course = new MysqlNode(GachonOption.MysqlOption, "SELECT course_no FROM takes_course WHERE student_id = ?id");
-                search_course["id"] = ID;
-                         
-                using (search_course.ExecuteReader())
-                {
-                    bool isExist = false;
-                    //있으면 연결만
-                    while (search_course.Read())
+                    if (!search_id.Read())
                     {
-                        isExist = true;
-                        CombineClass(GachonObjects.AllClass[search_course.GetString("course_no")]);
+                        MysqlNode idnode = new MysqlNode(GachonOption.MysqlOption, "INSERT INTO account (id) VALUES (?id) ");
+                        idnode["id"] = ID;
+                        idnode.ExecuteNonQuery();
+                        First_Login = true;
                     }
-                    if (isExist == false)
+                }
+                if (First_Login) // 첫 접속시 수강중인 강의를 새로 등록
+                {
+                    List<GachonClass> need_eclass_info = new List<GachonClass>();
+                    foreach (HtmlNode node in data.DocumentNode.SelectNodes("//div[@class='course_box']"))
                     {
-                        List<GachonClass> need_eclass_info = new List<GachonClass>();
-                        foreach (HtmlNode node in data.DocumentNode.SelectNodes("//div[@class='course_box']"))
+                        JObject box = ParseSupport.CyberCampusTitle(node.SelectSingleNode(".//div[@class='course-title']/h3").InnerText);
+                        string title = (string)box["title"];
+                        string key = (string)box["key"];
+                        lock (GachonObjects.AllClass)
                         {
-                            JObject box = ParseSupport.CyberCampusTitle(node.SelectSingleNode(".//div[@class='course-title']/h3").InnerText);
-                            string title = (string)box["title"];
-                            string key = (string)box["key"];
-                            lock (GachonObjects.AllClass)
+                            if (!GachonObjects.AllClass.ContainsKey(key))
                             {
-                                if (!GachonObjects.AllClass.ContainsKey(key))
-                                {
-                                    GachonClass newclass = GachonClass.GetObject(title, key, true);
-                                    JObject urlq = ParseSupport.UrlQueryParser(node.SelectSingleNode(".//a[@class='course_link']").Attributes["href"].Value);
-                                    newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
-                                    need_eclass_info.Add(newclass);
-                                }
-                                MysqlNode insertNode = new MysqlNode(GachonOption.MysqlOption,
-                                    "INSERT into takes_course(student_id, course_no) values (?id, ?course_no)");
-                                insertNode["id"] = ID;
-                                insertNode["course_no"] = key;
-                                insertNode.ExecuteNonQuery();
+                                GachonClass newclass = GachonClass.GetObject(title, key, true);
+                                JObject urlq = ParseSupport.UrlQueryParser(node.SelectSingleNode(".//a[@class='course_link']").Attributes["href"].Value);
+                                newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
+                                need_eclass_info.Add(newclass);
+                            }
+                            MysqlNode insertNode = new MysqlNode(GachonOption.MysqlOption,
+                                "INSERT into takes_course(student_id, course_no) values (?id, ?course_no)");
+                            insertNode["id"] = ID;
+                            insertNode["course_no"] = key;
+                            insertNode.ExecuteNonQuery();
 
-                                CombineClass(GachonObjects.AllClass[key]);
-                            }
+                            CombineClass(GachonObjects.AllClass[key]);
                         }
-                        HtmlDocument eclassinfo = null;
-                        if (need_eclass_info.Count > 0)
-                            eclassinfo = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "http://eclass.gachon.ac.kr/index.jsp");
-                        // 새로운 클래스가 생겼으니 eclass 정보를 읽어서 새로 생긴 클래스와 연결한다.
-                        foreach (GachonClass newclass in need_eclass_info)
+                    }
+                    HtmlDocument eclassinfo = null;
+                    if (need_eclass_info.Count > 0)
+                        eclassinfo = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "http://eclass.gachon.ac.kr/index.jsp");
+                    // 새로운 클래스가 생겼으니 eclass 정보를 읽어서 새로 생긴 클래스와 연결한다.
+                    foreach (GachonClass newclass in need_eclass_info)
+                    {
+                        HtmlNode node = eclassinfo.DocumentNode.SelectSingleNode("//a[@title=" + newclass.ID + newclass.Sec_ID + "]");
+                        if (node != null)
                         {
-                            HtmlNode node = eclassinfo.DocumentNode.SelectSingleNode("//a[@title=" + newclass.ID + newclass.Sec_ID + "]");
-                            if (node != null)
-                            {
-                                string e_id = ParseSupport.UrlQueryParser(node.Attributes["href"].Value)["Forum_seq"].ToString();
-                                newclass.CombineSite(new GachonEClass(e_id));
-                            }
+                            string e_id = ParseSupport.UrlQueryParser(node.Attributes["href"].Value)["Forum_seq"].ToString();
+                            newclass.CombineSite(new GachonEClass(e_id));
+                        }
+                    }
+                }
+                else // 첫 접속이 아니면 기존 강의목록을 연결한다.
+                {
+                    MysqlNode search_course = new MysqlNode(GachonOption.MysqlOption, "SELECT course_no FROM takes_course WHERE student_id = ?id");
+                    search_course["id"] = ID;
+                    using (search_course.ExecuteReader())
+                    {
+                        while (search_course.Read())
+                        {
+                            CombineClass(GachonObjects.AllClass[search_course.GetString("course_no")]);
                         }
                     }
                 }

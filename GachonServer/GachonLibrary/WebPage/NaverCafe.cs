@@ -34,15 +34,15 @@ namespace GachonLibrary
                             TitleDivs[1] = TitleDivs[1].SelectSingleNode(".//a");
                             datas[1] = datas[1].SelectSingleNode(".//a");
                             string url = ParseSupport.StringFromHtml(TitleDivs[1].Attributes["href"].Value);
-                      
-                            result.Insert(0, new PostItem(board.type, 
-                                this, 
-                                url, 
-                                Int32.Parse(TitleDivs[0].InnerText),
-                                ParseSupport.StringFromHtml(TitleDivs[1].InnerText).Trim(),
-                                datas[1].InnerText.Trim(),
-                                DateTime.Parse(datas[2].InnerText),
-                                board.name));
+                            result.Insert(0, new PostItem(board)
+                            {
+                                url = url,
+                                source = this,
+                                no = Int32.Parse(TitleDivs[0].InnerText),
+                                Title = ParseSupport.StringFromHtml(TitleDivs[1].InnerText).Trim(),
+                                Publisher = datas[1].InnerText.Trim(),
+                                time = DateTime.Parse(datas[2].InnerText),
+                            });
                         }
                     }
                 }
