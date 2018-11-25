@@ -150,6 +150,10 @@ public class NetworkMain : MonoBehaviour {
             case NetworkProtocol.CloseNewStudy:
                 Preset.objects.NewStudyWindow.Close();
                 break;
+            case NetworkProtocol.Keyword_Open:
+                Preset.objects.KeywordWindow.NewList((JArray)json["list"]);
+                Preset.objects.KeywordWindow.Open();
+                break;
         }
     }
     // Update is called once per frame

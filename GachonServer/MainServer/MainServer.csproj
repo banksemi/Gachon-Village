@@ -53,6 +53,7 @@
     <Compile Include="Function\Login.cs" />
     <Compile Include="Function\NPC_Action.cs" />
     <Compile Include="GachonSocket.cs" />
+    <Compile Include="System\KeywordSystem.cs" />
     <Compile Include="Network\ChatType.cs" />
     <Compile Include="Network\NetworkSend.cs" />
     <Compile Include="Object\GameObject.cs" />
@@ -60,12 +61,12 @@
     <Compile Include="Network\NetworkProtocol.cs" />
     <Compile Include="Object\NPC.cs" />
     <Compile Include="Object\Study.cs" />
-    <Compile Include="PostSystem.cs" />
+    <Compile Include="System\PostSystem.cs" />
     <Compile Include="private_data%28git%29.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Object\User.cs" />
-    <Compile Include="StudySystem.cs" />
+    <Compile Include="System\StudySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -17,6 +17,7 @@ namespace GachonLibrary
 {
     public class GachonUser
     {
+        private static Object Login_Lock = new object();
         private CookieContainer cookie = new CookieContainer();
         /// <summary>
         /// 로그인 여부를 확인합니다.
@@ -104,26 +105,34 @@ namespace GachonLibrary
         }
         public static GachonUser GetObject(string ID, string password)
         {
-            if (GachonObjects.AllUser.ContainsKey(ID))
+            /*
+             * 동시에 여러 쓰레드에서 같은 아이디에 대해 새로 로그인하는경우 문제가 있습니다.
+             * 지금은 이 함수 전체에 lock을 걸어 해결하지만, 더 나은 성능을 위해서는
+             * 각각의 유저에 대해 lock을 진행할 필요가 있습니다.
+             */
+            lock (Login_Lock)
             {
-                if (GachonObjects.AllUser[ID].password == password) return GachonObjects.AllUser[ID];
-                else return null;
-            }
-            else
-            {
-                if (!GachonObjects.Did_init)
+                if (GachonObjects.AllUser.ContainsKey(ID))
                 {
-                    GachonObjects.Get_SQL_value();
-                }
-                GachonUser user = new GachonUser(ID, password);
-                if (user.LoginOk)
-                {
-                    GachonObjects.AllUser.Add(ID, user);
-                    return user;
+                    if (GachonObjects.AllUser[ID].password == password) return GachonObjects.AllUser[ID];
+                    else return null;
                 }
                 else
                 {
-                    return null;
+                    if (!GachonObjects.Did_init)
+                    {
+                        GachonObjects.Get_SQL_value();
+                    }
+                    GachonUser user = new GachonUser(ID, password);
+                    if (user.LoginOk)
+                    {
+                        GachonObjects.AllUser.Add(ID, user);
+                        return user;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
         }
@@ -143,17 +152,30 @@ namespace GachonLibrary
             {
                 // 사이버 캠퍼스에 로그인을 하면서 강의 정보 불러옴.
                 HtmlDocument data = WebPacket.Web_POST_Html(cookie, "https://cyber.gachon.ac.kr/login/index.php", "https://cyber.gachon.ac.kr/login.php", "username=" + ID + "&password=" + escape_password);
-                MysqlNode search_node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM takes_course WHERE student_id = ?ID");
-                search_node["ID"] = ID;
+                // 학생 테이블에 ID가 없으면 무조건 추가
+                MysqlNode search_id = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE id = ?id");               
+                search_id["id"] = ID;
+                search_id.ExecuteReader();
 
-                using (search_node.ExecuteReader())
+                if (!search_id.Read())
+                {
+                    MysqlNode idnode = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id) values (?id) ");
+                    idnode["id"] = ID;
+                    idnode.ExecuteNonQuery();
+                }  //아이디만 있을수도있고 아닐수도있음
+
+                //takes_course에서 course_no가 없으면 추가
+                MysqlNode search_course = new MysqlNode(GachonOption.MysqlOption, "SELECT course_no FROM takes_course WHERE student_id = ?id");
+                search_course["id"] = ID;
+                         
+                using (search_course.ExecuteReader())
                 {
                     bool isExist = false;
-
-                    while (search_node.Read())
+                    //있으면 연결만
+                    while (search_course.Read())
                     {
                         isExist = true;
-                        CombineClass(GachonObjects.AllClass[search_node.GetString("course_no")]);
+                        CombineClass(GachonObjects.AllClass[search_course.GetString("course_no")]);
                     }
                     if (isExist == false)
                     {
@@ -172,11 +194,11 @@ namespace GachonLibrary
                                     newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
                                     need_eclass_info.Add(newclass);
                                 }
-                                MysqlNode insertCybernode = new MysqlNode(GachonOption.MysqlOption,"INSERT INTO takes_course (student_id, course_no)"+
-                                                                                                   "VALUES(?id, ?course_no)");
-                                insertCybernode["id"] = ID;
-                                insertCybernode["course_no"] = key;
-                                insertCybernode.ExecuteNonQuery();
+                                MysqlNode insertNode = new MysqlNode(GachonOption.MysqlOption,
+                                    "INSERT into takes_course(student_id, course_no) values (?id, ?course_no)");
+                                insertNode["id"] = ID;
+                                insertNode["course_no"] = key;
+                                insertNode.ExecuteNonQuery();
 
                                 CombineClass(GachonObjects.AllClass[key]);
                             }
@@ -229,14 +251,17 @@ namespace GachonLibrary
         public void GetUserInfo()
         {
             if (LoginOk == false) return; // 마지막 로그인을 실패했을경우
-            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM account WHERE id = ?ID");
+            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM account WHERE id = ?ID");  //수정? 
             node["ID"] = ID;
 
             using (node.ExecuteReader())
             {
-                if (node.Read())
+                node.Read();
+                StudentNumber = node.GetString("studentnumber");
+
+                if (Int32.Parse(StudentNumber)!=0)
                 {
-                    StudentNumber = node.GetString("studentnumber");
+                    //StudentNumber = node.GetString("studentnumber");                 
                     Name = node.GetString("name");
                     Email = node.GetString("email");
                     Phone = node.GetString("phone");
@@ -251,8 +276,8 @@ namespace GachonLibrary
                     Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
                     Department = data.DocumentNode.SelectSingleNode("//p[@class='department']").InnerText;
 
-                    MysqlNode insert = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id, studentnumber, name, department, phone, email)" +
-                                                                               "values (?id, ?num, ?name, ?dept, ?phone, ?email )");
+                    MysqlNode insert = new MysqlNode(GachonOption.MysqlOption, "UPDATE  account SET studentnumber = ?num, name = ?name, department = ?dept"+
+                                                                               ",phone = ?phone , email = ?email where id = ?id ");
                     insert["id"] = ID;
                     insert["num"] = StudentNumber;
                     insert["name"] = Name;

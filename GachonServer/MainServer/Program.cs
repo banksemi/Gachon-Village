@@ -19,6 +19,11 @@ namespace MainServer
         {
             GachonOption.MysqlOption = SqlOption;
             Function.Init_Load();
+
+            GachonClass.NewPost += KeywordSystem.NewPost;
+            GachonClass.AutoCrawlingDelay = 3; // (초단위)  10초에 한번씩 최신글을 확인
+            GachonClass.StartAutoCrawling = true; // 강의 최신글 크롤링 시작.
+
             Server server = new Server(1119);
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
@@ -71,6 +76,12 @@ namespace MainServer
                     break;
                 case NetworkProtocol.NewStudy:
                     StudySystem.NewStudy(User.Items[socket], Message);
+                    break;
+                case NetworkProtocol.Keyword_Remove:
+                    KeywordSystem.RemoveItem(User.Items[socket], (string)Message["keyword"]);
+                    break;
+                case NetworkProtocol.Keyword_Add:
+                    KeywordSystem.AddItem(User.Items[socket], (string)Message["keyword"]);
                     break;
             }
         }

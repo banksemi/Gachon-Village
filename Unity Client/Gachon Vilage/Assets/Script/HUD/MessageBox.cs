@@ -5,6 +5,7 @@ using UnityEngine;
 public class MessageBox : MonoBehaviour {
     public UILabel name_p;
     public UILabel content;
+    public UISprite back;
     public SetMinimumSize set;
     public void Set(string name, string message)
     {
@@ -12,5 +13,11 @@ public class MessageBox : MonoBehaviour {
         content.text = message;
         set.Update();
     }
-
+    public void SetDepth(int value)
+    {
+        
+        name_p.depth = value;
+        content.depth = value;
+        back.depth = value - 1;
+    }
 }

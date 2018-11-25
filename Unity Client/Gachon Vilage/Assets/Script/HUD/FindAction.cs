@@ -16,15 +16,18 @@ public class FindAction : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.F))
+        if (UIInput.selection == null) // 다른 UIInput에 입력중이 아닌경우
         {
-            if (select_action != null)
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                JObject json = new JObject();
-                json["type"] = NetworkProtocol.Action;
-                json["no"] = select_action.No;
-                json["function"] = select_action.function;
-                NetworkMain.SendMessage(json);
+                if (select_action != null)
+                {
+                    JObject json = new JObject();
+                    json["type"] = NetworkProtocol.Action;
+                    json["no"] = select_action.No;
+                    json["function"] = select_action.function;
+                    NetworkMain.SendMessage(json);
+                }
             }
         }
 	}

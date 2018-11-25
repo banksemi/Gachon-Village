@@ -4751,7 +4751,7 @@ ParticleSystemRenderer:
   m_RenderMode: 2
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 100
+  m_MaxParticleSize: 9000
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2

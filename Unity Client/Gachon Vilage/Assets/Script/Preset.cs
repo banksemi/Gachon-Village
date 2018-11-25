@@ -30,6 +30,8 @@ class Preset : MonoBehaviour
     public UILabel PostCount;
 
     public Window NewStudyWindow;
+
+    public KeywordWindow KeywordWindow;
     void Start()
     {
         

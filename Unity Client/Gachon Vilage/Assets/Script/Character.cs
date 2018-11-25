@@ -85,7 +85,7 @@ public class Character : MonoBehaviour {
         if (col != null)
         {
             MessageTime += Time.deltaTime;
-            if (Message != null && MessageTime >= 4f)
+            if (Message != null && MessageTime >= 6f)
             {
                 Destroy(Message.gameObject);
                 Message = null;
@@ -96,6 +96,7 @@ public class Character : MonoBehaviour {
             if (screenPos.z < 0 || screenPos.z > 100)
             {
                 label.gameObject.SetActive(false);
+                if (Message != null) Message.gameObject.SetActive(false);
             }
             else
             {
@@ -107,16 +108,20 @@ public class Character : MonoBehaviour {
                     a.a = (100 - screenPos.z) * 5 / 100f;
                     label.color = a;
                 }
+                int z = 100 - (int)(screenPos.z * 2);
                 if (Message == null)
                 {
                     screenPos.y += 15;
                     label.transform.localPosition = screenPos;
+                    label.depth = z;
                     label.gameObject.SetActive(true);
+
                 }
                 else
                 {
                     screenPos.y += 35;
                     Message.transform.localPosition = screenPos;
+                    Message.SetDepth(z);
                     Message.gameObject.SetActive(true);
                     label.gameObject.SetActive(false);
                 }
