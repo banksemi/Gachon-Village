@@ -50,12 +50,21 @@ namespace NetworkLibrary
             while(true)
             {
                 String message = null;
+                JObject json = null;
                 try
                 {
                     message = SR.ReadLine();
                     if (message == null) break;
-                    JObject json = JObject.Parse(message);
-
+                    try
+                    {
+                        json = JObject.Parse(message);
+                        if (json["type"] == null) throw new Exception();
+                    }
+                    catch (Exception e) // 파싱중 에러 발생시 올바르지 않은 패킷이라 판단하고 소켓연결을 종료시킨다.
+                    {
+                        Dispose();
+                        return;
+                    }
                     if (Receive != null)
                     {
                         if ((int)json["type"] == -1) // 처음에 물어보는 과정 (클라 -> 서버 업로드 요청, 서버 -> 클라 다운로드 명령)
