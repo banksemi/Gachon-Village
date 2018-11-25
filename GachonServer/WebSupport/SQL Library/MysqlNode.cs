@@ -20,7 +20,7 @@ namespace SQL_Library
           
             if (Reader[name] is DBNull)
             {
-                return "";
+                return null;
             }
             return Reader.GetString(name);
         }

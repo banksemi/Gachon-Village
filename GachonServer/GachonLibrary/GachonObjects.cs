@@ -23,19 +23,19 @@ namespace GachonLibrary
                 {
                     bool isClassType = node.GetString("type") == "Class";
                     GachonClass newclass = GachonClass.GetObject(node.GetString("name"), node.GetString("no"), isClassType, false);  //title , key
-                    if (node.GetString("eclass").Length != 0)
+                    if (!string.IsNullOrEmpty(node.GetString("eclass")))
                     {
                         newclass.CombineSite(new GachonEClass(node.GetString("eclass")), false);
                     }
-                    if (node.GetString("gcafe").Length != 0)
+                    if (!string.IsNullOrEmpty(node.GetString("gcafe")))
                     {
                         newclass.CombineSite(new GachonCafe(node.GetString("gcafe")), false);
                     }
-                    if (node.GetString("cyber").Length != 0)
+                    if (!string.IsNullOrEmpty(node.GetString("cyber")))
                     {
                         newclass.CombineSite(new GachonCyberCampus(node.GetString("cyber")), false);
                     }
-                    if (node.GetString("navercafe").Length != 0)
+                    if (!string.IsNullOrEmpty(node.GetString("navercafe")))
                     {
                         newclass.CombineSite(new NaverCafe(node.GetString("navercafe")), false);
                     }
