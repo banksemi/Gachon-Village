@@ -148,17 +148,18 @@ namespace GachonLibrary
             {
                 // 사이버 캠퍼스에 로그인을 하면서 강의 정보 불러옴.
                 HtmlDocument data = WebPacket.Web_POST_Html(cookie, "https://cyber.gachon.ac.kr/login/index.php", "https://cyber.gachon.ac.kr/login.php", "username=" + ID + "&password=" + escape_password);
-                // 학생 테이블에 ID가 없으면 무조건 추가
-                MysqlNode search_id = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE id = ?id");               
+                // 학생 테이블에 정보가 없다면 미리 ID 튜플을 생성해준다.
+                MysqlNode search_id = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE id = ?id");
                 search_id["id"] = ID;
-                search_id.ExecuteReader();
-
-                if (!search_id.Read())
+                using (search_id.ExecuteReader())
                 {
-                    MysqlNode idnode = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id) values (?id) ");
-                    idnode["id"] = ID;
-                    idnode.ExecuteNonQuery();
-                }  //아이디만 있을수도있고 아닐수도있음
+                    if (!search_id.Read())
+                    {
+                        MysqlNode idnode = new MysqlNode(GachonOption.MysqlOption, "INSERT into account (id) values (?id) ");
+                        idnode["id"] = ID;
+                        idnode.ExecuteNonQuery();
+                    }
+                }
 
                 //takes_course에서 course_no가 없으면 추가
                 MysqlNode search_course = new MysqlNode(GachonOption.MysqlOption, "SELECT course_no FROM takes_course WHERE student_id = ?id");
