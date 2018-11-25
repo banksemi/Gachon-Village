@@ -29,7 +29,42 @@ namespace MainServer
             json["list"] = array;
             user.socket.Send(json);
         }
+        private static bool test(string keyword, string course_name, string title)
+        {           
+            string[] target;
+            string targetKeyword;
+            bool correspond_course = false;
+            int start = keyword.IndexOf('[');
 
+            //특정 과목이 지정되었을 경우
+            if (start!=-1)
+            {
+                target = keyword.Split(']');
+                target[0] = target[0].Trim(); //Target course
+                target[0] = target[0].Substring(start + 1);
+                targetKeyword = target[1].Trim(); //Target keyword
+
+                //Target Course가 일치할 경우
+                if (course_name.IndexOf(target[0]) != -1)
+                {
+                    correspond_course = true;
+                }
+            }
+            else
+            {
+                targetKeyword = keyword.Trim();
+                correspond_course = true;
+            }
+         
+            if (correspond_course)
+            {
+                if (title.IndexOf(targetKeyword) != -1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public static void NewPost(GachonClass gclass, PostItem postItem)
         {
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM keyword");
@@ -41,7 +76,7 @@ namespace MainServer
                 {
                     if (ignore_id == node.GetString("student_id")) continue;
                     string keyword = node.GetString("keyword");
-                    if (postItem.Title.IndexOf(keyword) != -1)
+                    if (test(node.GetString("student_id"), gclass.Title, postItem.Title))
                     {
                         ignore_id = node.GetString("student_id");
                         PostSystem.SendPost(
