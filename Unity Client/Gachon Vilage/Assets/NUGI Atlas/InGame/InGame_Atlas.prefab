@@ -53,6 +53,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 5c24a289ba95a5b4cb2dc4f39c3d6378, type: 2}
   mSprites:
+  - name: All
+    x: 973
+    y: 338
+    width: 40
+    height: 48
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 3
+    paddingRight: 5
+    paddingTop: 0
+    paddingBottom: 0
   - name: chatting_box
     x: 0
     y: 281
