@@ -42,6 +42,7 @@ namespace NetworkLibrary.File
         public event FileAction Start;
         public event FileAction Process;
         public event FileAction End;
+        public event FileAction Success;
         public event FileAction Error;
         /// <summary>
         /// 업로드 모드로 작성할 새로운 파일입니다.
@@ -157,12 +158,16 @@ namespace NetworkLibrary.File
                     StartDownload(client);
                 }
                 Console.WriteLine("[NetworkFile] " + ServerKey + " : 완료");
-                End?.Invoke(this);
+                Success?.Invoke(this);
             }
             catch (Exception e)
             {
                 Console.WriteLine("[NetworkFile] " + ServerKey + " : " + e.Message);
                 Error?.Invoke(this);
+            }
+            finally
+            {
+                End?.Invoke(this);
             }
         }
         protected abstract void AcceptFile(string path);
