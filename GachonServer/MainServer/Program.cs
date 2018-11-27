@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using HtmlAgilityPack;
 using NetworkLibrary;
+using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
 using SQL_Library;
 namespace MainServer
@@ -28,6 +29,7 @@ namespace MainServer
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
             server.Exit += Server_Exit;
+            server.FileInfoReceive += Server_FileInfoReceive;
             new System.Threading.Thread(UpdateThread).Start();
             for(int i = 0; i < 15;i++)
             {
@@ -38,6 +40,35 @@ namespace MainServer
                 System.Threading.Thread.Sleep(1000);
                // PostSystem.SendPost("실시간 알림 테스트", "Queue 테스트", "admin_keyword", "banksemi");
             }
+        }
+
+        private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+        {
+            if (!Directory.Exists("files"))
+            {
+                Directory.CreateDirectory("files");
+            }
+            string name;
+            do
+            {
+                name = DateTime.Now.ToString("yyyy-MM-dd") + file.FileName.GetHashCode() + new Random().Next(0, 1000000);
+            }
+            while (File.Exists("files/" + name));
+
+            file.Success += delegate (NetworkFile files)
+            {
+                // Mysql에 등록. 알려줌
+                MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO file(name,size,path,owner,date) VALUES (?name,?size,?path,?owner,?date)");
+                node["name"] = files.FileName;
+                node["size"] = files.FileSize;
+                node["path"] = "files/" + name;
+                node["owner"] = User.Items[socket].ID;
+                node["date"] = DateTime.Now;
+                long no = node.ExecuteInsertQuery();
+
+                User.Items[socket].ToChatMessage(no + "번", ChatType.Notice);
+            };
+            file.Accept("files/" + name);
         }
 
         private static void Server_Exit(ESocket socket)

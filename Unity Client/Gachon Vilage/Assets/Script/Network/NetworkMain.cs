@@ -9,7 +9,7 @@ using System.Threading;
 using UnityEngine.SceneManagement;
 public class NetworkMain : MonoBehaviour {
     private LinkedList<JObject> queue = new LinkedList<JObject>();
-    private static Client server;
+    public static Client server;
     private Thread thread;
     public static Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
     public GameObject TipMessageObject;
