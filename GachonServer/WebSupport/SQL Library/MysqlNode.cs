@@ -119,6 +119,24 @@ namespace SQL_Library
             AllClose();
             return result;
         }
+        public long ExecuteInsertQuery()
+        {
+            MySqlCommand cmd = Open();
+            int result = 0;
+            try
+            {
+                result = cmd.ExecuteNonQuery();
+            }
+            catch (MySqlException e)
+            {
+                if (e.Number == 1062)
+                    return -1;
+                else
+                    throw e;
+            }
+            AllClose();
+            return cmd.LastInsertedId;
+        }
         public void Dispose()
         {
             AllClose();

@@ -25,5 +25,8 @@ namespace MainServer
         public const int Keyword_Open = 15;
         public const int Keyword_Add = 16;
         public const int Keyword_Remove = 17;
+        public const int Inventory_Add = 18;
+        public const int Inventory_Remove = 19;
+        public const int File_Download = 20;
     }
 }

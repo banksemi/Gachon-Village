@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using NetworkLibrary;
+using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Threading;
 using UnityEngine.SceneManagement;
 public class NetworkMain : MonoBehaviour {
     private LinkedList<JObject> queue = new LinkedList<JObject>();
-    private static Client server;
+    public static Client server;
     private Thread thread;
     public static Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
     public GameObject TipMessageObject;
@@ -30,10 +31,18 @@ public class NetworkMain : MonoBehaviour {
                 server = new Client("easyrobot.co.kr", 1119);
                 server.Connect += Server_Connect;
                 server.Receive += Server_Receive;
+                server.FileInfoReceive += Server_FileInfoReceive;
                 server.Start();
             });
         thread.Start();
     }
+
+    private void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+    {
+        SocketFile.NewFile(file);
+        file.Accept((string)Message["path"]);
+    }
+
     private void TipMessage(string Message)
     {
         GameObject gameObject = Instantiate(TipMessageObject);
@@ -153,6 +162,12 @@ public class NetworkMain : MonoBehaviour {
             case NetworkProtocol.Keyword_Open:
                 Preset.objects.KeywordWindow.NewList((JArray)json["list"]);
                 Preset.objects.KeywordWindow.Open();
+                break;
+            case NetworkProtocol.Inventory_Add:
+                Preset.objects.InventoryWindow.Add(json);
+                break;
+            case NetworkProtocol.Inventory_Remove:
+                Preset.objects.InventoryWindow.Remove((int)json["no"]);
                 break;
         }
     }

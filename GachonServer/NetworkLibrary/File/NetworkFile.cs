@@ -42,6 +42,7 @@ namespace NetworkLibrary.File
         public event FileAction Start;
         public event FileAction Process;
         public event FileAction End;
+        public event FileAction Success;
         public event FileAction Error;
         /// <summary>
         /// 업로드 모드로 작성할 새로운 파일입니다.
@@ -87,7 +88,7 @@ namespace NetworkLibrary.File
             BinaryReader realFile = null;
             try
             {
-                realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open));
+                realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open, FileAccess.Read,FileShare.Read));
                 int count = (int)(FileSize / 1024) + 1;
                 for (int i = 0; i < count; i++)
                 {
@@ -116,27 +117,37 @@ namespace NetworkLibrary.File
         {
             NetworkStream ns = socket.GetStream();
             FileStream filestream = new FileStream(Path, FileMode.Create);
-            long remained = FileSize;
-            int i = 0;
-            while (remained > 0)
+            try
             {
-                int temp = 1024;
-                if (remained < 1024) temp = (int)remained;
-                byte[] temp_byte = new byte[1024];
-                int r = ns.Read(temp_byte, 0, temp);
-
-                filestream.Write(temp_byte, 0, r);
-                remained -= r;
-                if (i % 16 == 15)
+                long remained = FileSize;
+                int i = 0;
+                while (remained > 0)
                 {
-                    FinishByte = FileSize - remained;
-                    Process?.Invoke(this);
+                    int temp = 1024;
+                    if (remained < 1024) temp = (int)remained;
+                    byte[] temp_byte = new byte[1024];
+                    int r = ns.Read(temp_byte, 0, temp);
+                    if (r == 0) throw new Exception("패킷을 수신할 수 없음");
+                    filestream.Write(temp_byte, 0, r);
+                    remained -= r;
+                    if (i % 16 == 15)
+                    {
+                        FinishByte = FileSize - remained;
+                        Process?.Invoke(this);
+                    }
+                    i++;
                 }
-                i++;
             }
-            filestream.Flush();
-            filestream.Close();
-            socket.Close();
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                filestream.Flush();
+                filestream.Close();
+                socket.Close();
+            }
         }
         /// <summary>
         /// 서로간의 파일 전용 소켓이 만들어졌고, 헤더정보가 교환됬을때 실행되는 함수입니다. 라이브러리 내부에서만 사용됩니다.
@@ -157,12 +168,16 @@ namespace NetworkLibrary.File
                     StartDownload(client);
                 }
                 Console.WriteLine("[NetworkFile] " + ServerKey + " : 완료");
-                End?.Invoke(this);
+                Success?.Invoke(this);
             }
             catch (Exception e)
             {
                 Console.WriteLine("[NetworkFile] " + ServerKey + " : " + e.Message);
                 Error?.Invoke(this);
+            }
+            finally
+            {
+                End?.Invoke(this);
             }
         }
         protected abstract void AcceptFile(string path);

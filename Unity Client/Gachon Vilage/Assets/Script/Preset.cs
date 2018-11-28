@@ -32,6 +32,12 @@ class Preset : MonoBehaviour
     public Window NewStudyWindow;
 
     public KeywordWindow KeywordWindow;
+
+    public InventoryWindow InventoryWindow;
+
+    public FileMenu fileMenu;
+    public UIGrid SocketFileGrid;
+    public SocketFile SocketFile;
     void Start()
     {
         
