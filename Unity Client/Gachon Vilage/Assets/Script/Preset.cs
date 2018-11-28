@@ -34,6 +34,8 @@ class Preset : MonoBehaviour
     public KeywordWindow KeywordWindow;
 
     public InventoryWindow InventoryWindow;
+
+    public FileMenu fileMenu;
     void Start()
     {
         

@@ -54,7 +54,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 5c24a289ba95a5b4cb2dc4f39c3d6378, type: 2}
   mSprites:
   - name: All
-    x: 827
+    x: 795
     y: 334
     width: 40
     height: 48
@@ -81,7 +81,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: file_inventory
     x: 872
-    y: 403
+    y: 277
     width: 135
     height: 109
     borderLeft: 0
@@ -93,8 +93,8 @@ MonoBehaviour:
     paddingTop: 8
     paddingBottom: 8
   - name: Fill 1
-    x: 1008
-    y: 503
+    x: 836
+    y: 373
     width: 9
     height: 9
     borderLeft: 2
@@ -120,7 +120,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: Study Icon
     x: 872
-    y: 277
+    y: 387
     width: 135
     height: 125
     borderLeft: 0
@@ -131,8 +131,21 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: UI
+  - name: tooltip
     x: 530
+    y: 203
+    width: 163
+    height: 179
+    borderLeft: 6
+    borderRight: 6
+    borderTop: 6
+    borderBottom: 6
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: UI
+    x: 694
     y: 282
     width: 100
     height: 100
@@ -145,8 +158,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: UI Back
-    x: 631
-    y: 282
+    x: 694
+    y: 181
     width: 100
     height: 100
     borderLeft: 10
@@ -158,8 +171,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: UI Front
-    x: 732
-    y: 313
+    x: 795
+    y: 207
     width: 94
     height: 69
     borderLeft: 0

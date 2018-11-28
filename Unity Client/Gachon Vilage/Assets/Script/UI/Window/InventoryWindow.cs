@@ -16,6 +16,7 @@ public class InventoryWindow : Window
         item.UI_size.text = "" + (long)json["size"];
         item.UI_date.text = ((DateTime)json["date"]).ToShortDateString();
         item.no = (int)json["no"];
+        item.owner = (string)json["owner"];
         Items.Add((int)json["no"], item);
         if (isOpen()) Items_Form.repositionNow = true;
     }
