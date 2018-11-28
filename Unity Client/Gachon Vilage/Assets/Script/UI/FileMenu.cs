@@ -51,6 +51,7 @@ public class FileMenu : MonoBehaviour {
     }
     public void SaveAs()
     {
+        Input.imeCompositionMode = IMECompositionMode.Auto;
         FileItem item = Preset.objects.InventoryWindow.Items[no];
         string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Gachon-Files\\";
         int type = item.UI_title.text.LastIndexOf('.');
@@ -65,6 +66,7 @@ public class FileMenu : MonoBehaviour {
         StandaloneFileBrowser.SaveFilePanelAsync("Save File", folder, name, type_s, delegate(string path)
         {
             Save(path);
+            gameObject.SetActive(false);
         });
     }
 }

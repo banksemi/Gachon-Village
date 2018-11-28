@@ -27,6 +27,7 @@ public class Window : MonoBehaviour
     public virtual void Close()
     {
         UIInput.selection = null;
+        Input.imeCompositionMode = IMECompositionMode.Auto;
         gameObject.SetActive(false);
     }
     public virtual void Open()
