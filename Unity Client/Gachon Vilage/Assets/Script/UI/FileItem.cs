@@ -17,7 +17,8 @@ public class FileItem : MonoBehaviour {
             FileMenu file = Preset.objects.fileMenu;
             file.no = this.no;
             Vector3 p2 = Input.mousePosition;
-            p2.y = -Screen.height + p2.y;
+            p2.x = (int)p2.x;
+            p2.y = (int)(-Screen.height + p2.y);
             file.transform.localPosition = p2;
             file.title.text = "From " + owner;
             file.gameObject.SetActive(true);
