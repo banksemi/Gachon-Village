@@ -129,62 +129,14 @@ namespace MainServer
         /// </summary>
         /// <param name="message"></param>
         /// <param name="Type"></param>
-        public void ChatMessage(string message, int Type)
+        public virtual void ChatMessage(string message, int Type)
         {
-            //Dice
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Chat;
-
-            if (message.IndexOf("/주사위") == 0)
-            {
-                Random rd = new Random();
-                json["chattype"] = ChatType.Notice;
-                json["message"] = name + "(이)가 주사위를 굴렸습니다~!! 주사위가 " + rd.Next(1, 6).ToString() + " 나왔습니다!";
-                NetworkSend.SendAllUser(json);
-                return;
-            }
-
-            //Whisper
-            if ((message.IndexOf("/ㅈ") == 0) || (message.IndexOf("/w") == 0) || (message.IndexOf("/귓속말") == 0))
-            {
-                if (message.IndexOf(' ') != -1)
-                {
-                    string[] Receiver = message.Split(' ');
-
-                    foreach (User user in User.Items.Values.ToList())
-                    {
-                        if (user.name.Equals(Receiver[1]))
-                        {
-                            json["chattype"] = ChatType.Whisper;
-                            json["message"] = Receiver[2]; //메세지 내용
-                            json["no"] = no;
-                            json["sender"] = name;
-                            user.socket.Send(json);
-                            return;
-                        }
-                    }
-                    json["message"] = "현재 접속해있지 않는 사용자입니다.";
-                }
-                else
-                {
-                    json["message"] = "잘못된 귓속말 형식 입니다. '/w 대상 내용' 으로 입력해 주세요.";
-                }
-
-                json["chattype"] = ChatType.System;
-                if (this is User)
-                {
-                    User thisuser = (User)this;
-                    thisuser.socket.Send(json);
-                }
-                return;
-            }
-
-            //Normal chatting           
             json["chattype"] = Type;
             json["message"] = message;
             json["no"] = no; // 보낸사람의 고유번호
-            json["sender"] = name; // 보낸사람 이름                          
-            
+            json["sender"] = name; // 보낸사람 이름
             NetworkSend.SendAllUser(json);
         }
     }
