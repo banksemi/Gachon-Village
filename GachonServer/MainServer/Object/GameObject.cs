@@ -132,11 +132,21 @@ namespace MainServer
         public void ChatMessage(string message, int Type)
         {
             JObject json = new JObject();
+            if (message.IndexOf("/주사위") == 0)
+            {
+                Random rd = new Random();             
+                json["chattype"] = ChatType.Notice;
+                json["message"] = name+ "(이)가 주사위를 굴렸습니다~!! 주사위가 "+ rd.Next(1, 6).ToString()+" 나왔습니다!";
+            }
+            else
+            {
+                json["chattype"] = Type;
+                json["message"] = message;
+            }          
+
             json["type"] = NetworkProtocol.Chat;
-            json["chattype"] = Type;
             json["no"] = no; // 보낸사람의 고유번호
-            json["sender"] = name; // 보낸사람 이름
-            json["message"] = message;
+            json["sender"] = name; // 보낸사람 이름           
             NetworkSend.SendAllUser(json);
         }
     }
