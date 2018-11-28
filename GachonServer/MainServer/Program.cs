@@ -116,6 +116,9 @@ namespace MainServer
                 case NetworkProtocol.Inventory_Remove:
                     User.Items[socket].RemoveItem((int)Message["no"]);
                     break;
+                case NetworkProtocol.File_Download:
+                    User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
+                    break;
             }
         }
         public static void UpdateThread()

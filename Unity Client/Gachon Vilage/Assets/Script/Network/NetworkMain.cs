@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using NetworkLibrary;
+using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Threading;
@@ -30,10 +31,18 @@ public class NetworkMain : MonoBehaviour {
                 server = new Client("easyrobot.co.kr", 1119);
                 server.Connect += Server_Connect;
                 server.Receive += Server_Receive;
+                server.FileInfoReceive += Server_FileInfoReceive;
                 server.Start();
             });
         thread.Start();
     }
+
+    private void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+    {
+        Debug.Log(file.FileName);
+        file.Accept((string)Message["path"]);
+    }
+
     private void TipMessage(string Message)
     {
         GameObject gameObject = Instantiate(TipMessageObject);

@@ -7,6 +7,7 @@ using GachonLibrary;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
 using SQL_Library;
+using NetworkLibrary.File;
 namespace MainServer
 {
     public class User : GameObject
@@ -95,7 +96,7 @@ namespace MainServer
 
         public bool AddFileItem(int no)
         {
-            // 해당 번호의 파일이 실제로 있는지 확인
+            // 해당 번호의 파일이 실제로 있는지 확인 + 파일 정보 불러오기
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT file.name, file.size, account.name as owner, date FROM file join account on file.owner=account.id where file_no=?no");
             node["no"] = no;
             JObject item = null;
@@ -139,6 +140,37 @@ namespace MainServer
             else
                 return false;
         }
+
+        public void DownloadItem(int no, string user_path)
+        {
+            // 인벤토리에 해당 파일이 존재하는지 확인
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM inventory WHERE student_id=?id AND file_no=?no");
+            node["id"] = ID;
+            node["no"] = no;
+            using (node.ExecuteReader())
+            {
+                if (!node.Read())
+                {
+                    ToChatMessage("해당 아이템에 대한 권한이 없습니다.", ChatType.Notice);
+                }
+            }
+            // 파일 정보 불러오기
+            node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM file where file_no=?no");
+            node["no"] = no;
+            using (node.ExecuteReader())
+            {
+                if (node.Read())
+                {
+                    NServerFile file = new NServerFile(socket,node.GetString("path"));
+                    JObject json = new JObject();
+                    json["path"] = user_path;
+                    socket.SendFile(json, file);
+                }
+            }
+
+            // 인벤토리에 아이템이 있는지 확인
+        }
+
         public override void Update()
         {
             base.Update();
