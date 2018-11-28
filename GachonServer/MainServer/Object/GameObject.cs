@@ -147,39 +147,37 @@ namespace MainServer
             //Whisper
             if ((message.IndexOf("/ㅈ") == 0) || (message.IndexOf("/w") == 0) || (message.IndexOf("/귓속말") == 0))
             {
-                Boolean success = false;
-
-                json["chattype"] = ChatType.Whisper;
-                if (message.IndexOf(' ')!=-1)
-                {                    
+                if (message.IndexOf(' ') != -1)
+                {
                     string[] Receiver = message.Split(' ');
-                    json["message"] = Receiver[2]; //내용
-                    json["no"] = no;
-                    json["sender"] = name;
+
                     foreach (User user in User.Items.Values.ToList())
                     {
-                        if(user.name.Equals(Receiver[1]))
+                        if (user.name.Equals(Receiver[1]))
                         {
+                            json["chattype"] = ChatType.Whisper;
+                            json["message"] = Receiver[2]; //메세지 내용
+                            json["no"] = no;
+                            json["sender"] = name;
                             user.socket.Send(json);
-                            success = true;
                             return;
                         }
                     }
+                    json["message"] = "현재 접속해있지 않는 사용자입니다.";
                 }
-               if(!success) //잘못된 형식일 때
+                else
                 {
                     json["message"] = "잘못된 귓속말 형식 입니다. '/w 대상 내용' 으로 입력해 주세요.";
-                    foreach (User user in User.Items.Values.ToList())
-                    {
-                        if (user.name.Equals(name))
-                        {
-                            user.socket.Send(json);
-                            return;
-                        }
-                    }                
                 }
-            }
 
+                json["chattype"] = ChatType.System;
+                if (this is User)
+                {
+                    User thisuser = (User)this;
+                    thisuser.socket.Send(json);
+                }
+                return;
+            }
 
             //Normal chatting           
             json["chattype"] = Type;
