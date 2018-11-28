@@ -39,7 +39,7 @@ public class NetworkMain : MonoBehaviour {
 
     private void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
     {
-        Debug.Log(file.FileName);
+        SocketFile.NewFile(file);
         file.Accept((string)Message["path"]);
     }
 

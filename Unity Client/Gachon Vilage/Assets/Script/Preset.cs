@@ -36,6 +36,8 @@ class Preset : MonoBehaviour
     public InventoryWindow InventoryWindow;
 
     public FileMenu fileMenu;
+    public UIGrid SocketFileGrid;
+    public SocketFile SocketFile;
     void Start()
     {
         
