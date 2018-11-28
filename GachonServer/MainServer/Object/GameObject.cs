@@ -142,11 +142,11 @@ namespace MainServer
             {
                 json["chattype"] = Type;
                 json["message"] = message;
+                json["no"] = no; // 보낸사람의 고유번호
+                json["sender"] = name; // 보낸사람 이름     
             }          
-
             json["type"] = NetworkProtocol.Chat;
-            json["no"] = no; // 보낸사람의 고유번호
-            json["sender"] = name; // 보낸사람 이름           
+                 
             NetworkSend.SendAllUser(json);
         }
     }
