@@ -35,33 +35,38 @@ namespace MainServer
             string targetKeyword;
             bool correspond_course = false;
             int start = keyword.IndexOf('[');
-
-            //특정 과목이 지정되었을 경우
-            if (start!=-1)
+            try
             {
-                target = keyword.Split(']');
-                target[0] = target[0].Trim(); //Target course
-                target[0] = target[0].Substring(start + 1);
-                targetKeyword = target[1].Trim(); //Target keyword
-
-                //Target Course가 일치할 경우
-                if (course_name.IndexOf(target[0]) != -1)
+                //특정 과목이 지정되었을 경우
+                if (start != -1)
                 {
+                    target = keyword.Split(']');
+                    target[0] = target[0].Trim(); //Target course
+                    target[0] = target[0].Substring(start + 1);
+                    targetKeyword = target[1].Trim(); //Target keyword
+
+                    //Target Course가 일치할 경우
+                    if (course_name.IndexOf(target[0]) != -1)
+                    {
+                        correspond_course = true;
+                    }
+                }
+                else
+                {
+                    targetKeyword = keyword.Trim();
                     correspond_course = true;
                 }
-            }
-            else
-            {
-                targetKeyword = keyword.Trim();
-                correspond_course = true;
-            }
-         
-            if (correspond_course)
-            {
-                if (title.IndexOf(targetKeyword) != -1)
+
+                if (correspond_course)
                 {
-                    return true;
+                    if (title.IndexOf(targetKeyword) != -1)
+                    {
+                        return true;
+                    }
                 }
+            }catch (Exception)
+            {
+                return false;
             }
             return false;
         }
