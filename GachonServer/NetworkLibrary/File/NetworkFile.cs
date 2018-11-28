@@ -88,7 +88,7 @@ namespace NetworkLibrary.File
             BinaryReader realFile = null;
             try
             {
-                realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open));
+                realFile = new BinaryReader(System.IO.File.Open(Path, FileMode.Open, FileAccess.Read,FileShare.Read));
                 int count = (int)(FileSize / 1024) + 1;
                 for (int i = 0; i < count; i++)
                 {
