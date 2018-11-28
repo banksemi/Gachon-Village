@@ -65,8 +65,7 @@ namespace MainServer
                 node["owner"] = User.Items[socket].ID;
                 node["date"] = DateTime.Now;
                 long no = node.ExecuteInsertQuery();
-
-                User.Items[socket].ToChatMessage(no + "번", ChatType.Notice);
+                User.Items[socket].AddFileItem((int)no);
             };
             file.Accept("files/" + name);
         }
@@ -113,6 +112,9 @@ namespace MainServer
                     break;
                 case NetworkProtocol.Keyword_Add:
                     KeywordSystem.AddItem(User.Items[socket], (string)Message["keyword"]);
+                    break;
+                case NetworkProtocol.Inventory_Remove:
+                    User.Items[socket].RemoveItem((int)Message["no"]);
                     break;
             }
         }

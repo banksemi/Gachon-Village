@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GachonLibrary;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
+using SQL_Library;
 namespace MainServer
 {
     public class User : GameObject
@@ -50,6 +51,23 @@ namespace MainServer
                     socket.Send(json);
                 }
             }
+            // 인벤토리 로드
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM inventory_items WHERE student_id=?id");
+            node["id"] = ID;
+            using (node.ExecuteReader())
+            {
+                while (node.Read())
+                {
+                    JObject item = new JObject();
+                    item["type"] = NetworkProtocol.Inventory_Add;
+                    item["no"] = node.GetInt("file_no");
+                    item["size"] = node.GetInt("size");
+                    item["name"] = node.GetString("name");
+                    item["date"] = node.GetDateTime("date");
+                    item["owner"] = node.GetString("owner");
+                    socket.Send(item);
+                }
+            }
             NetworkMessageList.TipMessage(socket, "가천 빌리지에 오신것을 환영합니다!");
             ToChatMessage("가천 빌리지에 오신것을 환영합니다!", ChatType.Notice);
             ToChatMessage("[컴퓨터 네트워크] 과목에 새로운 게시글이 등록되었습니다.", ChatType.System);
@@ -73,6 +91,53 @@ namespace MainServer
             json["chattype"] = Type;
             json["message"] = message;
             socket.Send(json);
+        }
+
+        public bool AddFileItem(int no)
+        {
+            // 해당 번호의 파일이 실제로 있는지 확인
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT file.name, file.size, account.name as owner, date FROM file join account on file.owner=account.id where file_no=?no");
+            node["no"] = no;
+            JObject item = null;
+            using (node.ExecuteReader())
+            {
+                if (node.Read())
+                {
+                    item = new JObject();
+                    item["type"] = NetworkProtocol.Inventory_Add;
+                    item["no"] = no;
+                    item["size"] = node.GetInt("size");
+                    item["name"] = node.GetString("name");
+                    item["date"] = node.GetDateTime("date");
+                    item["owner"] = node.GetString("owner");
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            node = new MysqlNode(private_data.mysqlOption, "INSERT INTO inventory(student_id, file_no) VALUES (?id, ?no)");
+            node["id"] = ID;
+            node["no"] = no;
+            if (node.ExecuteInsertQuery() < 0) return false;
+            socket.Send(item);
+            return true;
+        }
+        public bool RemoveItem(int no)
+        {
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "DELETE FROM inventory WHERE student_id=?id and file_no=?no");
+            node["id"] = ID;
+            node["no"] = no;
+            if (node.ExecuteNonQuery() > 0)
+            {
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.Inventory_Remove;
+                json["no"] = no;
+                socket.Send(json);
+                return true;
+            }
+            else
+                return false;
         }
         public override void Update()
         {

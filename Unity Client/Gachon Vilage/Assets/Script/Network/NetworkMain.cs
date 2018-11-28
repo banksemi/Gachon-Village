@@ -154,6 +154,12 @@ public class NetworkMain : MonoBehaviour {
                 Preset.objects.KeywordWindow.NewList((JArray)json["list"]);
                 Preset.objects.KeywordWindow.Open();
                 break;
+            case NetworkProtocol.Inventory_Add:
+                Preset.objects.InventoryWindow.Add(json);
+                break;
+            case NetworkProtocol.Inventory_Remove:
+                Preset.objects.InventoryWindow.Remove((int)json["no"]);
+                break;
         }
     }
     // Update is called once per frame

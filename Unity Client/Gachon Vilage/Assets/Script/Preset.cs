@@ -32,6 +32,8 @@ class Preset : MonoBehaviour
     public Window NewStudyWindow;
 
     public KeywordWindow KeywordWindow;
+
+    public InventoryWindow InventoryWindow;
     void Start()
     {
         
