@@ -76,7 +76,7 @@ namespace MainServer
                 {
                     if (ignore_id == node.GetString("student_id")) continue;
                     string keyword = node.GetString("keyword");
-                    if (test(node.GetString("student_id"), gclass.Title, postItem.Title))
+                    if (test(keyword, gclass.Title, postItem.Title))
                     {
                         ignore_id = node.GetString("student_id");
                         PostSystem.SendPost(
