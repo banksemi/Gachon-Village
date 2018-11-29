@@ -131,14 +131,14 @@ namespace MainServer
         /// </summary>
         /// <param name="message"></param>
         /// <param name="Type"></param>
-        public void ChatMessage(string message, int Type)
+        public virtual void ChatMessage(string message, int Type)
         {
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Chat;
             json["chattype"] = Type;
+            json["message"] = message;
             json["no"] = no; // 보낸사람의 고유번호
             json["sender"] = name; // 보낸사람 이름
-            json["message"] = message;
             NetworkSend.SendAllUser(json);
         }
     }
