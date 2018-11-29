@@ -337,5 +337,17 @@ namespace GachonLibrary
             else
                 return dom;
         }
+        /// <summary>
+        /// 인풋 데이터를 기반으로 고유한 ID(아이디)를 반환합니다.
+        /// null을 반환한경우(찾을수 없음) ""을 반환한경우(중복)
+        /// </summary>
+        /// <param name="input">예시: 17이승화, 이승화, 201735861, 201735861이승화, 이승화17, banksemi(아이디)</param>
+        public static string GetID(string input)
+        {
+            // 입력 데이터를 기반으로 MYSQL WEHER 조건문에 내용을 추가해주세요.
+            // 주의 : SQL에 직접적으로 input 문자열을 입력하지 말아주세요. ( 보안 문제 )
+       
+            return null;
+        }
     }
 }
