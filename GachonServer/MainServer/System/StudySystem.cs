@@ -18,6 +18,12 @@ namespace MainServer
                 NetworkMessageList.TipMessage(user.socket, "스터디 이름은 2글자 이상 10글자 이내입니다.");
                 return;
             }
+            // 반경 내에 스터디 그룹이 있는지 체크
+            if (user.InGroup(35) != null)
+            {
+                NetworkMessageList.TipMessage(user.socket,"가까운 거리에 다른 스터디 그룹이 존재합니다.");
+                return;
+            }
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO course(no,type,name) VALUES (?name,'Group',?name)");
             node["name"] = key;
             int result = node.ExecuteNonQuery();

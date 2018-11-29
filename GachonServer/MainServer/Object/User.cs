@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -228,6 +228,29 @@ namespace MainServer
                 return;
             }
             base.ChatMessage(message, Type);
+        }
+        /// <summary>
+        /// 이 유저가 서있는 위치가 다른 그룹에 포함되는지 반환합니다.
+        /// 인풋값에 숫자를 입력하면 그 거리를 기준으로 판단합니다.
+        /// </summary>
+        /// <returns></returns>
+        public string InGroup(float check_d = 17.5f)
+        {
+            MysqlNode snode = new MysqlNode(private_data.mysqlOption, "SELECT group_name, x, z FROM `group`");
+            using (snode.ExecuteReader())
+            {
+                while (snode.Read())
+                {
+                    float dx = position.x - snode.GetFloat("x");
+                    float dz = position.z - snode.GetFloat("z");
+                    float distance = (float)Math.Sqrt(dx * dx + dz * dz);
+                    if (distance <= check_d)
+                    {
+                        return snode.GetString("group_name");
+                    }
+                }
+            }
+            return null;
         }
     }
 }
