@@ -130,14 +130,19 @@ public class NetworkMain : MonoBehaviour {
                     case ChatType.System:
                         color = "82FA58";
                         break;
+                    case ChatType.Group:
+                        color = "A9BCF5";
+                        break;
                 }
+                string groupmessage = "";
+                if ((string)json["group"] != null) groupmessage = "[" + (string)json["group"] + "] ";
                 if (json["no"] != null)
                 {
-                    if ((int)json["chattype"] != ChatType.NPC) Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0} : {1}[-]", json["sender"], json["message"]));
+                    if ((int)json["chattype"] != ChatType.NPC) Preset.objects.ChatBox.Add(string.Format("[" + color + "]{2}{0} : {1}[-]", json["sender"], json["message"], groupmessage));
                     GetGameObject(json).ChatMessage((string)json["message"]);
                 }
                 else
-                    Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0}[-]", json["message"]));
+                    Preset.objects.ChatBox.Add(string.Format("[" + color + "]{1}{0}[-]", json["message"], groupmessage));
                 break;
             case NetworkProtocol.Post_Open:
                 Preset.objects.PostItem_Reset();

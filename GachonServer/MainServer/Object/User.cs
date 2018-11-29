@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -227,7 +227,40 @@ namespace MainServer
                 socket.Send(json);
                 return;
             }
-            base.ChatMessage(message, Type);
+            // 해당 영역이 그룹의 영역일때
+            string ingroup = InGroup();
+            if (ingroup != null)
+            {
+                List<string> idlist = Study.Items[ingroup].GroupUsers();
+                if (idlist.Contains(ID))
+                {
+                    json["chattype"] = ChatType.Group;
+                    json["message"] = message;
+                    json["no"] = no;
+                    json["sender"] = name;
+                    json["group"] = ingroup;
+                    foreach (User user in User.Items.Values)
+                    {
+                        if (idlist.Contains(user.ID))
+                        {
+                            user.socket.Send(json);
+                        }
+                    }
+                    MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO group_chat(group_name, student_id, data) VALUES (?group, ?id, ?data)");
+                    node["group"] = ingroup;
+                    node["id"] = ID;
+                    node["data"] = message;
+                    node.ExecuteInsertQuery();
+                }
+                else
+                {
+                    base.ChatMessage(message, Type);
+                }
+            }
+            else
+            {
+                base.ChatMessage(message, Type);
+            }
         }
         /// <summary>
         /// 이 유저가 서있는 위치가 다른 그룹에 포함되는지 반환합니다.
