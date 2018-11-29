@@ -229,7 +229,7 @@ namespace GachonLibrary
         {
             LoginOk = false;
             password = null;
-            foreach(GachonClass gc in Takes)
+            foreach (GachonClass gc in Takes)
             {
                 gc.Users.Remove(this);
             }
@@ -319,7 +319,7 @@ namespace GachonLibrary
                 {
                     sb.AppendLine("로그인 상태 : 실패");
                 }
-              return sb.ToString();
+                return sb.ToString();
             }
             else
                 return ToString();
@@ -346,7 +346,53 @@ namespace GachonLibrary
         {
             // 입력 데이터를 기반으로 MYSQL WEHER 조건문에 내용을 추가해주세요.
             // 주의 : SQL에 직접적으로 input 문자열을 입력하지 말아주세요. ( 보안 문제 )
-       
+
+            string number = null;
+            string name = null;
+
+            Regex number_regex = new Regex(@"([0-9]+)");
+            Regex name_regex = new Regex(@"([가-힣]+)");
+            Match match = number_regex.Match(input);
+            if (match.Groups.Count > 1) number = match.Groups[1].Value;
+            match = name_regex.Match(input);
+            if (match.Groups.Count > 1) name = match.Groups[1].Value;
+
+            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE studentnumber LIKE ?stu_num and name LIKE ?name ");
+
+            if (number == null)
+            {
+                node["stu_num"] = "%d";
+            }
+            else
+            {
+                if (number.Length == 9)
+                {
+                    node["stu_num"] = number;
+                }
+                else if (number.Length == 2)
+                {
+                    node["stu_num"] = "__" + number + "%";
+                }             
+            }
+
+            if (name == null)
+            {
+                node["name"] = "%d";
+            }
+            else
+            {
+                node["name"] = name;
+            }
+
+            node.ExecuteReader();
+
+            using (node.ExecuteReader())
+            {
+                if (node.Read())
+                {
+                    return node.GetString("id");
+                }
+            }
             return null;
         }
     }
