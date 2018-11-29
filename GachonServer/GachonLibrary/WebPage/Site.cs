@@ -48,6 +48,7 @@ namespace GachonLibrary
                 }
                 catch (NoConnectPageError E)
                 {
+                    Console.WriteLine("[PageSearch Error] " + E.Message);
                     ReadBoardList = false;
                     return;
                 }
