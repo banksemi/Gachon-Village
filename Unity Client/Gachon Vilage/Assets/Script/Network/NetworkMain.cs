@@ -103,6 +103,7 @@ public class NetworkMain : MonoBehaviour {
                 skin.transform.localRotation = Quaternion.identity;
                 character.No = (int)json["no"];
                 character.Name = (string)json["name"];
+                character.Group = (string)json["group"];
                 character.function = (string)json["function"];
                 character.transform.position = new Vector3((float)json["x"], (float)json["y"], (float)json["z"]);
                 character.transform.rotation = Quaternion.Euler(0, (float)json["q"], 0);

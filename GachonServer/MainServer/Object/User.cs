@@ -28,6 +28,7 @@ namespace MainServer
                 gachonAccount = user;
                 Items.Add(socket, this);
                 name = gachonAccount.Name;
+                group = gachonAccount.StudentNumber.Substring(2, 2);
                 skin = "Eve";
             }
         }

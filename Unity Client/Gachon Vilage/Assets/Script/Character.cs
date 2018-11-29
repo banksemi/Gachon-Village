@@ -11,6 +11,7 @@ public class Character : MonoBehaviour {
     public int No;
     public string function = null;
     private string _name;
+    private string _group;
     private List<Vector4> movelist = new List<Vector4>();
     public float movetime = 1;
     public Vector4 startmove;
@@ -19,14 +20,23 @@ public class Character : MonoBehaviour {
     public string Name
     {
         get { return _name; }
-        set { _name = value; if (label != null) { label.text = _name; } }
+        set { _name = value; if (label != null) { UpdateLabel(); } }
+    }
+    public string Group
+    {
+        get { return _group; }
+        set { _group = value; if (label != null) { UpdateLabel(); } }
+    }
+    private void UpdateLabel()
+    {
+        if (label != null) { label.text = "[88FF73][[c]" + _group + "[/c]][-] " + _name; }
     }
     public string ID;
     void Start()
     {
         label = Instantiate(Preset.objects.NameUI).GetComponent<UILabel>();
         label.transform.parent = GameObject.FindWithTag("CCG").transform;
-        label.text = Name;
+        UpdateLabel();
         label.transform.localScale = new Vector3(1, 1, 1);
     }
     public void ChatMessage(string message)

@@ -17,6 +17,7 @@ namespace MainServer
                 while (node.Read())
                 {
                     NPC npc = new NPC();
+                    npc.group = "NPC";
                     npc.skin = node.GetString("skin");
                     npc.name = node.GetString("name");
                     npc.function = node.GetString("function");

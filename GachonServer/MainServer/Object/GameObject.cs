@@ -30,6 +30,7 @@ namespace MainServer
         public int no = 0;
         private static int no_count = 0;
         public string name;
+        public string group;
         private Object No_Lock = new object();
         private List<Vector4> movelist = new List<Vector4>();
         private const int MaxmoveSize = 10;
@@ -80,6 +81,7 @@ namespace MainServer
         {
             JObject json = new JObject();
             json["name"] = name;
+            json["group"] = group;
             json["no"] = no;
             json["skin"] = skin;
             json["x"] = position.x;

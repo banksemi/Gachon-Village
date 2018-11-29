@@ -13,7 +13,8 @@ namespace MainServer
         {
             skin = "Group Sign";
             key = name;
-            this.name = "[그룹] " + name;
+            this.name = name;
+            this.group = "그룹";
             this.position = position;
         }
     }
