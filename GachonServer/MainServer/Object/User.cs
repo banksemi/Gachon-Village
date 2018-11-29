@@ -115,6 +115,7 @@ namespace MainServer
                             json["no"] = no;
                             json["sender"] = name;
                             user.socket.Send(json);
+                            this.socket.Send(json);
                             return;
                         }
                     }
