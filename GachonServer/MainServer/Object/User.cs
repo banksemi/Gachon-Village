@@ -96,47 +96,37 @@ namespace MainServer
             //Whisper
             if ((message.IndexOf("/ㅈ") == 0) || (message.IndexOf("/w") == 0) || (message.IndexOf("/귓속말") == 0))
             {
-                Boolean isUnvalidFormat = false;
-
-                //띄어쓰기가 있다면
-                if (message.IndexOf(' ') != -1)
+                string[] Receiver = message.Split(' ');
+                //형식이 맞는지 확인
+                if (Receiver.Length > 2)
                 {
-                    string[] Receiver = message.Split(' ');
-                    //형식이 맞는지 확인
-                    if (Receiver.Length > 2)
+                    for (int i = 3; i < Receiver.Length; i++)
                     {
-                        for (int i = 2; i < Receiver.Length; i++)
-                        {
-                            Receiver[2] += (Receiver[i]+" ");
-                        }
-
-                        //대상이 접속해있는지 아닌지 확인
-                        foreach (User user in User.Items.Values.ToList())
-                        {
-                            if (user.name.Equals(Receiver[1]))
-                            {
-                                json["chattype"] = ChatType.Whisper;
-                                json["message"] = Receiver[2]; //메세지 내용
-                                json["no"] = no;
-                                json["sender"] = name;
-                                user.socket.Send(json);
-                                return;
-                            }
-                        }
-                        json["message"] = "[귓속말] 현재 접속해있지 않는 사용자입니다.";
-                    } 
-                    else //잘못된 형식일 경우
-                    {
-                        isUnvalidFormat = true;
+                        Receiver[2] += " " + Receiver[i];
                     }
+
+                    //대상이 접속해있는지 아닌지 확인
+                    foreach (User user in User.Items.Values.ToList())
+                    {
+                        if (user.name.Equals(Receiver[1]))
+                        {
+                            json["chattype"] = ChatType.Whisper;
+                            json["message"] = Receiver[2]; //메세지 내용
+                            json["no"] = no;
+                            json["sender"] = name;
+                            user.socket.Send(json);
+                            return;
+                        }
+                    }
+                    json["message"] = "[귓속말] 현재 접속해있지 않는 사용자입니다.";
                 }
-                if (isUnvalidFormat)
+                else
                 {
                     json["message"] = "[귓속말] 잘못된 귓속말 형식 입니다. '/w 대상 내용' 으로 입력해 주세요.";
                 }
-                    json["chattype"] = ChatType.System;
-                    socket.Send(json);
-                    return; 
+                json["chattype"] = ChatType.System;
+                socket.Send(json);
+                return;
             }
             base.ChatMessage(message, Type);
         }
