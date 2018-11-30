@@ -16,7 +16,7 @@ public class Window : MonoBehaviour
             }
         }
     }
-    public void TabChange(string name)
+    public virtual void TabChange(string name)
     {
         for(int i = 0; i < Toggle.Count;i++)
         {

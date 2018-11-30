@@ -25,7 +25,7 @@ namespace MainServer
             Items.Add(key, this);
         }
 
-        public void OpenMenu(User user)
+        public void OpenMenu(User user, string Tab="Main")
         {
             // 해당 유저의 권한 체크
             int level = GetLevel(user);
@@ -41,6 +41,58 @@ namespace MainServer
             else if (level == 0)
             {
                 user.ToChatMessage("해당 그룹에 이미 가입 요청을 보냈습니다.", ChatType.Notice);
+            }
+            else if (level == 1)
+            {
+                // 메뉴에 따른 내용 전달
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.Study_UI;
+                json["name"] = key;
+                json["tab"] = Tab;
+                if (Tab == "Main")
+                {
+                    // 메인 메뉴
+                }
+                else if (Tab == "Member")
+                {
+                    JArray array = new JArray();
+                    MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_member WHERE group_id=?id");
+                    node["id"] = key;
+                    using (node.ExecuteReader())
+                    {
+                        while (node.Read())
+                        {
+                            JObject item = new JObject();
+                            item["level"] = node.GetInt("level");
+                            item["no"] = node.GetString("studentnumber");
+                            item["name"] = node.GetString("name");
+                            item["department"] = node.GetString("department");
+                            item["student_id"] = node.GetString("student_id");
+                            item["email"] = node.GetString("email");
+                            array.Add(item);
+                        }
+                    }
+                    json["items"] = array;
+                }
+                else if (Tab == "File")
+                {
+
+                }
+                else if (Tab == "Chat")
+                {
+                    JArray array = new JArray();
+                    MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_chat_report where group_name=?id ORDER BY no DESC limit 20");
+                    node["id"] = key;
+                    using (node.ExecuteReader())
+                    {
+                        while (node.Read())
+                        {
+                            array.AddFirst(node.GetString("who") + " : " + node.GetString("data"));
+                        }
+                    }
+                    json["items"] = array;
+                }
+                user.socket.Send(json);
             }
         }
         public void SignUpRequest(User user)

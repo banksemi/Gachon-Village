@@ -181,6 +181,11 @@ public class NetworkMain : MonoBehaviour {
                 else
                     Preset.objects.StudySignUpWindow.Close();
                 break;
+            case NetworkProtocol.Study_UI:
+                Preset.objects.StudyWindow.key = (string)json["name"];
+                Preset.objects.StudyWindow.TabChange(json);
+                Preset.objects.StudyWindow.Open();
+                break;
         }
     }
     // Update is called once per frame

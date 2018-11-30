@@ -40,6 +40,8 @@ class Preset : MonoBehaviour
     public SocketFile SocketFile;
 
     public StudySignUpWindow StudySignUpWindow;
+    public StudyWindow StudyWindow;
+
     void Start()
     {
         

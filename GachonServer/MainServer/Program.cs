@@ -122,6 +122,9 @@ namespace MainServer
                 case NetworkProtocol.Study_SignUp:
                     Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
                     break;
+                case NetworkProtocol.Study_UI:
+                    Study.Items[(string)Message["name"]].OpenMenu(User.Items[socket], (string)Message["tab"]);
+                    break;
             }
         }
         public static void UpdateThread()
