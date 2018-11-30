@@ -9,6 +9,11 @@ public class InventoryWindow : Window
     public Dictionary<int, FileItem> Items = new Dictionary<int, FileItem>();
     public UIGrid Items_Form;
     public FileItem Prefab_Item;
+    public override void Open()
+    {
+        Items_Form.repositionNow = true;
+        base.Open();
+    }
     public void Add(JObject json)
     {
         FileItem item = Instantiate(Prefab_Item, Items_Form.transform);
