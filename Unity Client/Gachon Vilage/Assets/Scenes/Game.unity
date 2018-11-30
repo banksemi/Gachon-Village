@@ -16857,15 +16857,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4765788035517518, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 279
+      value: 278
       objectReference: {fileID: 0}
     - target: {fileID: 4946392483373148, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 279
+      value: 278
       objectReference: {fileID: 0}
     - target: {fileID: 4282844087157392, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 114423359732517382, guid: 8d6815d61179b264a92c0d044ddb1174,
         type: 2}
@@ -16899,12 +16899,12 @@ Prefab:
     - target: {fileID: 114423359732517382, guid: 8d6815d61179b264a92c0d044ddb1174,
         type: 2}
       propertyPath: mWidth
-      value: 608
+      value: 820
       objectReference: {fileID: 0}
     - target: {fileID: 114423359732517382, guid: 8d6815d61179b264a92c0d044ddb1174,
         type: 2}
       propertyPath: aspectRatio
-      value: 16.432432
+      value: 22.162163
       objectReference: {fileID: 0}
     - target: {fileID: 1933050500086428, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
       propertyPath: m_Name

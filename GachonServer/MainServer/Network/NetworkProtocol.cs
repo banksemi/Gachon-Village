@@ -30,5 +30,6 @@ namespace MainServer
         public const int File_Download = 20;
         public const int Study_SignUp = 21;
         public const int Study_UI = 22;
+        public const int Study_Member_Request = 23;
     }
 }

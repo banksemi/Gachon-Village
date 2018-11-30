@@ -12,12 +12,28 @@ public class MemberItem : MonoBehaviour
     public UILabel Department;
     public UILabel Number;
     public UILabel Email;
-    // Use this for initialization
-    void Start () {
-		
-	}
+    public string id;
+    public void Remove_Button()
+    {
+        JObject json = new JObject();
+        json["type"] = NetworkProtocol.Study_Member_Request;
+        json["name"] = Preset.objects.StudyWindow.key;
+        json["id"] = id;
+        json["positive"] = false;
+        NetworkMain.SendMessage(json);
+    }
+    public void Accept_Button()
+    {
+        JObject json = new JObject();
+        json["type"] = NetworkProtocol.Study_Member_Request;
+        json["name"] = Preset.objects.StudyWindow.key;
+        json["id"] = id;
+        json["positive"] = true;
+        NetworkMain.SendMessage(json);
+    }
     public void Set(JObject json)
     {
+        id = (string)json["student_id"];
         if ((int)json["level"] == 0)
         {
             Level0_Button.gameObject.SetActive(true);
@@ -32,9 +48,4 @@ public class MemberItem : MonoBehaviour
         Email.text = (string)json["email"];
         Number.text = (string)json["no"];
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

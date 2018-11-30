@@ -475,7 +475,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 114335745249585984}
+    mMethodName: Remove_Button
+    mParameters: []
+    oneShot: 0
 --- !u!114 &114237844956616426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -548,6 +552,7 @@ MonoBehaviour:
   Department: {fileID: 114669517419874382}
   Number: {fileID: 114860581812432242}
   Email: {fileID: 114395258129192870}
+  id: 
 --- !u!114 &114395258129192870
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -694,7 +699,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 114335745249585984}
+    mMethodName: Remove_Button
+    mParameters: []
+    oneShot: 0
 --- !u!114 &114547589253337760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -841,7 +850,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 114335745249585984}
+    mMethodName: Accept_Button
+    mParameters: []
+    oneShot: 0
 --- !u!114 &114666788071818172
 MonoBehaviour:
   m_ObjectHideFlags: 1

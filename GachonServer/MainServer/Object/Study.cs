@@ -25,7 +25,7 @@ namespace MainServer
             Items.Add(key, this);
         }
 
-        public void OpenMenu(User user, string Tab="Main")
+        public void OpenMenu(User user, string Tab = "Main")
         {
             // 해당 유저의 권한 체크
             int level = GetLevel(user);
@@ -109,17 +109,21 @@ namespace MainServer
                 json["type"] = NetworkProtocol.Study_SignUp;
                 json["ui"] = false;
                 user.socket.Send(json);
-                user.ToChatMessage(key + "그룹에 가입 신청을 완료했습니다.",ChatType.Notice);
+                user.ToChatMessage(key + "그룹에 가입 신청을 완료했습니다.", ChatType.Notice);
                 PostSystem.SendPost("그룹 가입 신청", "스터디 그룹\r\n[[-]" + key + "]\r\n\r\n가입 신청자\r\n" + user.name + " (" + user.gachonAccount.StudentNumber + ")\r\n\r\n새로운 회원가입 요청이 있습니다. 해당 그룹의 구역에서 가입 요청을 처리할 수 있습니다.", "admin_group", master);
-                
+
             }
         }
         public int GetLevel(User user)
         {
+            return GetLevel(user.ID);
+        }
+        public int GetLevel(string user_id)
+        {
             // 해당 유저의 권한 체크
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT level FROM takes_course WHERE course_no=?group_name AND student_id=?id");
             node["group_name"] = key;
-            node["id"] = user.ID;
+            node["id"] = user_id;
             using (node.ExecuteReader())
             {
                 if (node.Read())
@@ -150,5 +154,55 @@ namespace MainServer
             }
             return idlist;
         }
+        public void Member_Modify(User user, JObject json)
+        {
+            if (user.ID == (string)json["id"])
+            {
+                NetworkMessageList.TipMessage(user.socket, "자기 자신은 탈퇴시킬 수 없습니다. 메인메뉴 탭을 이용해주세요.");
+                return;
+            }
+            if (master != user.ID)
+            {
+                NetworkMessageList.TipMessage(user.socket, "해당 그룹의 마스터만 이 작업을 수행할 수 있습니다.");
+                return;
+            }
+            MysqlNode node;
+            int old_level = -100;
+            if ((bool)json["positive"]) // 가입 요청 수락
+            {
+                node = new MysqlNode(private_data.mysqlOption, "UPDATE takes_course SET level=?level WHERE course_no=?group_name AND student_id=?id AND level=?old_level");
+                node["old_level"] = 0;
+                node["level"] = 1;
+            }
+            else
+            {
+                old_level = GetLevel((string)json["id"]);
+                node = new MysqlNode(private_data.mysqlOption, "DELETE FROM takes_course WHERE course_no=?group_name AND student_id=?id");
+            }
+            node["group_name"] = key;
+            node["id"] = (string)json["id"];
+            int result = node.ExecuteNonQuery();
+            if (result > 0)
+            {
+                OpenMenu(user, "Member");
+                NetworkMessageList.TipMessage(user.socket, "요청이 정상적으로 처리되었습니다.");
+                if ((bool)json["positive"])
+                {
+                    PostSystem.SendPost("그룹에 가입되었습니다.", "스터디 그룹 [[-]" + name + "] 에 가입되었습니다!\r\n\r\n해당 그룹에서 많은 활동 부탁드립니다.", master, (string)json["id"]);
+                }
+                else
+                {
+                    if (old_level == 1)
+                        PostSystem.SendPost("그룹에서 강퇴되었습니다.", "스터디 그룹 [[-]" + name + "] 에서 강퇴되었음을 알립니다.", master, (string)json["id"]);
+                    else
+                        PostSystem.SendPost("그룹 가입 신청이 거절되었습니다.", "스터디 그룹 [[-]" + name + "] 에서 가입 신청이 거절됨을 알립니다.", master, (string)json["id"]);
+                }
+            }
+            else
+            {
+                NetworkMessageList.TipMessage(user.socket, "오류로 인해 처리되지 않았습니다.");
+            }
+        }
     }
 }
+
