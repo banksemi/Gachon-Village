@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -192,7 +192,7 @@ namespace MainServer
             }
 
             //Whisper
-            if ((message.IndexOf("/ㅈ") == 0) || (message.IndexOf("/w") == 0) || (message.IndexOf("/귓속말") == 0))
+            if ((message.IndexOf("/ㅈ ") == 0) || (message.IndexOf("/w ") == 0) || (message.IndexOf("/귓속말 ") == 0))
             {
                 string[] Receiver = message.Split(' ');
                 //형식이 맞는지 확인
@@ -202,17 +202,19 @@ namespace MainServer
                     {
                         Receiver[2] += " " + Receiver[i];
                     }
+                    string receiverID = GachonUser.GetID(Receiver[1]); //Sender가 입력한 이름을 통해 귓속말 대상 ID를 얻음
 
                     //대상이 접속해있는지 아닌지 확인
                     foreach (User user in User.Items.Values.ToList())
                     {
-                        if (user.name.Equals(Receiver[1]))
+                        if (user.ID.Equals(receiverID))
                         {
                             json["chattype"] = ChatType.Whisper;
                             json["message"] = Receiver[2]; //메세지 내용
                             json["no"] = no;
                             json["sender"] = name;
                             user.socket.Send(json);
+                            //json["sender"] = "["+Receiver[1]+"]"+ name; //Sender에게 [Reiever]Sender: Content 로 보이도록
                             this.socket.Send(json);
                             return;
                         }
