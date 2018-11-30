@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -140,7 +140,8 @@ public class Character : MonoBehaviour {
     }
     void OnDestroy()
     {
-        Destroy(label.gameObject);
+        if (label != null)
+            Destroy(label.gameObject);
     }
 
     public void Move(Vector4 vector4)
