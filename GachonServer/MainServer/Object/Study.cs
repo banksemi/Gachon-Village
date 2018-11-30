@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SQL_Library;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
+using System.IO;
 namespace MainServer
 {
     class Study : NPC
@@ -80,20 +81,25 @@ namespace MainServer
                 }
                 else if (Tab == "Chat")
                 {
-                    JArray array = new JArray();
-                    MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_chat_report where group_name=?id ORDER BY no DESC limit 20");
-                    node["id"] = key;
-                    using (node.ExecuteReader())
-                    {
-                        while (node.Read())
-                        {
-                            array.AddFirst(node.GetString("who") + " : " + node.GetString("data"));
-                        }
-                    }
-                    json["items"] = array;
+                    json["items"] = GetChattingData(20);
                 }
                 user.socket.Send(json);
             }
+        }
+        public string GetChattingData(int limit = 1000)
+        {
+            string data = "";
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_chat_report where group_name=?id ORDER BY no DESC limit ?line");
+            node["line"] = limit;
+            node["id"] = key;
+            using (node.ExecuteReader())
+            {
+                while (node.Read())
+                {
+                    data = "[" + node.GetDateTime("date").ToString("yyyy-MM-dd HH:mm:ss") + "] " + node.GetString("who") + " : " + node.GetString("data") +  "\r\n" + data;
+                }
+            }
+            return data;
         }
         public void SignUpRequest(User user)
         {
@@ -154,6 +160,22 @@ namespace MainServer
             }
             return idlist;
         }
+
+        public void SaveChatting(User user)
+        {
+            if (GetLevel(user) <= 0)
+            {
+                NetworkMessageList.TipMessage(user.socket, "권한이 부족합니다.");
+                return;
+            }
+            string FileName = FileSystem.GetRandomName(user.ID + key);
+            File.AppendAllText(FileName, GetChattingData());
+
+            long no = FileSystem.FileQuery(FileName, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt", user);
+            user.AddFileItem((int)no);
+            NetworkMessageList.TipMessage(user.socket, "해당 그룹의 채팅 내용이 인벤토리의 txt파일로 저장되었습니다!");
+        }
+
         public void Member_Modify(User user, JObject json)
         {
             if (user.ID == (string)json["id"])

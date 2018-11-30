@@ -8,11 +8,20 @@ public class StudyWindow : Window {
     public UIGrid MemberList_Level0;
     public UIGrid MemberList_Level1;
     public MemberItem Prefab_Member;
+
+    public UILabel ChatLabel;
     public void MoveTabSend(GameObject tab)
     {
         JObject json = new JObject();
         json["type"] = NetworkProtocol.Study_UI;
         json["tab"] = tab.name;
+        json["name"] = key;
+        NetworkMain.SendMessage(json);
+    }
+    public void SaveChatting()
+    {
+        JObject json = new JObject();
+        json["type"] = NetworkProtocol.Study_SaveChatting;
         json["name"] = key;
         NetworkMain.SendMessage(json);
     }
@@ -42,6 +51,10 @@ public class StudyWindow : Window {
                 Add_MemberList(item);
             }
             UpdateList();
+        }
+        else if (name=="Chat")
+        {
+            ChatLabel.text = (string)json["items"];
         }
         base.TabChange(name);
     }
