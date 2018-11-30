@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 public class StudyWindow : Window {
@@ -9,7 +10,10 @@ public class StudyWindow : Window {
     public UIGrid MemberList_Level1;
     public MemberItem Prefab_Member;
 
+    public UILabel MainTitle;
+    public UILabel MainInfo;
     public UILabel ChatLabel;
+
     public void MoveTabSend(GameObject tab)
     {
         JObject json = new JObject();
@@ -41,9 +45,16 @@ public class StudyWindow : Window {
                 button.GetComponent<UIButton>().isEnabled = true;
             }
         }
-
-        // Member 정보 갱신
-        if (name=="Member")
+        if (name=="Main")
+        {
+            string text = "";
+            text += string.Format(": {0} ({1})\r\n", json["master_name"], json["master_id"]);
+            text += string.Format(": {0}\r\n", ((DateTime)json["start_date"]).ToString("yyyy-MM-dd"));
+            text += string.Format(": {0}명\r\n", json["count"]);
+            MainTitle.text = key;
+            MainInfo.text = text;
+        }
+        else if (name=="Member") 
         {
             Reset_MemberList();
             foreach (JObject item in (JArray)json["items"])

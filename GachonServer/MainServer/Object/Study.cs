@@ -14,6 +14,13 @@ namespace MainServer
         public string key;
         public string master;
         public static new Dictionary<string, Study> Items = new Dictionary<string, Study>();
+        public int Count
+        {
+            get
+            {
+                return GroupUsers().Count;
+            }
+        }
         public Study(string name, string master, Vector4 position)
         {
             skin = "Group Sign";
@@ -53,6 +60,18 @@ namespace MainServer
                 if (Tab == "Main")
                 {
                     // 메인 메뉴
+                    MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_info WHERE group_name=?id");
+                    node["id"] = key;
+                    using (node.ExecuteReader())
+                    {
+                        if (node.Read())
+                        {
+                            json["master_name"] = node.GetString("master_name");
+                            json["master_id"] = node.GetString("master_id");
+                            json["start_date"] = node.GetDateTime("start_date");
+                            json["count"] = node.GetInt("member");
+                        }
+                    }
                 }
                 else if (Tab == "Member")
                 {
