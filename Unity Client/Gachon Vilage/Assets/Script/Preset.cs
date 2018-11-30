@@ -38,6 +38,8 @@ class Preset : MonoBehaviour
     public FileMenu fileMenu;
     public UIGrid SocketFileGrid;
     public SocketFile SocketFile;
+
+    public StudySignUpWindow StudySignUpWindow;
     void Start()
     {
         

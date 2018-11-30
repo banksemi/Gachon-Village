@@ -119,6 +119,9 @@ namespace MainServer
                 case NetworkProtocol.File_Download:
                     User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
                     break;
+                case NetworkProtocol.Study_SignUp:
+                    Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
+                    break;
             }
         }
         public static void UpdateThread()

@@ -175,6 +175,12 @@ public class NetworkMain : MonoBehaviour {
             case NetworkProtocol.Inventory_Remove:
                 Preset.objects.InventoryWindow.Remove((int)json["no"]);
                 break;
+            case NetworkProtocol.Study_SignUp:
+                if ((bool)json["ui"])
+                    Preset.objects.StudySignUpWindow.Open((string)json["name"]);
+                else
+                    Preset.objects.StudySignUpWindow.Close();
+                break;
         }
     }
     // Update is called once per frame

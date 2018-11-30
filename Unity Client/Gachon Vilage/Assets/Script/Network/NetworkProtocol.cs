@@ -28,5 +28,6 @@ public static class NetworkProtocol
     public const int Inventory_Add = 18;
     public const int Inventory_Remove = 19;
     public const int File_Download = 20;
+    public const int Study_SignUp = 21;
 }
 

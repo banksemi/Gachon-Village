@@ -20,6 +20,11 @@ namespace MainServer
             {
                 KeywordSystem.GetList(user);
             }
+            if (npc.function == "그룹 상호작용")
+            {
+                Study StudyGroup = (Study)npc;
+                StudyGroup.OpenMenu(user);
+            }
         }
     }
 }
