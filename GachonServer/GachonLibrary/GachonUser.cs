@@ -347,6 +347,9 @@ namespace GachonLibrary
             // 입력 데이터를 기반으로 MYSQL WEHER 조건문에 내용을 추가해주세요.
             // 주의 : SQL에 직접적으로 input 문자열을 입력하지 말아주세요. ( 보안 문제 )
 
+            // 빈 입력값에 대한 리턴
+            if (input == null || input.Trim().Length == 0) return null;
+
             string number = null;
             string name = null;
 
@@ -356,41 +359,63 @@ namespace GachonLibrary
             if (match.Groups.Count > 1) number = match.Groups[1].Value;
             match = name_regex.Match(input);
             if (match.Groups.Count > 1) name = match.Groups[1].Value;
+            string SQL = "SELECT id FROM account";
+            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, null);
+            Dictionary<string, string> list = new Dictionary<string, string>();
 
-            MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT id FROM account WHERE studentnumber LIKE ?stu_num and name LIKE ?name ");
-
-            if (number == null)
+            if (number != null && number.Length == 9) // 학번 정보가 포함된경우 (이때는 추가정보로 이름이 있을수는 있지만 아이디는 아니다.)
             {
-                node["stu_num"] = "%d";
-            }
-            else
-            {
-                if (number.Length == 9)
+                list.Add("studentnumber", "?number");
+                node["number"] = number;
+                // 학번으로도 고유값이 만족하지만 이름도 같이 입력됬을경우에는 이름과 함께 조건체크를 진행한다. (사용자 실수 방지)
+                if (name != null)
                 {
-                    node["stu_num"] = number;
+                    list.Add("name", "?name");
+                    node["name"] = name;
                 }
-                else if (number.Length == 2)
+            }
+            else // 9자리의 학번정보가 없을때
+            {
+                if (name == null) // 이름도 입력이 안되면 아이디로 판단
                 {
-                    node["stu_num"] = "__" + number + "%";
-                }             
+                    list.Add("id", "?id");
+                    node["id"] = input;
+                }
+                else
+                {
+                    list.Add("name", "?name");
+                    node["name"] = name;
+                    if (number != null && number.Length == 2) // 2글자의 숫자 정보(학번)이 포함되어있는가
+                    {
+                        list.Add("studentnumber", "?number");
+                        node["number"] = "__" + number + "%";
+                    }
+                }
             }
 
-            if (name == null)
+            for(int i = 0; i < list.Count;i++)
             {
-                node["name"] = "%d";
+                if (i == 0)
+                    SQL += " WHERE ";
+                else
+                    SQL += " AND ";
+                SQL += list.Keys.ElementAt(i);
+                SQL += " LIKE ";
+                SQL += list.Values.ElementAt(i);
             }
-            else
-            {
-                node["name"] = name;
-            }
-
+            node.ChangeSql(SQL);
             node.ExecuteReader();
 
             using (node.ExecuteReader())
             {
                 if (node.Read())
                 {
-                    return node.GetString("id");
+                    string id = node.GetString("id");
+                    bool duplicate = node.Read();
+                    if (duplicate == false)
+                        return id;
+                    else
+                        return "";
                 }
             }
             return null;

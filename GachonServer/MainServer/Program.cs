@@ -18,8 +18,8 @@ namespace MainServer
         static MysqlOption SqlOption = private_data.mysqlOption;
         static void Main(string[] args)
         {
-            Debug_SameID();
             GachonOption.MysqlOption = SqlOption;
+            Debug_SameID();
             Function.Init_Load();
 
             GachonClass.NewPost += KeywordSystem.NewPost;
@@ -45,7 +45,7 @@ namespace MainServer
 
         private static void Debug_SameID()
         {
-            string[] a = { "이승화", "17이승화", "201735861이승화", "이승화17", "banksemi"};
+            string[] a = {"이승화", "17이승화", "이승화17", "이승화201735861", "201735861이승화", "201735861", "banksemi"};
             foreach(string temp in a)
             {
                 if (GachonUser.GetID(temp) != "banksemi") throw new Exception("정상적으로 출력되지 않음 : " + temp);
