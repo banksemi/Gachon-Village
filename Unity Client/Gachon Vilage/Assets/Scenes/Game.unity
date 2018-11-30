@@ -1810,7 +1810,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3019
+  startingRenderQueue: 3011
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -17037,7 +17037,7 @@ Prefab:
     - target: {fileID: 114423359732517382, guid: 8d6815d61179b264a92c0d044ddb1174,
         type: 2}
       propertyPath: mText
-      value: "Group \uAD00\uB9AC"
+      value: "\uC2A4\uD130\uB514 \uADF8\uB8F9"
       objectReference: {fileID: 0}
     - target: {fileID: 114836116366010160, guid: 8d6815d61179b264a92c0d044ddb1174,
         type: 2}
@@ -17094,7 +17094,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1933050500086428, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114266681568847684, guid: 8d6815d61179b264a92c0d044ddb1174, type: 2}
