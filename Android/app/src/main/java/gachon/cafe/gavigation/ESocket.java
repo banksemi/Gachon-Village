@@ -12,9 +12,16 @@ import java.net.Socket;
 import java.util.List;
 
 public class ESocket extends Thread {
+    public static int no_count = 0;
+    public int no;
     public ESocket(NetworkService service)
     {
+        this.no = no_count++;
         this.service = service;
+    }
+    public void Log(String Message)
+    {
+        Log.d("테스트1 (Socket " + no + ")",Message);
     }
     NetworkService service;
     boolean isdispose = false;
@@ -33,9 +40,8 @@ public class ESocket extends Thread {
     {
         while(!isdispose) {
             try {
-                Log.d("테스트1","시작 준비");
+                Log("서버에 연결 시도");
                 socket = new Socket("easyrobot.co.kr", 1119);
-                Log.d("테스트1","연결함");
                 inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 outToClient = new PrintWriter(socket.getOutputStream(), true);
 
@@ -118,19 +124,14 @@ public class ESocket extends Thread {
             }
             ReceiveThread = null;
         }
-        Log.d("테스트1", "ReceiveThread 종료됨");
-        Log.d("테스트1", "outToClient 종료됨");
-
-        Log.d("테스트1", "socket 종료됨");
+        Log("소켓종료");
     }
 
     public void Dispose()
     {
-        Log.d("테스트1", "소켓 닫기 시작");
         isdispose = true;
         SocketClose();
-        Log.d("테스트1", "소켓 닫기 시작중");
         this.interrupt();
-        Log.d("테스트1", "소켓 닫기 시작끝");
+        Log("해당 연결은 완전히 종료됨");
     }
 }

@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class NetworkService  extends Service {
-    private ESocket esocket = null;
+    private static ESocket esocket = null;
     @Override
     public IBinder onBind(Intent intent) {
         // Service 객체와 (화면단 Activity 사이에서)
