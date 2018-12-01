@@ -1,13 +1,13 @@
 package gachon.cafe.gavigation;
 
 import android.app.Fragment;
-import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONObject;
@@ -28,13 +28,27 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
         View view = inflater.inflate(R.layout.post_menu, null) ;
         adapter = new ListViewAdapter();
 
-        listview = (ListView) getView().findViewById(R.id.post_listView);
+        listview = (ListView) view.findViewById(R.id.post_listView);
         listview.setAdapter(adapter);
 
-        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.ic_launcher_background));
-        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.ic_launcher_background));
-        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.ic_launcher_background));
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
 
+                String titleStr =  item.getTitle();
+                String descStr = item.getDesc();
+                Drawable iconDrawable = item.getIcon();
+            }
+        });
+
+
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),"Title","description","최은아","2018-12-02");
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),"Title","description","최은아","2018-12-02");
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),"Title","description","최은아","2018-12-02");
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),"Title","description","최은아","2018-12-02");
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),"Title","description","최은아","2018-12-02");
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),"Title","description","최은아","2018-12-02");
         return view;
     }
     @Override

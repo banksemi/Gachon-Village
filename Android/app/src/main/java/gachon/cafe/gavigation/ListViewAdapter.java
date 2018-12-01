@@ -35,13 +35,15 @@ public class ListViewAdapter extends BaseAdapter {
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.post_menu, parent, false);
+            convertView = inflater.inflate(R.layout.listview_item, parent, false);
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
-        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.post_title) ;
+        TextView descTextView = (TextView) convertView.findViewById(R.id.post_desc) ;
+        TextView dateTextView = (TextView) convertView.findViewById(R.id.post_sender) ;
+        TextView senderTextView = (TextView) convertView.findViewById(R.id.post_date) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ListViewItem listViewItem = listViewItemList.get(position);
@@ -67,13 +69,16 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(Drawable icon, String title, String desc) {
+    public void addItem(Drawable icon, String title, String desc, String sender, String date) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
         item.setDesc(desc);
+        item.setSender(sender);
+        item.setDate(date);
 
         listViewItemList.add(item);
     }
+
 }
