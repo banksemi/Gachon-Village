@@ -9,5 +9,6 @@ namespace MainServer
     public static class AndroidProtocol
     {
         public const int TestMessage = 1000;
+        public const int Login = 1115;
     }
 }

@@ -82,6 +82,9 @@ namespace MainServer
                     case AndroidProtocol.TestMessage:
                         Console.WriteLine("안드로이드 테스트 메세지 : " + (string)Message["message"]);
                         break;
+                    case AndroidProtocol.Login:
+                        Function.Login(socket, (string)Message["id"], (string)Message["password"], false);
+                        break;
                 }
             }
             else
@@ -89,7 +92,7 @@ namespace MainServer
                 switch ((int)Message["type"])
                 {
                     case NetworkProtocol.Login:
-                        Function.Login(socket, (string)Message["id"], (string)Message["password"]);
+                        Function.Login(socket, (string)Message["id"], (string)Message["password"], true);
                         break;
                     case NetworkProtocol.EnterWorld:
                         User.Items[socket].Start();
