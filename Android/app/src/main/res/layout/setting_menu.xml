@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="431dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/menu3_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/subColor"
+                android:padding="12dp"
+                android:text="@string/menu3_setting"
+                android:textColor="@color/textColorMain"
+                android:textSize="18sp" />
+
+
+            <ListView
+                android:id="@+id/keyword_listView"
+                android:layout_width="match_parent"
+                android:layout_height="381dp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/subColor"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/setKeyword_editText"
+            android:layout_width="243dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="새로 등록할 키워드 입력"
+            android:textColor="@color/textColorMain"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorPrimary"
+            android:text="추가"
+            android:textColor="@color/colorAccent" />
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

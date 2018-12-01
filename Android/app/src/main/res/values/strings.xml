@@ -9,4 +9,5 @@
     <string name="login_button"> Login </string>
     <string name="menu2_course">현재 수강과목</string>
     <string name="menu2_study">소속 스터디</string>
+    <string name="menu3_setting">Key word</string>
     </resources>
