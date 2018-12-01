@@ -364,8 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   no: 0
-  owner_name: 
-  size: 0
+  owner: 
   UI_title: {fileID: 114961555548622476}
   UI_size: {fileID: 114931050202752940}
   UI_date: {fileID: 114103158129979272}

@@ -30,6 +30,7 @@ public class InventoryWindow : Window
     {
         FileItem item = Items[no];
         DestroyImmediate(item.gameObject);
+        Items.Remove(no);
         if (isOpen()) Items_Form.repositionNow = true;
 
     }

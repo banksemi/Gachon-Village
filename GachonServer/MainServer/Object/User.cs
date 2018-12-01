@@ -94,31 +94,24 @@ namespace MainServer
             json["message"] = message;
             socket.Send(json);
         }
-
+        public bool HaveItem(int no)
+        {
+            // 해당 번호의 파일이 실제로 있는지 확인 + 파일 정보 불러오기
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT 'true' FROM inventory WHERE student_id=?id AND file_no=?no");
+            node["id"] = ID;
+            node["no"] = no;
+            using (node.ExecuteReader())
+            {
+                if (node.Read()) return true;
+            }
+            return false;
+        }
         public bool AddFileItem(int no)
         {
             // 해당 번호의 파일이 실제로 있는지 확인 + 파일 정보 불러오기
-            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT file.name, file.size, account.name as owner, date FROM file join account on file.owner=account.id where file_no=?no");
-            node["no"] = no;
-            JObject item = null;
-            using (node.ExecuteReader())
-            {
-                if (node.Read())
-                {
-                    item = new JObject();
-                    item["type"] = NetworkProtocol.Inventory_Add;
-                    item["no"] = no;
-                    item["size"] = node.GetInt("size");
-                    item["name"] = node.GetString("name");
-                    item["date"] = node.GetDateTime("date");
-                    item["owner"] = node.GetString("owner");
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            node = new MysqlNode(private_data.mysqlOption, "INSERT INTO inventory(student_id, file_no) VALUES (?id, ?no)");
+            JObject item = FileSystem.GetFileItem(no);
+            if (item == null) return false;
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO inventory(student_id, file_no) VALUES (?id, ?no)");
             node["id"] = ID;
             node["no"] = no;
             if (node.ExecuteInsertQuery() < 0) return false;

@@ -96,7 +96,7 @@ namespace MainServer
                 }
                 else if (Tab == "File")
                 {
-
+                    json["items"] = Files();
                 }
                 else if (Tab == "Chat")
                 {
@@ -179,7 +179,43 @@ namespace MainServer
             }
             return idlist;
         }
-
+        /// <summary>
+        /// 해당 그룹의 파일을 모두 반환합니다.
+        /// </summary>
+        /// <returns></returns>
+        public JArray Files()
+        {
+            JArray jArray = new JArray();
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_file_info WHERE group_name=?key");
+            node["key"] = key;
+            using (node.ExecuteReader())
+            {
+                while (node.Read())
+                {
+                    JObject json = new JObject();
+                    json["no"] = node.GetInt("file_no");
+                    json["name"] = node.GetString("name");
+                    json["size"] = node.GetInt("size");
+                    json["owner"] = node.GetString("owner");
+                    json["upload_user"] = node.GetString("upload_user");
+                    json["file_date"] = node.GetDateTime("date");
+                    json["upload_date"] = node.GetDateTime("upload_date");
+                    jArray.Add(json);
+                }
+            }
+            return jArray;
+        }
+        public bool HaveItem(int no)
+        {
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM group_file_info WHERE group_name=?key AND file_no=?no");
+            node["key"] = key;
+            node["no"] = no;
+            using (node.ExecuteReader())
+            {
+                if (node.Read()) return true;
+            }
+            return false;
+        }
         public void SaveChatting(User user)
         {
             if (GetLevel(user) <= 0)
@@ -194,7 +230,63 @@ namespace MainServer
             user.AddFileItem((int)no);
             NetworkMessageList.TipMessage(user.socket, "해당 그룹의 채팅 내용이 인벤토리의 txt파일로 저장되었습니다!");
         }
-
+        public void FileUpload(User user, int no)
+        {
+            // 해당 유저의 권한 체크
+            int level = GetLevel(user);
+            if (GetLevel(user) < 1)
+            {
+                user.ToChatMessage("해당 그룹에 파일을 업로드할 권한이 없습니다.", ChatType.Notice);
+                return;
+            }
+            if (!user.HaveItem(no))
+            {
+                NetworkMessageList.TipMessage(user.socket, "해당 파일이 인벤토리에 없어서 업로드에 실패했습니다.");
+                return;
+            }
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO group_file(group_name, file_no, upload_user) VALUES (?group_name, ?file_no, ?user)");
+            node["group_name"] = key;
+            node["file_no"] = no;
+            node["user"] = user.ID;
+            int result = node.ExecuteNonQuery();
+            if (result > 0)
+            {
+                NetworkMessageList.TipMessage(user.socket, "파일을 스터디에 성공적으로 업로드했습니다.");
+                OpenMenu(user, "File");
+            }
+            else
+            {
+                NetworkMessageList.TipMessage(user.socket, "예기치 못한 오류로 업로드에 실패했습니다.");
+            }
+        }
+        public void FileDownload(User user, int no)
+        {
+            int level = GetLevel(user);
+            if (GetLevel(user) < 1)
+            {
+                user.ToChatMessage("해당 그룹에서 파일을 다운로드할 권한이 없습니다.", ChatType.Notice);
+                return;
+            }
+            if (user.HaveItem(no))
+            {
+                NetworkMessageList.TipMessage(user.socket, "같은 파일이 이미 인벤토리에 존재합니다.");
+                return;
+            }
+            if (!HaveItem(no))
+            {
+                NetworkMessageList.TipMessage(user.socket, "요청하신 파일이 이 그룹에 존재하지 않습니다. (이미 삭제되었을 가능성이 있습니다)");
+                return;
+            }
+            bool result = user.AddFileItem(no);
+            if (result)
+            {
+                NetworkMessageList.TipMessage(user.socket, "인벤토리에 파일이 복사되었습니다.");
+            }
+            else
+            {
+                NetworkMessageList.TipMessage(user.socket, "예기치 못한 오류로 인해 파일을 인벤토리에 복사하지 못했습니다.");
+            }
+        }
         public void Member_Modify(User user, JObject json)
         {
             if (user.ID == (string)json["id"])

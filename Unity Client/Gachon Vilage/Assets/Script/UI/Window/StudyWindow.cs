@@ -14,6 +14,8 @@ public class StudyWindow : Window {
     public UILabel MainInfo;
     public UILabel ChatLabel;
 
+    public ScrollGrid Files;
+    public StudyFile StudyFile;
     public void MoveTabSend(GameObject tab)
     {
         JObject json = new JObject();
@@ -62,6 +64,16 @@ public class StudyWindow : Window {
                 Add_MemberList(item);
             }
             UpdateList();
+        }
+        else if (name=="File")
+        {
+            Files.Reset();
+            foreach (JObject item in (JArray)json["items"])
+            {
+                StudyFile newitem = Files.AddItem(StudyFile);
+                newitem.Set(item);
+            }
+            Files.RepositionNow();
         }
         else if (name=="Chat")
         {

@@ -7,6 +7,7 @@ using System.IO;
 using NetworkLibrary;
 using NetworkLibrary.File;
 using SQL_Library;
+using Newtonsoft.Json.Linq;
 namespace MainServer
 {
     public static class FileSystem
@@ -36,6 +37,28 @@ namespace MainServer
             node["date"] = DateTime.Now;
             long no = node.ExecuteInsertQuery();
             return no;
+        }
+        public static JObject GetFileItem(int no)
+        {
+            // 해당 번호의 파일이 실제로 있는지 확인 + 파일 정보 불러오기
+            MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT file.name, file.size, account.name as owner, date FROM file join account on file.owner=account.id where file_no=?no");
+            node["no"] = no;
+            JObject item = null;
+            using (node.ExecuteReader())
+            {
+                if (node.Read())
+                {
+                    item = new JObject();
+                    item["type"] = NetworkProtocol.Inventory_Add;
+                    item["no"] = no;
+                    item["size"] = node.GetInt("size");
+                    item["name"] = node.GetString("name");
+                    item["date"] = node.GetDateTime("date");
+                    item["owner"] = node.GetString("owner");
+                    return item;
+                }
+            }
+            return null;
         }
     }
 }

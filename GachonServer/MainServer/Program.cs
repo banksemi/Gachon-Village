@@ -114,6 +114,13 @@ namespace MainServer
                 case NetworkProtocol.Study_SaveChatting:
                     Study.Items[(string)Message["name"]].SaveChatting(User.Items[socket]);
                     break;
+                case NetworkProtocol.Study_FileUpload:
+                    Study.Items[(string)Message["group_name"]].FileUpload(User.Items[socket], (int)Message["no"]);
+                    break;
+                case NetworkProtocol.Study_FileDownload:
+                    Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
+                    break;
+
 
             }
         }
