@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exception\DuplicationError.cs" />
+    <Compile Include="Exception\NoConnectPageError.cs" />
     <Compile Include="GachonClass.cs" />
     <Compile Include="GachonObjects.cs" />
     <Compile Include="GachonOption.cs" />

@@ -42,8 +42,18 @@ namespace GachonLibrary
             if (ReadBoardList == false)
             {
                 ReadBoardList = true;
-                SearchMenu(guser);
+                try
+                {
+                    SearchMenu(guser);
+                }
+                catch (NoConnectPageError E)
+                {
+                    Console.WriteLine("[PageSearch Error] " + E.Message);
+                    ReadBoardList = false;
+                    return;
+                }
 
+                #region 메뉴별 가장 최근의 게시글 번호 갱신 (article 테이블에서 sitetype, siteid, board_name 으로 그룹화)
                 MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
                     "select sitetype, siteid, board_name, max(no) as NO from article where siteType = ?sitetype and siteid = ?siteid group by sitetype, siteid, board_name;");
                 node["sitetype"] = Type;
@@ -53,7 +63,7 @@ namespace GachonLibrary
                     while (node.Read())
                     {
                         string find_menuName = node.GetString("board_name");
-                        int find_count =Int32.Parse( node.GetString("NO"));
+                        int find_count = node.GetInt("no");
                         foreach (BoardType board in boards)
                         {
                             if(board.name == find_menuName)
@@ -63,11 +73,17 @@ namespace GachonLibrary
                             }
                         }
                     }
-                }             
+                }
+                #endregion
             }
             foreach (BoardType board in boards)
             {
-                List<PostItem> items = GetList(guser, board);
+                List<PostItem> items = null;
+                try
+                {
+                    items = GetList(guser, board);
+                }
+                catch (NoConnectPageError e) { }
                 if (items != null)
                 {
                     for (int i = 0; i < items.Count; i++)

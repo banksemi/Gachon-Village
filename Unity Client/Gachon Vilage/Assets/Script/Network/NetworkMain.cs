@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using NetworkLibrary;
+using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Threading;
 using UnityEngine.SceneManagement;
 public class NetworkMain : MonoBehaviour {
     private LinkedList<JObject> queue = new LinkedList<JObject>();
-    private static Client server;
+    public static Client server;
     private Thread thread;
     public static Dictionary<int, Character> gameObjects = new Dictionary<int, Character>();
     public GameObject TipMessageObject;
@@ -30,10 +31,18 @@ public class NetworkMain : MonoBehaviour {
                 server = new Client("easyrobot.co.kr", 1119);
                 server.Connect += Server_Connect;
                 server.Receive += Server_Receive;
+                server.FileInfoReceive += Server_FileInfoReceive;
                 server.Start();
             });
         thread.Start();
     }
+
+    private void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+    {
+        SocketFile.NewFile(file);
+        file.Accept((string)Message["path"]);
+    }
+
     private void TipMessage(string Message)
     {
         GameObject gameObject = Instantiate(TipMessageObject);
@@ -94,6 +103,7 @@ public class NetworkMain : MonoBehaviour {
                 skin.transform.localRotation = Quaternion.identity;
                 character.No = (int)json["no"];
                 character.Name = (string)json["name"];
+                character.Group = (string)json["group"];
                 character.function = (string)json["function"];
                 character.transform.position = new Vector3((float)json["x"], (float)json["y"], (float)json["z"]);
                 character.transform.rotation = Quaternion.Euler(0, (float)json["q"], 0);
@@ -120,14 +130,19 @@ public class NetworkMain : MonoBehaviour {
                     case ChatType.System:
                         color = "82FA58";
                         break;
+                    case ChatType.Group:
+                        color = "A9BCF5";
+                        break;
                 }
+                string groupmessage = "";
+                if ((string)json["group"] != null) groupmessage = "[" + (string)json["group"] + "] ";
                 if (json["no"] != null)
                 {
-                    if ((int)json["chattype"] != ChatType.NPC) Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0} : {1}[-]", json["sender"], json["message"]));
+                    if ((int)json["chattype"] != ChatType.NPC) Preset.objects.ChatBox.Add(string.Format("[" + color + "]{2}{0} : {1}[-]", json["sender"], json["message"], groupmessage));
                     GetGameObject(json).ChatMessage((string)json["message"]);
                 }
                 else
-                    Preset.objects.ChatBox.Add(string.Format("[" + color + "]{0}[-]", json["message"]));
+                    Preset.objects.ChatBox.Add(string.Format("[" + color + "]{1}{0}[-]", json["message"], groupmessage));
                 break;
             case NetworkProtocol.Post_Open:
                 Preset.objects.PostItem_Reset();
@@ -149,6 +164,27 @@ public class NetworkMain : MonoBehaviour {
                 break;
             case NetworkProtocol.CloseNewStudy:
                 Preset.objects.NewStudyWindow.Close();
+                break;
+            case NetworkProtocol.Keyword_Open:
+                Preset.objects.KeywordWindow.NewList((JArray)json["list"]);
+                Preset.objects.KeywordWindow.Open();
+                break;
+            case NetworkProtocol.Inventory_Add:
+                Preset.objects.InventoryWindow.Add(json);
+                break;
+            case NetworkProtocol.Inventory_Remove:
+                Preset.objects.InventoryWindow.Remove((int)json["no"]);
+                break;
+            case NetworkProtocol.Study_SignUp:
+                if ((bool)json["ui"])
+                    Preset.objects.StudySignUpWindow.Open((string)json["name"]);
+                else
+                    Preset.objects.StudySignUpWindow.Close();
+                break;
+            case NetworkProtocol.Study_UI:
+                Preset.objects.StudyWindow.key = (string)json["name"];
+                Preset.objects.StudyWindow.TabChange(json);
+                Preset.objects.StudyWindow.Open();
                 break;
         }
     }

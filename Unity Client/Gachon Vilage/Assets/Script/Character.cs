@@ -11,6 +11,7 @@ public class Character : MonoBehaviour {
     public int No;
     public string function = null;
     private string _name;
+    private string _group;
     private List<Vector4> movelist = new List<Vector4>();
     public float movetime = 1;
     public Vector4 startmove;
@@ -19,14 +20,23 @@ public class Character : MonoBehaviour {
     public string Name
     {
         get { return _name; }
-        set { _name = value; if (label != null) { label.text = _name; } }
+        set { _name = value; if (label != null) { UpdateLabel(); } }
+    }
+    public string Group
+    {
+        get { return _group; }
+        set { _group = value; if (label != null) { UpdateLabel(); } }
+    }
+    private void UpdateLabel()
+    {
+        if (label != null) { label.text = "[88FF73][[c]" + _group + "[/c]][-] " + _name; }
     }
     public string ID;
     void Start()
     {
         label = Instantiate(Preset.objects.NameUI).GetComponent<UILabel>();
         label.transform.parent = GameObject.FindWithTag("CCG").transform;
-        label.text = Name;
+        UpdateLabel();
         label.transform.localScale = new Vector3(1, 1, 1);
     }
     public void ChatMessage(string message)
@@ -85,7 +95,7 @@ public class Character : MonoBehaviour {
         if (col != null)
         {
             MessageTime += Time.deltaTime;
-            if (Message != null && MessageTime >= 4f)
+            if (Message != null && MessageTime >= 6f)
             {
                 Destroy(Message.gameObject);
                 Message = null;
@@ -96,6 +106,7 @@ public class Character : MonoBehaviour {
             if (screenPos.z < 0 || screenPos.z > 100)
             {
                 label.gameObject.SetActive(false);
+                if (Message != null) Message.gameObject.SetActive(false);
             }
             else
             {
@@ -107,16 +118,20 @@ public class Character : MonoBehaviour {
                     a.a = (100 - screenPos.z) * 5 / 100f;
                     label.color = a;
                 }
+                int z = 100 - (int)(screenPos.z * 2);
                 if (Message == null)
                 {
                     screenPos.y += 15;
                     label.transform.localPosition = screenPos;
+                    label.depth = z;
                     label.gameObject.SetActive(true);
+
                 }
                 else
                 {
                     screenPos.y += 35;
                     Message.transform.localPosition = screenPos;
+                    Message.SetDepth(z);
                     Message.gameObject.SetActive(true);
                     label.gameObject.SetActive(false);
                 }
@@ -125,7 +140,8 @@ public class Character : MonoBehaviour {
     }
     void OnDestroy()
     {
-        Destroy(label.gameObject);
+        if (label != null)
+            Destroy(label.gameObject);
     }
 
     public void Move(Vector4 vector4)

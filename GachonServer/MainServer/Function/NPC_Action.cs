@@ -15,7 +15,15 @@ namespace MainServer
             if (npc.function == "우편함 열기")
             {
                 PostSystem.GetPage(user, 1);
-
+            }
+            if (npc.function == "키워드 알림 설정")
+            {
+                KeywordSystem.GetList(user);
+            }
+            if (npc.function == "그룹 상호작용")
+            {
+                Study StudyGroup = (Study)npc;
+                StudyGroup.OpenMenu(user);
             }
         }
     }

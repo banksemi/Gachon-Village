@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using HtmlAgilityPack;
 using NetworkLibrary;
+using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
 using SQL_Library;
 namespace MainServer
@@ -18,11 +19,18 @@ namespace MainServer
         static void Main(string[] args)
         {
             GachonOption.MysqlOption = SqlOption;
+            Debug_SameID();
             Function.Init_Load();
+
+            GachonClass.NewPost += KeywordSystem.NewPost;
+            GachonClass.AutoCrawlingDelay = 3; // (초단위)  10초에 한번씩 최신글을 확인
+            GachonClass.StartAutoCrawling = true; // 강의 최신글 크롤링 시작.
+
             Server server = new Server(1119);
             server.Connect += Server_Connect;
             server.Receive += Server_Receive;
             server.Exit += Server_Exit;
+            server.FileInfoReceive += Server_FileInfoReceive;
             new System.Threading.Thread(UpdateThread).Start();
             for(int i = 0; i < 15;i++)
             {
@@ -33,6 +41,27 @@ namespace MainServer
                 System.Threading.Thread.Sleep(1000);
                // PostSystem.SendPost("실시간 알림 테스트", "Queue 테스트", "admin_keyword", "banksemi");
             }
+        }
+
+        private static void Debug_SameID()
+        {
+            string[] a = {"이승화", "17이승화", "이승화17", "이승화201735861", "201735861이승화", "201735861", "banksemi"};
+            foreach(string temp in a)
+            {
+                if (GachonUser.GetID(temp) != "banksemi") throw new Exception("정상적으로 출력되지 않음 : " + temp);
+            }
+        }
+
+        private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
+        {
+            string name = FileSystem.GetRandomName(file.FileName);
+            file.Success += delegate (NetworkFile files)
+            {
+                // Mysql에 등록. 알려줌
+                long no = FileSystem.FileQuery(name, file.FileName, User.Items[socket]);
+                User.Items[socket].AddFileItem((int)no);
+            };
+            file.Accept(name);
         }
 
         private static void Server_Exit(ESocket socket)
@@ -69,7 +98,7 @@ namespace MainServer
                         User.Items[socket].Move(new Vector4((float)Message["x"], (float)Message["y"], (float)Message["z"], (float)Message["q"]));
                         break;
                     case NetworkProtocol.Chat:
-                        User.Items[socket].ChatMessage((string)Message["message"], ChatType.Normal);
+                        User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);
                         break;
                     case NetworkProtocol.Action:
                         Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
@@ -82,6 +111,36 @@ namespace MainServer
                         break;
                     case NetworkProtocol.NewStudy:
                         StudySystem.NewStudy(User.Items[socket], Message);
+                        break;
+                    case NetworkProtocol.Keyword_Remove:
+                        KeywordSystem.RemoveItem(User.Items[socket], (string)Message["keyword"]);
+                        break;
+                    case NetworkProtocol.Keyword_Add:
+                        KeywordSystem.AddItem(User.Items[socket], (string)Message["keyword"]);
+                        break;
+                    case NetworkProtocol.Inventory_Remove:
+                        User.Items[socket].RemoveItem((int)Message["no"]);
+                        break;
+                    case NetworkProtocol.File_Download:
+                        User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
+                        break;
+                    case NetworkProtocol.Study_SignUp:
+                        Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
+                        break;
+                    case NetworkProtocol.Study_UI:
+                        Study.Items[(string)Message["name"]].OpenMenu(User.Items[socket], (string)Message["tab"]);
+                        break;
+                    case NetworkProtocol.Study_Member_Request:
+                        Study.Items[(string)Message["name"]].Member_Modify(User.Items[socket], Message);
+                        break;
+                    case NetworkProtocol.Study_SaveChatting:
+                        Study.Items[(string)Message["name"]].SaveChatting(User.Items[socket]);
+                        break;
+                    case NetworkProtocol.Study_FileUpload:
+                        Study.Items[(string)Message["group_name"]].FileUpload(User.Items[socket], (int)Message["no"]);
+                        break;
+                    case NetworkProtocol.Study_FileDownload:
+                        Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
                         break;
                 }
             }

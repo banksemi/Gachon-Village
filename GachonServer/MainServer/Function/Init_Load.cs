@@ -17,6 +17,7 @@ namespace MainServer
                 while (node.Read())
                 {
                     NPC npc = new NPC();
+                    npc.group = "NPC";
                     npc.skin = node.GetString("skin");
                     npc.name = node.GetString("name");
                     npc.function = node.GetString("function");
@@ -47,7 +48,7 @@ namespace MainServer
             {
                 while (node.Read())
                 {
-                    Study group = new Study(node.GetString("group_name"), new Vector4(node.GetFloat("x"), node.GetFloat("y"), node.GetFloat("z"), node.GetFloat("q")));
+                    Study group = new Study(node.GetString("group_name"), node.GetString("master"), new Vector4(node.GetFloat("x"), node.GetFloat("y"), node.GetFloat("z"), node.GetFloat("q")));
                     group.Start();
                     Console.WriteLine("Group " + group.name + " 추가");
                 }

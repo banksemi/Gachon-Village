@@ -28,11 +28,15 @@ namespace GachonLibrary
                     {
                         HtmlNodeCollection datas = node.SelectNodes(".//td");
                         string url = ParseSupport.StringFromHtml(datas[1].ChildNodes["a"].Attributes["href"].Value);
-
-                        result.Insert(0, new PostItem(board.type, this, url, Int32.Parse(datas[0].InnerText),
-                            ParseSupport.StringFromHtml(datas[1].InnerText),
-                            datas[2].InnerText,
-                            DateTime.Parse(datas[3].InnerText),board.name));
+                        result.Insert(0, new PostItem(board)
+                        {
+                            url = url,
+                            source = this,
+                            no = Int32.Parse(datas[0].InnerText),
+                            Title = ParseSupport.StringFromHtml(datas[1].InnerText),
+                            Publisher = datas[2].InnerText,
+                            time = DateTime.Parse(datas[3].InnerText)
+                        });
                     }
                 }
             }

@@ -155,16 +155,16 @@ namespace GachonLibrary
 
             MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
                 "INSERT INTO article (course_no, board_name, no, category, publisher, title, date, content, url, sitetype, siteid)" +
-                                    "VALUES (?course_no, ?board_name, ?no, ?cate, ?pub, ?tit, ?date, ?cont, ?url, ?sitetype, ?siteid) ");
+                                    "VALUES (?course_no, ?board_name, ?no, ?posttype, ?publisher, ?title, ?date, ?content, ?url, ?sitetype, ?siteid) ");
 
             node["course_no"] = this.Key;
             node["board_name"] = postItem.board_name;
             node["no"] = postItem.no;
-            node["cate"] = (int) postItem.posttype;
-            node["pub"] = postItem.Publisher;
-            node["tit"] = postItem.Title;
+            node["posttype"] = (int) postItem.posttype;
+            node["publisher"] = postItem.Publisher;
+            node["title"] = postItem.Title;
             node["date"] = postItem.time;
-            node["cont"] = postItem.Content;
+            node["content"] = postItem.Content;
             node["url"] = postItem.url;
             node["sitetype"] = postItem.source.Type;
             node["siteid"] = postItem.source.ID;

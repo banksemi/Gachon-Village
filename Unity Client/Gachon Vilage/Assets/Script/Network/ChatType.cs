@@ -11,5 +11,6 @@ class ChatType
     public const int System = 2;
     public const int Whisper = 3;
     public const int NPC = 4;
+    public const int Group = 5;
 }
 

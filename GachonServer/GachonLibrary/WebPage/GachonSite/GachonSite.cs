@@ -23,6 +23,7 @@ namespace GachonLibrary
                 Uri baseuri = new Uri(SiteUrl + "board/list.jsp?Menu_seq=0&Forum_seq=" + ID);
                 HtmlDocument dom = guser.VisitPage(baseuri);
                 HtmlNodeCollection sets = dom.DocumentNode.SelectNodes("//ul[@class='dep']/li/a");
+                if (sets == null) throw new NoConnectPageError("연결이 정상적으로 이뤄지지 않음");
                 foreach(HtmlNode node in sets)
                 {
                     string menu_title = node.InnerText;

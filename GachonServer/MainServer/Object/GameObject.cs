@@ -30,6 +30,7 @@ namespace MainServer
         public int no = 0;
         private static int no_count = 0;
         public string name;
+        public string group;
         private Object No_Lock = new object();
         private List<Vector4> movelist = new List<Vector4>();
         private const int MaxmoveSize = 10;
@@ -80,6 +81,7 @@ namespace MainServer
         {
             JObject json = new JObject();
             json["name"] = name;
+            json["group"] = group;
             json["no"] = no;
             json["skin"] = skin;
             json["x"] = position.x;
@@ -129,14 +131,14 @@ namespace MainServer
         /// </summary>
         /// <param name="message"></param>
         /// <param name="Type"></param>
-        public void ChatMessage(string message, int Type)
+        public virtual void ChatMessage(string message, int Type)
         {
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Chat;
             json["chattype"] = Type;
+            json["message"] = message;
             json["no"] = no; // 보낸사람의 고유번호
             json["sender"] = name; // 보낸사람 이름
-            json["message"] = message;
             NetworkSend.SendAllUser(json);
         }
     }
