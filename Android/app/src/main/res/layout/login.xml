@@ -84,10 +84,10 @@
         android:fontFamily="monospace"
         android:text="@string/login_id"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText3"
-        app:layout_constraintEnd_toStartOf="@+id/editText3"
+        app:layout_constraintBottom_toBottomOf="@+id/login_id_edittext"
+        app:layout_constraintEnd_toStartOf="@+id/login_id_edittext"
         app:layout_constraintStart_toStartOf="@+id/login_back"
-        app:layout_constraintTop_toTopOf="@+id/editText3" />
+        app:layout_constraintTop_toTopOf="@+id/login_id_edittext" />
 
     <TextView
         android:id="@+id/login_pw"
@@ -101,10 +101,10 @@
         android:fontFamily="monospace"
         android:text="@string/login_pw"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText2"
-        app:layout_constraintEnd_toStartOf="@+id/editText2"
+        app:layout_constraintBottom_toBottomOf="@+id/login_password_edittext"
+        app:layout_constraintEnd_toStartOf="@+id/login_password_edittext"
         app:layout_constraintStart_toStartOf="@+id/login_back"
-        app:layout_constraintTop_toTopOf="@+id/editText2" />
+        app:layout_constraintTop_toTopOf="@+id/login_password_edittext" />
 
     <Button
         android:id="@+id/login_button"
