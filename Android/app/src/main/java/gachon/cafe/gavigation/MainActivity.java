@@ -54,22 +54,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        JSONObject json = new JSONObject();
-        try {
-            json.put("type", 1000);
-            json.put("message", "abab");
-        }
-        catch (Exception e)
-        {
-
-        }
-        NetworkMain.Send(json);
-        Intent intent = new Intent(
-                getApplicationContext(),//현재제어권자
-                NetworkService.class); // 이동할 컴포넌트
-        startService(intent); // 서비스 시작
-
-
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.frameview, new Fragment_Login()); fragmentTransaction.commit();

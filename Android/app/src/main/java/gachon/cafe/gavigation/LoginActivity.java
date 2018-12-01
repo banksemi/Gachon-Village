@@ -43,6 +43,22 @@ public class LoginActivity extends ESocketActivity{
     @Override
     public void ReceiveMessage(JSONObject json)
     {
+        try {
+            int type = json.getInt("type");
+            switch (type)
+            {
+                case 1115: // 로그인
+                    // 로그인 성공시 액티비티 이동
+                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    break;
+
+            }
+        }
+        catch (Exception e)
+        {
+            Log.d("테스트3", e.getMessage());
+        }
     }
 }
 
