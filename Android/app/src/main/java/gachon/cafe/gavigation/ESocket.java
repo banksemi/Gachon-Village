@@ -79,7 +79,7 @@ public class ESocket extends Thread {
                 };
                 ReceiveThread.start();
                 while (socket != null ) {
-                    
+
 
                     List<JSONObject> list = NetworkMain.SendQueue.Get();
                     if (list != null) {

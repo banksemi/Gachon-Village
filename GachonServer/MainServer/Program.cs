@@ -92,6 +92,13 @@ namespace MainServer
                     case AndroidProtocol.GroupList:
                         AndroidFunction.SendTakesList(socket);
                         return;
+                    case AndroidProtocol.KeywordList:
+                        AndroidFunction.KeywordList(socket);
+                        break;
+                    case AndroidProtocol.KeywordAdd:
+                        AndroidFunction.NewKeyword(socket,(string)Message["keyword"]);
+                        break;
+
                 }
             }
             else

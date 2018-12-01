@@ -17,16 +17,7 @@ import org.json.JSONObject;
 public class Fragment_course_menu extends ListFragment implements ReceiveFragment {
     private View myView = null;
     public Fragment_course_menu() {
-        try
-        {
-            JSONObject json = new JSONObject();
-            json.put("type",1119);
-            NetworkMain.Send(json);
-        }
-        catch (Exception e)
-        {
-
-        }
+        NetworkMain.SendTypeMessage(1119);
         // Required empty public constructor
     }
 

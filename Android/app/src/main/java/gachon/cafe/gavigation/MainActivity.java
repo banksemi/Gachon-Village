@@ -34,7 +34,7 @@ public class MainActivity extends ESocketActivity {
                     SwitchView(Fragment_course_menu.class);
                     return true;
                 case R.id.navigation_setting:
-                    SwitchView(Fragment_Notifications.class);
+                    SwitchView(Fragment_Keyword.class);
                     return true;
             }
             return false;
