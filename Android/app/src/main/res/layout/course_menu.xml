@@ -11,18 +11,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/menu2_course"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/subColor"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:text="@string/menu2_course"
                 android:textColor="@color/textColorMain"
-                android:textSize="18sp"
-                />
+                android:textSize="18sp" />
 
             <View
                 android:id="@+id/divider"
@@ -33,16 +32,15 @@
             <ListView
                 android:id="@+id/listView_course"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-            </ListView>
+                android:layout_height="236dp" />
 
 
             <TextView
                 android:id="@+id/menu2_study"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/subColor"
-                android:padding= "10dp"
+                android:padding="12dp"
                 android:text="@string/menu2_study"
                 android:textColor="@color/textColorMain"
                 android:textSize="18sp" />
@@ -56,8 +54,7 @@
             <ListView
                 android:id="@+id/listView_study"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-            </ListView>
+                android:layout_height="229dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
