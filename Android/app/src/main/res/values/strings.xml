@@ -4,4 +4,7 @@
     <string name="title_study_group">Study group</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_setting">Setting</string>
-</resources>
+    <string name="login_id">ID</string>
+    <string name="login_pw">PW</string>
+    <string name="login_button"> Login </string>
+    </resources>
