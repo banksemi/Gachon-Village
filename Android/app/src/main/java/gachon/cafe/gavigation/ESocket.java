@@ -1,5 +1,6 @@
 package gachon.cafe.gavigation;
 
+import android.os.Debug;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -11,6 +12,11 @@ import java.net.Socket;
 import java.util.List;
 
 public class ESocket extends Thread {
+    public ESocket(NetworkService service)
+    {
+        this.service = service;
+    }
+    NetworkService service;
     boolean isdispose = false;
     Socket socket = null;
     BufferedReader inFromClient = null;
@@ -27,9 +33,9 @@ public class ESocket extends Thread {
     {
         while(!isdispose) {
             try {
-                Log.d("승화","시작 준비");
-                socket = new Socket("192.168.1.61", 1118);
-                Log.d("승화","연결함");
+                Log.d("테스트1","시작 준비");
+                socket = new Socket("easyrobot.co.kr", 1119);
+                Log.d("테스트1","연결함");
                 inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 outToClient = new PrintWriter(socket.getOutputStream(), true);
 
@@ -49,8 +55,9 @@ public class ESocket extends Thread {
                                 }
                                 JSONObject json = new JSONObject(data);
                                 NetworkMain.ReceiveQueue.Add(json);
-
-                                MainActivity.handler.sendEmptyMessage(0);
+                                Log.d("테스트1","핸들러 작업");
+                                service.mHandler.sendEmptyMessage(0);
+                                Log.d("테스트1","핸들러 완료");
                                 Thread.sleep(10);
                             }
                             catch (Exception e)
@@ -61,7 +68,7 @@ public class ESocket extends Thread {
                     }
                 };
                 ReceiveThread.start();
-                while (socket != null) {
+                while (socket != null ) {
 
                     JSONObject json = new JSONObject();
                     try {
@@ -81,7 +88,7 @@ public class ESocket extends Thread {
                             Send(item);
                         }
                     }
-                    Thread.sleep(50);
+                    Thread.sleep(1000);
                 }
             } catch (InterruptedException e) {
                 Dispose();
@@ -97,27 +104,6 @@ public class ESocket extends Thread {
         }
     }
     private void SocketClose() {
-        if (ReceiveThread != null) {
-            try {
-                ReceiveThread.interrupt();
-            } catch (Exception e) {
-            }
-            ReceiveThread = null;
-        }
-        if (inFromClient != null) {
-            try {
-                inFromClient.close();
-            } catch (Exception e) {
-            }
-            inFromClient = null;
-        }
-        if (outToClient != null) {
-            try {
-                outToClient.close();
-            } catch (Exception e) {
-            }
-            outToClient = null;
-        }
         if (socket != null) {
             try {
                 socket.close();
@@ -125,12 +111,26 @@ public class ESocket extends Thread {
             }
             socket = null;
         }
+        if (ReceiveThread != null) {
+            try {
+                ReceiveThread.interrupt();
+            } catch (Exception e) {
+            }
+            ReceiveThread = null;
+        }
+        Log.d("테스트1", "ReceiveThread 종료됨");
+        Log.d("테스트1", "outToClient 종료됨");
+
+        Log.d("테스트1", "socket 종료됨");
     }
 
     public void Dispose()
     {
+        Log.d("테스트1", "소켓 닫기 시작");
         isdispose = true;
+        SocketClose();
+        Log.d("테스트1", "소켓 닫기 시작중");
         this.interrupt();
-        Dispose();
+        Log.d("테스트1", "소켓 닫기 시작끝");
     }
 }

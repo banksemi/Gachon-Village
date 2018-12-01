@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        handler = this.mHandler;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -76,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private void ReceiveMessage(JSONObject json)
-    {
-        Toast.makeText(getApplicationContext(),json.toString(),Toast.LENGTH_SHORT).show();
-    }
     private void SwitchView(Class fragment)
     {
         FragmentManager fm = getFragmentManager();
@@ -93,19 +89,4 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
     }
-    // 이벤트 처리를 위한 핸들러. 패킷 수신이 ReceiveMessage를 호출
-    public static Handler handler = null;
-    Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            List<JSONObject> list = NetworkMain.ReceiveQueue.Get();
-            if (list != null) {
-                for (JSONObject item : list) {
-
-                    ReceiveMessage(item);
-                }
-            }
-            // 메세지를 처리하고 또다시 핸들러에 메세지 전달 (1000ms 지연)
-            //mHandler.sendEmptyMessageDelayed(0,1000);
-        }
-    };
 }

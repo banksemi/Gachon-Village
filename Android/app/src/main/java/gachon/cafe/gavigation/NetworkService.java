@@ -2,8 +2,15 @@ package gachon.cafe.gavigation;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class NetworkService  extends Service {
     private ESocket esocket = null;
@@ -23,14 +30,35 @@ public class NetworkService  extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
-        Log.d("test", "서비스의 onStartCommand");
+        Log.d("테스트1", "서비스의 onStartCommand");
         if (esocket != null)
         {
             esocket.Dispose();
         }
-        esocket = new ESocket();
+        Log.d("테스트1", "종료 완료");
+        esocket = new ESocket(this);
         esocket.start();
+        Log.d("테스트1", "서비스의 onStartCommand 끝");
 
         return super.onStartCommand(intent, flags, startId);
+    }
+    // 이벤트 처리를 위한 핸들러. 패킷 수신이 ReceiveMessage를 호출
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            Log.d("테스트1","핸들러 작업중");
+            List<JSONObject> list = NetworkMain.ReceiveQueue.Get();
+            if (list != null) {
+                for (JSONObject item : list) {
+
+                    ReceiveMessage(item);
+                }
+            }
+            // 메세지를 처리하고 또다시 핸들러에 메세지 전달 (1000ms 지연)
+            //mHandler.sendEmptyMessageDelayed(0,1000);
+        }
+    };
+    private void ReceiveMessage(JSONObject json)
+    {
+        Toast.makeText(getApplicationContext(),json.toString(),Toast.LENGTH_SHORT).show();
     }
 }
