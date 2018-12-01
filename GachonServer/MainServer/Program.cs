@@ -75,64 +75,74 @@ namespace MainServer
 
         private static void Server_Receive(ESocket socket, Newtonsoft.Json.Linq.JObject Message)
         {
-            switch((int)Message["type"])
+            if ((int)Message["type"] >= 1000)
             {
-                case NetworkProtocol.Login:
-                    Function.Login(socket, (string)Message["id"], (string)Message["password"]);
-                    break;
-                case NetworkProtocol.EnterWorld:
-                    User.Items[socket].Start();
-                    break;
-                case NetworkProtocol.Move:
-                    User.Items[socket].Move(new Vector4((float)Message["x"], (float)Message["y"], (float)Message["z"], (float)Message["q"]));
-                    break;
-                case NetworkProtocol.Chat:
-                    User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);
-                    break;
-                case NetworkProtocol.Action:
-                    Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
-                    break;
-                case NetworkProtocol.Post_Open:
-                    PostSystem.GetPage(User.Items[socket], (int)Message["page"]);
-                    break;
-                case NetworkProtocol.Post_Detail:
-                    PostSystem.GetItem(User.Items[socket], (int)Message["no"]);
-                    break;
-                case NetworkProtocol.NewStudy:
-                    StudySystem.NewStudy(User.Items[socket], Message);
-                    break;
-                case NetworkProtocol.Keyword_Remove:
-                    KeywordSystem.RemoveItem(User.Items[socket], (string)Message["keyword"]);
-                    break;
-                case NetworkProtocol.Keyword_Add:
-                    KeywordSystem.AddItem(User.Items[socket], (string)Message["keyword"]);
-                    break;
-                case NetworkProtocol.Inventory_Remove:
-                    User.Items[socket].RemoveItem((int)Message["no"]);
-                    break;
-                case NetworkProtocol.File_Download:
-                    User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
-                    break;
-                case NetworkProtocol.Study_SignUp:
-                    Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
-                    break;
-                case NetworkProtocol.Study_UI:
-                    Study.Items[(string)Message["name"]].OpenMenu(User.Items[socket], (string)Message["tab"]);
-                    break;
-                case NetworkProtocol.Study_Member_Request:
-                    Study.Items[(string)Message["name"]].Member_Modify(User.Items[socket], Message);
-                    break;
-                case NetworkProtocol.Study_SaveChatting:
-                    Study.Items[(string)Message["name"]].SaveChatting(User.Items[socket]);
-                    break;
-                case NetworkProtocol.Study_FileUpload:
-                    Study.Items[(string)Message["group_name"]].FileUpload(User.Items[socket], (int)Message["no"]);
-                    break;
-                case NetworkProtocol.Study_FileDownload:
-                    Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
-                    break;
-
-
+                switch ((int)Message["type"])
+                {
+                    case AndroidProtocol.TestMessage:
+                        Console.WriteLine("안드로이드 테스트 메세지 : " + (string)Message["message"]);
+                        break;
+                }
+            }
+            else
+            {
+                switch ((int)Message["type"])
+                {
+                    case NetworkProtocol.Login:
+                        Function.Login(socket, (string)Message["id"], (string)Message["password"]);
+                        break;
+                    case NetworkProtocol.EnterWorld:
+                        User.Items[socket].Start();
+                        break;
+                    case NetworkProtocol.Move:
+                        User.Items[socket].Move(new Vector4((float)Message["x"], (float)Message["y"], (float)Message["z"], (float)Message["q"]));
+                        break;
+                    case NetworkProtocol.Chat:
+                        User.Items[socket].ChatMessage((string)Message["message"],ChatType.Normal);
+                        break;
+                    case NetworkProtocol.Action:
+                        Function.NPC_Action((NPC)GameObject.Items[(int)Message["no"]], User.Items[socket]);
+                        break;
+                    case NetworkProtocol.Post_Open:
+                        PostSystem.GetPage(User.Items[socket], (int)Message["page"]);
+                        break;
+                    case NetworkProtocol.Post_Detail:
+                        PostSystem.GetItem(User.Items[socket], (int)Message["no"]);
+                        break;
+                    case NetworkProtocol.NewStudy:
+                        StudySystem.NewStudy(User.Items[socket], Message);
+                        break;
+                    case NetworkProtocol.Keyword_Remove:
+                        KeywordSystem.RemoveItem(User.Items[socket], (string)Message["keyword"]);
+                        break;
+                    case NetworkProtocol.Keyword_Add:
+                        KeywordSystem.AddItem(User.Items[socket], (string)Message["keyword"]);
+                        break;
+                    case NetworkProtocol.Inventory_Remove:
+                        User.Items[socket].RemoveItem((int)Message["no"]);
+                        break;
+                    case NetworkProtocol.File_Download:
+                        User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
+                        break;
+                    case NetworkProtocol.Study_SignUp:
+                        Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
+                        break;
+                    case NetworkProtocol.Study_UI:
+                        Study.Items[(string)Message["name"]].OpenMenu(User.Items[socket], (string)Message["tab"]);
+                        break;
+                    case NetworkProtocol.Study_Member_Request:
+                        Study.Items[(string)Message["name"]].Member_Modify(User.Items[socket], Message);
+                        break;
+                    case NetworkProtocol.Study_SaveChatting:
+                        Study.Items[(string)Message["name"]].SaveChatting(User.Items[socket]);
+                        break;
+                    case NetworkProtocol.Study_FileUpload:
+                        Study.Items[(string)Message["group_name"]].FileUpload(User.Items[socket], (int)Message["no"]);
+                        break;
+                    case NetworkProtocol.Study_FileDownload:
+                        Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
+                        break;
+                }
             }
         }
         public static void UpdateThread()

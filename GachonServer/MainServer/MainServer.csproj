@@ -55,6 +55,7 @@
     <Compile Include="GachonSocket.cs" />
     <Compile Include="System\FileSystem.cs" />
     <Compile Include="System\KeywordSystem.cs" />
+    <Compile Include="Network\AndroidProtocol.cs" />
     <Compile Include="Network\ChatType.cs" />
     <Compile Include="Network\NetworkSend.cs" />
     <Compile Include="Object\GameObject.cs" />
