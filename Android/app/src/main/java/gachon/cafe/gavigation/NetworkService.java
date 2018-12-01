@@ -1,11 +1,18 @@
 package gachon.cafe.gavigation;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ReceiverCallNotAllowedException;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -60,6 +67,31 @@ public class NetworkService  extends Service {
             //mHandler.sendEmptyMessageDelayed(0,1000);
         }
     };
+    public void Test(String title, String content)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel notificationChannel = new NotificationChannel("post_channel", "우편 알림", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription("우편함에 새로운 소식이 올때 이 채널을 통해 알려드립니다.");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.GREEN);
+            notificationChannel.enableVibration(true); notificationChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+
+
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"post_channel")
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(R.drawable.login_logo);
+        NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(FileFunction.NextNo(),builder.build());
+
+    }
     private void ReceiveMessage(JSONObject json)
     {
         try {
@@ -69,9 +101,13 @@ public class NetworkService  extends Service {
                 case 1:
                     Toast.makeText(getApplicationContext(),json.getString("message"),Toast.LENGTH_SHORT).show();
                     break;
+                case 9: // 우편함 내용 실시간 알림
+                    Test(json.getString("title"),json.getString("content"));
+                    Toast.makeText(getApplicationContext(),json.getString("title"),Toast.LENGTH_SHORT).show();
+                    break;
                 case 1115: // 로그인
                     // 로그인에 성공했습니다!!
-                    LoginFunction.LoginSave(json.getString("data"));
+                    FileFunction.LoginSave(json.getString("data"));
                     Toast.makeText(getApplicationContext(),"로그인에 성공했습니다!!",Toast.LENGTH_SHORT).show();
                     break;
 

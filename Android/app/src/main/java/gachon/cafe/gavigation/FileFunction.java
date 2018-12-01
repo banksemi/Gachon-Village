@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class LoginFunction {
+public class FileFunction {
     public static void LoginSave(String data) {
         try {
             Log.d("테스트2", "파일 여는중");
@@ -45,6 +45,49 @@ public class LoginFunction {
             e.printStackTrace();
 
         }
+    }
+    private static void Save(String file, String data)
+    {
+        try {
+            PrintWriter pw = new PrintWriter(ESocketActivity.path.getAbsolutePath() + file);
+            pw.write(data + "\r\n");
+            pw.flush();
+            pw.close();
+        } catch (Exception e) {
+            Log.d("테스트2", "에러" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static String Load(String file2) {
+        try {
+            File file = new File(ESocketActivity.path.getAbsolutePath() + file2);
+            Scanner sc = new Scanner(file);
+            String data = sc.nextLine();
+            sc.close();
+            return data;
+        }
+        catch (Exception e)
+        {
+            Log.d("테스트2", "2에러" + e.getMessage());
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+    public static int NextNo()
+    {
+       String a = Load("a.txt");
+       if (a == null)
+       {
+           Save("a.txt","0");
+           return 0;
+       }
+       else
+       {
+          int no = Integer.parseInt(a) + 1;
+          Save("a.txt",no + "");
+          return no;
+       }
     }
 }
 

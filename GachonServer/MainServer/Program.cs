@@ -36,10 +36,13 @@ namespace MainServer
             {
                // PostSystem.SendPost("실시간 알림 테스트" + i, "Queue 테스트", "admin_keyword", "banksemi");
             }
+            int i2 = 0;
             while (true)
             {
-                System.Threading.Thread.Sleep(1000);
-               // PostSystem.SendPost("실시간 알림 테스트", "Queue 테스트", "admin_keyword", "banksemi");
+                System.Threading.Thread.Sleep(4000);
+                string title = "실시간 알림 테스트" + i2++;
+                Console.WriteLine(title);
+                PostSystem.SendPost(title, "Queue 테스트", "admin_keyword", "banksemi");
             }
         }
 

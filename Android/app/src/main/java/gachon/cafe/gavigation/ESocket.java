@@ -48,7 +48,7 @@ public class ESocket extends Thread {
                 socket = new Socket("easyrobot.co.kr", 1119);
                 inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 outToClient = new PrintWriter(socket.getOutputStream(), true);
-                LoginFunction.LoginLoad();
+                FileFunction.LoginLoad();
                 ReceiveThread = new Thread()
                 {
                     public void run()
