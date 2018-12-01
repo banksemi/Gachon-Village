@@ -1,12 +1,48 @@
 package gachon.cafe.gavigation;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import org.json.JSONObject;
+
+public class LoginActivity extends ESocketActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        Button login_button = (Button) findViewById(R.id.login_button);
+        login_button.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JSONObject json = new JSONObject();
+                TextView login_text = (TextView) findViewById(R.id.login_id_edittext);
+                TextView login_text2 = (TextView) findViewById(R.id.login_password_edittext);
+                try
+                {
+                    json.put("type",1115);
+                    json.put("id",login_text.getText());
+                    json.put("password",login_text2.getText());
+                }
+                catch (Exception e)
+                {
+
+                }
+                NetworkMain.Send(json);
+            }
+        });
+    }
+    @Override
+    public void ReceiveMessage(JSONObject json)
+    {
     }
 }
 

@@ -2,6 +2,7 @@ package gachon.cafe.gavigation;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.ReceiverCallNotAllowedException;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -10,9 +11,11 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NetworkService  extends Service {
+    public static List<ESocketActivity> receivers = new ArrayList();
     private static ESocket esocket = null;
     @Override
     public IBinder onBind(Intent intent) {
@@ -59,6 +62,29 @@ public class NetworkService  extends Service {
     };
     private void ReceiveMessage(JSONObject json)
     {
-        Toast.makeText(getApplicationContext(),json.toString(),Toast.LENGTH_SHORT).show();
+        try {
+            int type = json.getInt("type");
+            switch (type)
+            {
+                case 1:
+                    Toast.makeText(getApplicationContext(),json.getString("message"),Toast.LENGTH_SHORT).show();
+                    break;
+                case 1115: // 로그인
+                    // 로그인에 성공했습니다!!
+                    LoginFunction.LoginSave(json.getString("data"));
+                    Toast.makeText(getApplicationContext(),"로그인에 성공했습니다!!",Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+        }
+        catch (Exception e)
+        {
+
+        }
+        for(ESocketActivity item : receivers)
+        {
+            item.ReceiveMessage(json);
+        }
+        //Toast.makeText(getApplicationContext(),json.toString(),Toast.LENGTH_SHORT).show();
     }
 }

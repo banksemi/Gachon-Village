@@ -6,7 +6,11 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
@@ -44,7 +48,7 @@ public class ESocket extends Thread {
                 socket = new Socket("easyrobot.co.kr", 1119);
                 inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 outToClient = new PrintWriter(socket.getOutputStream(), true);
-
+                LoginFunction.LoginLoad();
                 ReceiveThread = new Thread()
                 {
                     public void run()

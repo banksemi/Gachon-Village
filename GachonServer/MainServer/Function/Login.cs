@@ -46,6 +46,14 @@ namespace MainServer
                 json["no"] = user.no; // 플레이어를 나타내는 객체가 무엇인지 알려준다.
                 socket.Send(json);
             }
+            else
+            {
+                // 로그인 성공 메세지를 보내준다.
+                JObject json = new JObject();
+                json["type"] = AndroidProtocol.Login;
+                json["data"] = id + ":" + password;
+                socket.Send(json);
+            }
             GachonSocket.Connect(socket, id, true);
         }
     }

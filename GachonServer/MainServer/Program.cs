@@ -66,6 +66,7 @@ namespace MainServer
 
         private static void Server_Exit(ESocket socket)
         {
+            Console.WriteLine("누군가 종료함");
             GachonSocket.Exit(socket);
             if (User.Items.ContainsKey(socket))
             {

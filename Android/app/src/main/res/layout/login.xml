@@ -46,12 +46,12 @@
         app:layout_constraintVertical_bias="0.239" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/login_id_edittext"
         android:layout_width="235dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Your Gachon ID"
         app:layout_constraintBottom_toBottomOf="@+id/login_back"
         app:layout_constraintEnd_toEndOf="@+id/login_back"
         app:layout_constraintHorizontal_bias="0.803"
@@ -60,11 +60,12 @@
         app:layout_constraintVertical_bias="0.156" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/login_password_edittext"
         android:layout_width="235dp"
         android:layout_height="44dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:hint="Password"
         app:layout_constraintBottom_toBottomOf="@+id/login_back"
         app:layout_constraintEnd_toEndOf="@+id/login_back"
         app:layout_constraintHorizontal_bias="0.803"
