@@ -79,18 +79,7 @@ public class ESocket extends Thread {
                 };
                 ReceiveThread.start();
                 while (socket != null ) {
-
-                    JSONObject json = new JSONObject();
-                    try {
-                        json.put("type", 1000);
-                        json.put("message", "ping");
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-                    Log.d("A", "테스트");
-                    NetworkMain.Send(json);
+                    
 
                     List<JSONObject> list = NetworkMain.SendQueue.Get();
                     if (list != null) {
@@ -98,7 +87,7 @@ public class ESocket extends Thread {
                             Send(item);
                         }
                     }
-                    Thread.sleep(1000);
+                    Thread.sleep(10);
                 }
             } catch (InterruptedException e) {
                 Dispose();
