@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Window : MonoBehaviour
 {
+    private List<Window> Windows = new List<Window>();
     public List<GameObject> Toggle;
     void Start()
     {
+        Windows.Add(this);
         if (Toggle.Count > 0)
         {
             Toggle[0].SetActive(true);
@@ -16,7 +18,7 @@ public class Window : MonoBehaviour
             }
         }
     }
-    public void TabChange(string name)
+    public virtual void TabChange(string name)
     {
         for(int i = 0; i < Toggle.Count;i++)
         {

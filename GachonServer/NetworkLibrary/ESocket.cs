@@ -124,6 +124,11 @@ namespace NetworkLibrary
                 // 소켓통신 에러일경우 
                 Dispose();
             }
+            catch (System.IO.IOException e)
+            {
+                // IO에 문제가 생긴경우
+                Dispose();
+            }
             catch (System.ObjectDisposedException e)
             {
                 // 오브젝트가 종료된경우, 더이상 메세지를 보내지 않고 무시함.
@@ -142,13 +147,16 @@ namespace NetworkLibrary
         {
             lock (this)
             {
-                if (Exit != null) Exit(this);
-                isClosed = true;
-                try { if (SR != null) SR.Dispose(); } catch { }
-                try { if (SW != null) SW.Dispose(); } catch { }
-                try { if (NS != null) NS.Dispose(); } catch { }
-                try { if (tcpClient != null) tcpClient.Close(); } catch { }
-                try { if (thread != null) thread.Abort(); } catch { }
+                if (isClosed == false)
+                {
+                    isClosed = true;
+                    if (Exit != null) Exit(this);
+                    try { if (SR != null) SR.Dispose(); } catch { }
+                    try { if (SW != null) SW.Dispose(); } catch { }
+                    try { if (NS != null) NS.Dispose(); } catch { }
+                    try { if (tcpClient != null) tcpClient.Close(); } catch { }
+                    try { if (thread != null) thread.Abort(); } catch { }
+                }
             }
         }
     }

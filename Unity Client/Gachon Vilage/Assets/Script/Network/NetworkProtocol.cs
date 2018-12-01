@@ -28,5 +28,11 @@ public static class NetworkProtocol
     public const int Inventory_Add = 18;
     public const int Inventory_Remove = 19;
     public const int File_Download = 20;
+    public const int Study_SignUp = 21;
+    public const int Study_UI = 22;
+    public const int Study_Member_Request = 23;
+    public const int Study_SaveChatting = 24;
+    public const int Study_FileUpload = 25;
+    public const int Study_FileDownload = 26;
 }
 

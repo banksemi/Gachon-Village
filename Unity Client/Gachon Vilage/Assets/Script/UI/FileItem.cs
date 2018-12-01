@@ -24,4 +24,16 @@ public class FileItem : MonoBehaviour {
             file.gameObject.SetActive(true);
         }
     }
+    void OnDoubleClick()
+    {
+        if (Preset.objects.StudyWindow.isOpen())
+        {
+            // 스터디에 파일 업로드
+            JObject json = new JObject();
+            json["type"] = NetworkProtocol.Study_FileUpload;
+            json["group_name"] = Preset.objects.StudyWindow.key;
+            json["no"] = no;
+            NetworkMain.SendMessage(json);
+        }
+    }
 }

@@ -53,7 +53,7 @@ namespace MainServer
             node["key"] = key;
             node.ExecuteNonQuery();
             // 성공적으로 만들어진경우
-            Study group = new Study(key, position);
+            Study group = new Study(key,user.ID, position);
             group.Start();
 
             JObject json = new JObject();

@@ -54,30 +54,14 @@ namespace MainServer
 
         private static void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
         {
-            if (!Directory.Exists("files"))
-            {
-                Directory.CreateDirectory("files");
-            }
-            string name;
-            do
-            {
-                name = DateTime.Now.ToString("yyyy-MM-dd") + file.FileName.GetHashCode() + new Random().Next(0, 1000000);
-            }
-            while (File.Exists("files/" + name));
-
+            string name = FileSystem.GetRandomName(file.FileName);
             file.Success += delegate (NetworkFile files)
             {
                 // Mysql에 등록. 알려줌
-                MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO file(name,size,path,owner,date) VALUES (?name,?size,?path,?owner,?date)");
-                node["name"] = files.FileName;
-                node["size"] = files.FileSize;
-                node["path"] = "files/" + name;
-                node["owner"] = User.Items[socket].ID;
-                node["date"] = DateTime.Now;
-                long no = node.ExecuteInsertQuery();
+                long no = FileSystem.FileQuery(name, file.FileName, User.Items[socket]);
                 User.Items[socket].AddFileItem((int)no);
             };
-            file.Accept("files/" + name);
+            file.Accept(name);
         }
 
         private static void Server_Exit(ESocket socket)
@@ -129,6 +113,26 @@ namespace MainServer
                 case NetworkProtocol.File_Download:
                     User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
                     break;
+                case NetworkProtocol.Study_SignUp:
+                    Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
+                    break;
+                case NetworkProtocol.Study_UI:
+                    Study.Items[(string)Message["name"]].OpenMenu(User.Items[socket], (string)Message["tab"]);
+                    break;
+                case NetworkProtocol.Study_Member_Request:
+                    Study.Items[(string)Message["name"]].Member_Modify(User.Items[socket], Message);
+                    break;
+                case NetworkProtocol.Study_SaveChatting:
+                    Study.Items[(string)Message["name"]].SaveChatting(User.Items[socket]);
+                    break;
+                case NetworkProtocol.Study_FileUpload:
+                    Study.Items[(string)Message["group_name"]].FileUpload(User.Items[socket], (int)Message["no"]);
+                    break;
+                case NetworkProtocol.Study_FileDownload:
+                    Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
+                    break;
+
+
             }
         }
         public static void UpdateThread()

@@ -140,7 +140,8 @@ public class Character : MonoBehaviour {
     }
     void OnDestroy()
     {
-        Destroy(label.gameObject);
+        if (label != null)
+            Destroy(label.gameObject);
     }
 
     public void Move(Vector4 vector4)
