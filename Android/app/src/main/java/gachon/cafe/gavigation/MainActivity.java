@@ -6,16 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ESocketActivity {
 
     private TextView mTextMessage;
-
+    private ReceiveFragment receiverFragment = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_notifications:
                     SwitchView(Fragment_Notifications.class);
                     return true;
-                case R.id.navigation_study_group:
-                    SwitchView(Fragment_Notifications.class);
+                case R.id.navigation_course:
+                    SwitchView(Fragment_course_menu.class);
                     return true;
                 case R.id.navigation_setting:
+                    SwitchView(Fragment_Notifications.class);
                     return true;
             }
             return false;
@@ -44,29 +46,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mTextMessage = (TextView) findViewById(R.id.message);
-       // BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-       // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.frameview, new Fragment_course_menu()); fragmentTransaction.commit();
-
+        SwitchView(Fragment_Notifications.class);
 
     }
     private void SwitchView(Class fragment)
     {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        android.app.Fragment newf = null;
         try {
-            fragmentTransaction.replace(R.id.frameview,(android.app.Fragment)fragment.newInstance());
+            newf = (android.app.Fragment)fragment.newInstance();
+            fragmentTransaction.replace(R.id.frameview,newf);
         }
         catch (Exception e)
         {
 
         }
+        receiverFragment = (ReceiveFragment) newf;
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void ReceiveMessage(JSONObject json) {
+        if (receiverFragment != null) receiverFragment.ReceiveMessage(json);
+    }
 }

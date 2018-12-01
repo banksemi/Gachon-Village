@@ -40,14 +40,31 @@ public class NetworkService  extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
-        Log.d("테스트1", "서비스의 onStartCommand");
-        if (esocket != null)
-        {
-            esocket.Dispose();
+        String Classname = null;
+        try {
+            Classname = intent.getExtras().getString("Class");
         }
-        Log.d("테스트1", "종료 완료");
-        esocket = new ESocket(this);
-        esocket.start();
+        catch (Exception e)
+        {
+
+        }
+        if (Classname == null || Classname.equals("LoginActivity"))
+        {
+            if (esocket != null)
+            {
+                esocket.Dispose();
+            }
+            esocket = new ESocket(this);
+            esocket.start();
+        }
+        else
+        {
+            if (esocket == null)
+            {
+                esocket = new ESocket(this);
+                esocket.start();
+            }
+        }
         Log.d("테스트1", "서비스의 onStartCommand 끝");
 
         return super.onStartCommand(intent, flags, startId);

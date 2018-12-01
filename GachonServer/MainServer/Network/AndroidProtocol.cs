@@ -10,5 +10,6 @@ namespace MainServer
     {
         public const int TestMessage = 1000;
         public const int Login = 1115;
+        public const int GroupList = 1119;
     }
 }

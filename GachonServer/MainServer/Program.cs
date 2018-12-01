@@ -89,6 +89,9 @@ namespace MainServer
                     case AndroidProtocol.Login:
                         Function.Login(socket, (string)Message["id"], (string)Message["password"], false);
                         break;
+                    case AndroidProtocol.GroupList:
+                        AndroidFunction.SendTakesList(socket);
+                        return;
                 }
             }
             else

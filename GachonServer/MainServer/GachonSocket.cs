@@ -65,5 +65,16 @@ namespace MainServer
             }
             return null;
         }
+        public static string GetId(ESocket socket)
+        {
+            lock (lockobject)
+            {
+                if (session_string.ContainsKey(socket))
+                {
+                    return session_string[socket];
+                }
+            }
+            return null;
+        }
     }
 }

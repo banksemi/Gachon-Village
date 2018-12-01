@@ -1,7 +1,9 @@
 package gachon.cafe.gavigation;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +11,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class Fragment_course_menu extends Fragment {
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-    static final String[] LIST_COURSE ={"이슬람 문화의 의해","컴퓨터 네트워크와 실습","알고리즘","컴퓨터 네트워크와 실습","알고리즘","컴퓨터 네트워크와 실습","알고리즘"};
-    static final String[] LIST_STUDY = {"우편함", "뤠디오가가","우편함", "뤠디오가가","우편함", "뤠디오가가","우편함", "뤠디오가가"};
+public class Fragment_course_menu extends ListFragment implements ReceiveFragment {
+    private View myView = null;
     public Fragment_course_menu() {
+        try
+        {
+            JSONObject json = new JSONObject();
+            json.put("type",1119);
+            NetworkMain.Send(json);
+        }
+        catch (Exception e)
+        {
 
-
+        }
         // Required empty public constructor
     }
 
@@ -23,16 +34,25 @@ public class Fragment_course_menu extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.course_menu,null);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, LIST_COURSE);
-
-        ArrayAdapter adapter2 = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, LIST_STUDY);
-        ListView listView2 = (ListView) view.findViewById(R.id.listView_study);
-
-        ListView listView = (ListView) view.findViewById(R.id.listView_course);
-        listView.setAdapter(adapter);listView2.setAdapter(adapter2);
-
-        return view;
+        myView = inflater.inflate(R.layout.course_menu,null);
+        return myView;
+    }
+    @Override
+    public void ReceiveMessage(JSONObject json) {
+        try {
+            int type = json.getInt("type");
+            switch (type)
+            {
+                case 1119: // 그룹 정보
+                    UpdateList(json.getJSONArray("group"),R.id.listView_study);
+                    UpdateList(json.getJSONArray("class"),R.id.listView_course);
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.d("테스트3", e.getMessage());
+        }
     }
 }
 

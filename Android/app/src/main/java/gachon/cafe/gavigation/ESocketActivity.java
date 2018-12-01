@@ -21,10 +21,13 @@ public class ESocketActivity extends AppCompatActivity
         // 서비스 등록
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(
-                getApplicationContext(),//현재제어권자
+        getApplicationContext(),//현재제어권자
                 NetworkService.class); // 이동할 컴포넌트
+
+        intent.putExtra("Class", this.getLocalClassName());
         startService(intent); // 서비스 시작
-        NetworkService.receivers.add(this);
+        if (!NetworkService.receivers.contains(this))
+            NetworkService.receivers.add(this);
     }
     @Override
     protected void onDestroy() {

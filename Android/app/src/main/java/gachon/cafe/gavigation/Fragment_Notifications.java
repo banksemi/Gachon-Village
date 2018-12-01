@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Fragment_Notifications extends Fragment {
+import org.json.JSONObject;
+
+public class Fragment_Notifications extends Fragment implements ReceiveFragment {
 
     public Fragment_Notifications() {
         // Required empty public constructor
@@ -17,6 +19,10 @@ public class Fragment_Notifications extends Fragment {
                              Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.setting_menu, container, false);
+    }
+    @Override
+    public void ReceiveMessage(JSONObject json) {
+
     }
 }
 

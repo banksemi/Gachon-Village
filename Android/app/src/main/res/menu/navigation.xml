@@ -12,9 +12,9 @@
         android:title="@string/title_notifications" />
 
     <item
-        android:id="@+id/navigation_study_group"
+        android:id="@+id/navigation_course"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_study_group" />
+        android:title="@string/title_course" />
 
     <item
         android:id="@+id/navigation_setting"
