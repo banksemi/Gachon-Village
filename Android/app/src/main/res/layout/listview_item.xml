@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="60dp"
+        android:layout_height="77dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:src="@drawable/contact" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <TextView
+            android:id="@+id/post_title"
+            android:layout_width="241dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:text="Title"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+
+        <TextView
+            android:id="@+id/post_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="description"
+            android:paddingLeft="15dp"
+            android:paddingBottom="10dp"
+            android:textSize="16sp"
+            android:textColor="#666666" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <TextView
+            android:id="@+id/post_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="date"
+            android:textColor="#666666"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/post_sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sender"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:textSize="16sp"
+            android:textColor="#666666" />
+    </LinearLayout>
+
+</LinearLayout>
+
+

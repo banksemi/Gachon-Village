@@ -98,6 +98,9 @@ namespace MainServer
                     case AndroidProtocol.KeywordAdd:
                         AndroidFunction.NewKeyword(socket,(string)Message["keyword"]);
                         break;
+                    case AndroidProtocol.PostList:
+                        AndroidFunction.GetPostList(socket);
+                        break;
 
                 }
             }
