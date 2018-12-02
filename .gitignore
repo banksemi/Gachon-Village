@@ -383,6 +383,8 @@ private_data(git).cs
 # NetworkLibrary (Plugin)
 [Uu]nity [Cc]lient/**/Assets/Plugins/NetworkLibrary/
 
+# ID Save File (In Game)
+[Uu]nity [Cc]lient/**/idsave.txt
 #Android
 
 # IntelliJ
