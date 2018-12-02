@@ -52,6 +52,8 @@ public class ListViewAdapter extends BaseAdapter {
         iconImageView.setImageDrawable(listViewItem.getIcon());
         titleTextView.setText(listViewItem.getTitle());
         descTextView.setText(listViewItem.getDesc());
+        senderTextView.setText(listViewItem.getSenderStr());
+        dateTextView.setText(listViewItem.getDateStr());
 
         return convertView;
     }

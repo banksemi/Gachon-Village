@@ -84,7 +84,7 @@ public class NetworkService  extends Service {
             //mHandler.sendEmptyMessageDelayed(0,1000);
         }
     };
-    public void Test(String title, String content)
+    public void Test(String title, String content, String Sender)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -102,9 +102,15 @@ public class NetworkService  extends Service {
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"post_channel")
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(R.drawable.login_logo);
+                .setSmallIcon(R.drawable.login_logo)
+                .setContentTitle(Sender)
+                .setContentText(title);
+        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder)
+                .bigText(content);
+
+
+        builder.setStyle(style);
+
         NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         manager.notify(FileFunction.NextNo(),builder.build());
 
@@ -119,7 +125,7 @@ public class NetworkService  extends Service {
                     Toast.makeText(getApplicationContext(),json.getString("message"),Toast.LENGTH_SHORT).show();
                     break;
                 case 9: // 우편함 내용 실시간 알림
-                    Test(json.getString("title"),json.getString("content"));
+                    Test(json.getString("title"),json.getString("content"),json.getString("sender"));
                     Toast.makeText(getApplicationContext(),json.getString("title"),Toast.LENGTH_SHORT).show();
                     break;
                 case 1115: // 로그인

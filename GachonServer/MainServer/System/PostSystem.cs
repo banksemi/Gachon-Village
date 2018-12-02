@@ -24,17 +24,17 @@ namespace MainServer
             }
         }
 
-        public static void GetPage(User user, int page_no)
+        public static void GetPage(ESocket socket, string ID, int page_no)
         {
             if (page_no < 1) page_no = 1;
-            int newcount = PostSystem.GetNewMessageCount(user.ID);
-            int count = PostSystem.GetMessageCount(user.ID);
+            int newcount = PostSystem.GetNewMessageCount(ID);
+            int count = PostSystem.GetMessageCount(ID);
             int all_page = 1;
             if (count == 0) all_page = 1;
             else all_page = (count - 1) / 5 + 1;
             if (page_no > all_page) page_no = all_page;
             MysqlNode mysqlNode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?id order by date desc limit "+((page_no - 1) * 5) +", 5");
-            mysqlNode["id"] = user.ID;
+            mysqlNode["id"] = ID;
             JArray array = new JArray();
             using (mysqlNode.ExecuteReader())
             {
@@ -69,9 +69,12 @@ namespace MainServer
             json["count"] = count;
             json["page"] = page_no;
             json["all_page"] = all_page;
-            user.socket.Send(json);
+            socket.Send(json);
         }
-
+        public static void GetPage(User user, int page_no)
+        {
+            GetPage(user.socket, user.ID, page_no);
+        }
         public static void GetItem(User user, int no)
         {
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?receiver and no=?no");
@@ -162,6 +165,7 @@ namespace MainServer
             json["type"] = NetworkProtocol.PostAlarm;
             json["title"] = title;
             json["content"] = content;
+            json["sender"] = sender;
             json["receiver"] = receiver;
             json["date"] = date;
             if (notice == true)

@@ -93,5 +93,13 @@ namespace MainServer
                 socket.Send(json);
             }
         }
+        public static void GetPostList(ESocket socket)
+        {
+            string id = GachonSocket.GetId(socket);
+            if (id != null)
+            {
+                PostSystem.GetPage(socket,id, 1);
+            }
+        }
     }
 }
