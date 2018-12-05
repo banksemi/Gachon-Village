@@ -114,6 +114,13 @@ namespace GachonLibrary
                 PageSearch(guser);
             }
         }
+        /// <summary>
+        /// 새로운 게시판을 추가해줍니다.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="baseUri"></param>
+        /// <param name="href"></param>
         protected void NewBoard(BoardType.PostType type, string name, Uri baseUri, string href)
         {
             boards.Add(new BoardType(type, name, new Uri(baseUri, href).AbsoluteUri));
