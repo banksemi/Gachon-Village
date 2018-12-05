@@ -34,10 +34,13 @@ namespace WebSupport
             json["key"] = 2018 + gasaa.Groups[2].Value + gasaa.Groups[3].Value;
             return json;
         }
-        public static string StringFromHtml(string text)
+        public static string StringFromHtml(string text, bool CanEnter=false)
         {
-            text = text.Replace("\r", "");
-            text = text.Replace("\n", "");
+            if (CanEnter == false)
+            {
+                text = text.Replace("\r", "");
+                text = text.Replace("\n", "");
+            }
             text = text.Replace("\t", "");
             text = text.Replace("&nbsp;", " ");
             text = text.Replace("&amp;", "&");
@@ -76,7 +79,7 @@ namespace WebSupport
                     }
                 }
             }
-            return StringFromHtml(temp);
+            return StringFromHtml(temp, true).Trim(Environment.NewLine.ToCharArray()); ;
         }
     }
 }

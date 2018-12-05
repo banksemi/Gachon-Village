@@ -122,7 +122,7 @@ namespace GachonLibrary
         {
             HtmlDocument dom = guser.VisitPage(post.url);
             post.Title = ParseSupport.StringFromHtml(dom.DocumentNode.SelectSingleNode("//td[@class='tit']").InnerText);
-            post.Content = ParseSupport.StringFromHtml(dom.DocumentNode.SelectSingleNode("//td[contains(@class,'text')]").InnerText);
+            post.Content = ParseSupport.StringFromHtmlNode(dom.DocumentNode.SelectSingleNode("//td[contains(@class,'text')]"));
         }
     }
 }
