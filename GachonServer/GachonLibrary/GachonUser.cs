@@ -257,7 +257,7 @@ namespace GachonLibrary
                 node.Read();
                 StudentNumber = node.GetString("studentnumber");
 
-                if (Int32.Parse(StudentNumber)!=0)
+                if ((!String.IsNullOrEmpty(StudentNumber)) && Int32.Parse(StudentNumber)!=0)
                 {
                     //StudentNumber = node.GetString("studentnumber");                 
                     Name = node.GetString("name");
