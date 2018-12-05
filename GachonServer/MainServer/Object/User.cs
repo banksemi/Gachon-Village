@@ -214,6 +214,8 @@ namespace MainServer
                             json["no"] = no;
                             json["sender"] = name;
                             user.socket.Send(json);
+
+                            json["group"] = "To " + Receiver[1];
                             //json["sender"] = "["+Receiver[1]+"]"+ name; //Sender에게 [Reiever]Sender: Content 로 보이도록
                             this.socket.Send(json);
                             return;
