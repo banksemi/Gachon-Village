@@ -58,7 +58,6 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
 
                 String titleStr =  item.getTitle();
-                String descStr = item.getDesc();
                 Drawable iconDrawable = item.getIcon();
             }
         });
