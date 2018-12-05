@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/menu1_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/subColor"
+        android:padding="12dp"
+        android:text="@string/menu1_post"
+        android:textColor="@color/textColorMain"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary" />
+
+
+    <ListView
+        android:id="@+id/post_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </ListView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

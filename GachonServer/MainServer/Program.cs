@@ -36,10 +36,13 @@ namespace MainServer
             {
                // PostSystem.SendPost("실시간 알림 테스트" + i, "Queue 테스트", "admin_keyword", "banksemi");
             }
+            int i2 = 0;
             while (true)
             {
-                System.Threading.Thread.Sleep(1000);
-               // PostSystem.SendPost("실시간 알림 테스트", "Queue 테스트", "admin_keyword", "banksemi");
+                System.Threading.Thread.Sleep(4000);
+                string title = "실시간 알림 테스트" + i2++;
+                Console.WriteLine(title);
+                PostSystem.SendPost(title, "Queue 테스트", "admin_keyword", "banksemi");
             }
         }
 
@@ -66,6 +69,7 @@ namespace MainServer
 
         private static void Server_Exit(ESocket socket)
         {
+            Console.WriteLine("누군가 종료함");
             GachonSocket.Exit(socket);
             if (User.Items.ContainsKey(socket))
             {
@@ -82,6 +86,22 @@ namespace MainServer
                     case AndroidProtocol.TestMessage:
                         Console.WriteLine("안드로이드 테스트 메세지 : " + (string)Message["message"]);
                         break;
+                    case AndroidProtocol.Login:
+                        Function.Login(socket, (string)Message["id"], (string)Message["password"], false);
+                        break;
+                    case AndroidProtocol.GroupList:
+                        AndroidFunction.SendTakesList(socket);
+                        return;
+                    case AndroidProtocol.KeywordList:
+                        AndroidFunction.KeywordList(socket);
+                        break;
+                    case AndroidProtocol.KeywordAdd:
+                        AndroidFunction.NewKeyword(socket,(string)Message["keyword"]);
+                        break;
+                    case AndroidProtocol.PostList:
+                        AndroidFunction.GetPostList(socket);
+                        break;
+
                 }
             }
             else
@@ -89,7 +109,7 @@ namespace MainServer
                 switch ((int)Message["type"])
                 {
                     case NetworkProtocol.Login:
-                        Function.Login(socket, (string)Message["id"], (string)Message["password"]);
+                        Function.Login(socket, (string)Message["id"], (string)Message["password"], true);
                         break;
                     case NetworkProtocol.EnterWorld:
                         User.Items[socket].Start();

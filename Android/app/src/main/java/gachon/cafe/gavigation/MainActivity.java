@@ -4,22 +4,19 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ESocketActivity {
 
     private TextView mTextMessage;
+    private ReceiveFragment receiverFragment = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -33,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_notifications:
                     SwitchView(Fragment_Notifications.class);
                     return true;
-                case R.id.navigation_study_group:
-                    SwitchView(Fragment_Notifications.class);
+                case R.id.navigation_course:
+                    SwitchView(Fragment_course_menu.class);
                     return true;
                 case R.id.navigation_setting:
+                    SwitchView(Fragment_Keyword.class);
                     return true;
             }
             return false;
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        handler = this.mHandler;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -53,59 +50,28 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        SwitchView(Fragment_Notifications.class);
 
-        JSONObject json = new JSONObject();
-        try {
-            json.put("type", 1000);
-            json.put("message", "abab");
-        }
-        catch (Exception e)
-        {
-
-        }
-        NetworkMain.Send(json);
-        Intent intent = new Intent(
-                getApplicationContext(),//현재제어권자
-                NetworkService.class); // 이동할 컴포넌트
-        startService(intent); // 서비스 시작
-
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.frameview, new Fragment_Login()); fragmentTransaction.commit();
-
-
-    }
-    private void ReceiveMessage(JSONObject json)
-    {
-        Toast.makeText(getApplicationContext(),json.toString(),Toast.LENGTH_SHORT).show();
     }
     private void SwitchView(Class fragment)
     {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        android.app.Fragment newf = null;
         try {
-            fragmentTransaction.replace(R.id.frameview,(android.app.Fragment)fragment.newInstance());
+            newf = (android.app.Fragment)fragment.newInstance();
+            fragmentTransaction.replace(R.id.frameview,newf);
         }
         catch (Exception e)
         {
 
         }
+        receiverFragment = (ReceiveFragment) newf;
         fragmentTransaction.commit();
     }
-    // 이벤트 처리를 위한 핸들러. 패킷 수신이 ReceiveMessage를 호출
-    public static Handler handler = null;
-    Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            List<JSONObject> list = NetworkMain.ReceiveQueue.Get();
-            if (list != null) {
-                for (JSONObject item : list) {
 
-                    ReceiveMessage(item);
-                }
-            }
-            // 메세지를 처리하고 또다시 핸들러에 메세지 전달 (1000ms 지연)
-            //mHandler.sendEmptyMessageDelayed(0,1000);
-        }
-    };
+    @Override
+    public void ReceiveMessage(JSONObject json) {
+        if (receiverFragment != null) receiverFragment.ReceiveMessage(json);
+    }
 }

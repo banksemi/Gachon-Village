@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">Gavigation</string>
     <string name="title_home">Home</string>
-    <string name="title_study_group">Study group</string>
+    <string name="title_course">Course</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_setting">Setting</string>
-</resources>
+    <string name="login_id">ID</string>
+    <string name="login_pw">PW</string>
+    <string name="login_button"> Login </string>
+    <string name="menu1_post"> 우편함</string>
+    <string name="menu2_course">현재 수강과목</string>
+    <string name="menu2_study">소속 스터디</string>
+    <string name="menu3_setting">Key word</string>
+    </resources>
