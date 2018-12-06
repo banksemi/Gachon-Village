@@ -26,8 +26,8 @@
 
             <TextView
                 android:id="@+id/post_sender"
-                android:layout_width="241dp"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="39dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="15dp"
                 android:paddingTop="10dp"
@@ -38,14 +38,14 @@
 
             <TextView
                 android:id="@+id/post_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingRight="15dp"
-                android:text="date"
+                android:layout_width="177dp"
+                android:layout_height="39dp"
                 android:gravity="end"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:text="date"
                 android:textColor="#666666"
-                android:textSize="20sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
