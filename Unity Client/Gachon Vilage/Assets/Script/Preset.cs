@@ -47,7 +47,11 @@ class Preset : MonoBehaviour
     public HomeworkItem HomeworkItem;
     void Start()
     {
-        
+
+        // 들어온 다음에 로딩 완료 메세지를 보낸다.
+        JObject json = new JObject();
+        json["type"] = NetworkProtocol.EnterWorld;
+        NetworkMain.SendMessage(json);
     }
     public void PostItem_Add(JObject json)
     {

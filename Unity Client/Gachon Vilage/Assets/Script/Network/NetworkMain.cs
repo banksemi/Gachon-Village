@@ -86,8 +86,6 @@ public class NetworkMain : MonoBehaviour {
             case NetworkProtocol.EnterWorld:
                 myNo = (int)json["no"];
                 SceneManager.LoadScene("Game");
-                // 들어온 다음에 로딩 완료 메세지를 보낸다.
-                SendMessage(json);
                 break;
             case NetworkProtocol.NewObject:
                 if (!isPlayer(json))
