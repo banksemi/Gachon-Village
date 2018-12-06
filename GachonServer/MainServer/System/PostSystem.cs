@@ -160,11 +160,12 @@ namespace MainServer
             Node["receiver"] = receiver;
             Node["date"] = date.ToString("yyyy-MM-dd HH:mm:ss");
             long result = Node.ExecuteInsertQuery();
-            if (notice == true)
+
+            // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
+            ESocket socket = GachonSocket.GetOnlineUser(receiver);
+            if (socket != null)
             {
-                // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
-                ESocket socket = GachonSocket.GetOnlineUser(receiver);
-                if (socket != null)
+                if (notice == true)
                 {
                     if (User.Items.ContainsKey(socket))
                     {
@@ -172,15 +173,12 @@ namespace MainServer
                         return;
                     }
                 }
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.PostAlarm;
+                json["no"] = result;
+                socket.Send(json);
+
             }
-
-            // 항상 안드로이드일 경우를 생각해서 마지막 번호 메세지 전달
-
-            ESocket socket2 = GachonSocket.GetOnlineUser(receiver);
-            JObject json = new JObject();
-            json["type"] = NetworkProtocol.PostAlarm;
-            json["no"] = result;
-            socket2.Send(json);
         }
     }
 }
