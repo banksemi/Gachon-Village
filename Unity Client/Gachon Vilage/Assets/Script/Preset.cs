@@ -17,6 +17,7 @@ class Preset : MonoBehaviour
             return preset;
         }
     }
+    public Character Player;
     public GameObject NewGameObject;
     public GameObject NameUI;
     public UITextList ChatBox;
@@ -42,6 +43,8 @@ class Preset : MonoBehaviour
     public StudySignUpWindow StudySignUpWindow;
     public StudyWindow StudyWindow;
 
+    public UIGrid HomeworkGrid;
+    public HomeworkItem HomeworkItem;
     void Start()
     {
         

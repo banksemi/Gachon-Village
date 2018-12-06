@@ -70,6 +70,20 @@ namespace MainServer
                     socket.Send(item);
                 }
             }
+            // 과제 정보 로드
+            node = new MysqlNode(private_data.mysqlOption, "SELECT takes_course.course_no, title, end_date FROM takes_course JOIN homework_list ON takes_course.course_no=homework_list.course_no WHERE student_id=?id and DATE(NOW()) <= DATE(end_date)");
+            node["id"] = ID;
+            using (node.ExecuteReader())
+            {
+                while (node.Read())
+                {
+                    JObject item = new JObject();
+                    item["type"] = NetworkProtocol.Homework_Add;
+                    item["title"] = "[" + GachonObjects.AllClass[node.GetString("course_no")].Title + "] "  + node.GetString("title");
+                    item["date"] = node.GetDateTime("end_date");
+                    socket.Send(item);
+                }
+            }
             NetworkMessageList.TipMessage(socket, "가천 빌리지에 오신것을 환영합니다!");
             ToChatMessage("가천 빌리지에 오신것을 환영합니다!", ChatType.Notice);
             ToChatMessage("[컴퓨터 네트워크] 과목에 새로운 게시글이 등록되었습니다.", ChatType.System);

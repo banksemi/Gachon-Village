@@ -34,5 +34,6 @@ public static class NetworkProtocol
     public const int Study_SaveChatting = 24;
     public const int Study_FileUpload = 25;
     public const int Study_FileDownload = 26;
+    public const int Homework_Add = 27;
 }
 

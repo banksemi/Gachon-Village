@@ -5,6 +5,7 @@ using UnityEngine;
 using NetworkLibrary;
 using NetworkLibrary.File;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Threading;
 using UnityEngine.SceneManagement;
@@ -69,7 +70,7 @@ public class NetworkMain : MonoBehaviour {
     {
         if (isPlayer(json) && !gameObjects.ContainsKey((int)json["no"]))
         {
-            gameObjects.Add(myNo, GameObject.Find("Player").GetComponent<Character>());
+            gameObjects.Add(myNo, Preset.objects.Player);
         }
         return gameObjects[(int)json["no"]];
     }
@@ -185,6 +186,13 @@ public class NetworkMain : MonoBehaviour {
                 Preset.objects.StudyWindow.key = (string)json["name"];
                 Preset.objects.StudyWindow.TabChange(json);
                 Preset.objects.StudyWindow.Open();
+                break;
+            case NetworkProtocol.Homework_Add:
+                HomeworkItem homeworkItem = Instantiate(Preset.objects.HomeworkItem, Preset.objects.HomeworkGrid.transform);
+                homeworkItem.Title.text = (string)json["title"];
+                homeworkItem.Date.text = ((DateTime)json["date"]).ToString("yyyy-MM-dd") + "까지";
+                homeworkItem.time = (DateTime)json["date"];
+                Preset.objects.HomeworkGrid.repositionNow = true;
                 break;
         }
     }
