@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/subColor">
@@ -51,7 +52,7 @@
     <EditText
         android:id="@+id/editText_post_title"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="45dp"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
@@ -60,7 +61,8 @@
         android:layout_marginBottom="15dp"
         android:background="@color/colorAccent"
         android:hint="@string/hint_send_title"
-        android:inputType="text"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:maxLength="30"
         android:paddingStart="15dp"
         android:paddingTop="10sp"
         android:paddingEnd="15dp"
@@ -68,6 +70,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_content_title" />
 
@@ -92,17 +95,20 @@
 
             <EditText
                 android:id="@+id/editText_post_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="text"
+                android:inputType="textMultiLine|textNoSuggestions"
                 android:hint="@string/hint_send_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="20dp"
-                android:background="@color/colorAccent" />
+                android:maxWidth="55dp"
+                android:maxHeight="500dp"
+                android:background="@null"
+                />
         </LinearLayout>
     </ScrollView>
 
