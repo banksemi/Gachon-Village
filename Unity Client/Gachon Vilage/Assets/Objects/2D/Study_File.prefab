@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 114849065873975672}
   - component: {fileID: 114636178881864278}
   - component: {fileID: 65803812457936644}
+  - component: {fileID: 114482076148495078}
   m_Layer: 5
   m_Name: Study_File
   m_TagString: Untagged
@@ -493,6 +494,19 @@ MonoBehaviour:
   mAtlas: {fileID: 114788531562805944, guid: 4893e8202da7b1243935573982a3ee86, type: 2}
   mSpriteName: All
   mFillCenter: 1
+--- !u!114 &114482076148495078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1164716846354928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f02842fa4878db54f9587ff4de7d9f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollView: {fileID: 0}
+  draggablePanel: {fileID: 0}
 --- !u!114 &114491022400240054
 MonoBehaviour:
   m_ObjectHideFlags: 1
