@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("SQL", "디비 목록 추가 시작");
         if (!Mains.containsKey(context)) {
             Log.d("SQL", "디비 목록 추가");
-            DBHelper main = new DBHelper(context, "gavi", null, 10);
+            DBHelper main = new DBHelper(context, "gavi", null, 11);
             Log.d("SQL", "디비 목록 추가2");
             main.testDB();
             Log.d("SQL", "디비 목록 추가3");
@@ -61,7 +61,15 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS POST");
         onCreate(db);
         Toast.makeText(context, "내부 데이터베이스의 버전이 변경되어 그동안의 모든 데이터가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-    } /** * */
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS POST");
+        onCreate(db);
+        Toast.makeText(context, "내부 데이터베이스의 버전이 변경되어 그동안의 모든 데이터가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+
 
     public void AddData(int no, String title, String content, String sender,String id, Date date) {
         // 1. 쓸 수 있는 DB 객체를 가져온다.
