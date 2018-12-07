@@ -18,7 +18,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="과제2에 관한 공지"
+        android:text="Title"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginLeft="18dp"
         android:layout_marginBottom="23dp"
-        android:text="키워드 알림"
+        android:text="sender"
         android:textSize="15sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
@@ -50,7 +50,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="23dp"
-        android:text="2018-12-25"
+        android:text="date"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.912"
@@ -85,15 +85,15 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="20dp"
-                android:text="안녕하세요 과제에 대한 질문이 많아 게시글로 다시 올립니다.\n녕\n하\n세\n요\n. 과제\n \n2\n에\n \n대\n한\n \n질\n문\n이\n \n많\아\n \n공\n지\n를\n \올림\n니\n다\n.\n\\nn\n2\n차 과제은 1차 과제의 주제즐 놓고 ~ "
+                android:text="content"
                 android:textSize="15sp" />
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/reply_button"
         android:layout_width="wrap_content"
-        android:layout_height="43dp"
+        android:layout_height="32dp"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"

@@ -2,14 +2,13 @@ package gachon.cafe.gavigation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 public class MessageViewActivity extends ESocketActivity{
+    private String receiver;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_item_content);
@@ -35,6 +34,7 @@ public class MessageViewActivity extends ESocketActivity{
         post_content_sender.setText(data[3].toString());
         post_content_date.setText(data[5].toString());
 
+        receiver = data[3].toString();
         /*
         Button login_button = (Button) findViewById(R.id.login_button);
         login_button.setOnClickListener(new Button.OnClickListener() {
@@ -58,6 +58,16 @@ public class MessageViewActivity extends ESocketActivity{
         });
         */
 
+        //답장하기 버튼을 눌렀을 때 Listener
+        Button reply_button = (Button) findViewById(R.id.reply_button);
+        reply_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent reply_intent = new Intent(getApplicationContext(), SendMessageActivity.class);
+                reply_intent.putExtra("receiver",receiver);
+                startActivity(reply_intent);
+            }
+        });
     }
     @Override
     public void ReceiveMessage(JSONObject json)

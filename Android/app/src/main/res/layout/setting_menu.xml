@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <TextView
         android:id="@+id/menu3_setting"
         android:layout_width="match_parent"
@@ -28,12 +28,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <ListView
                 android:id="@+id/keyword_listView"
                 android:layout_width="match_parent"
                 android:layout_height="470dp" />
-
 
         </LinearLayout>
     </ScrollView>
@@ -48,16 +46,18 @@
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="16dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/setKeyword_editText"
             android:layout_width="243dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:hint="새로 등록할 키워드 입력"
+            android:hint="@string/hint_set_keyword"
             android:textColor="@color/textColorMain"
             android:textSize="20sp" />
 
@@ -65,17 +65,14 @@
             android:id="@+id/keyword_button"
             android:layout_width="76dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:background="@color/colorPrimary"
-            android:text="추가"
+            android:text="@string/add_button"
             android:textColor="@color/colorAccent" />
 
-
     </LinearLayout>
-
-
-
 
 </android.support.constraint.ConstraintLayout>

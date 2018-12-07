@@ -11,4 +11,11 @@
     <string name="menu2_course">현재 수강과목</string>
     <string name="menu2_study">소속 스터디</string>
     <string name="menu3_setting">Key word</string>
+    <string name="reply_button">답장하기</string>
+    <string name="send_button">보내기</string>
+    <string name="add_button">추가</string>
+    <string name="hint_send_title">제목을 입력하세요</string>
+    <string name="hint_send_content">메세지를 입력하세요</string>
+    <string name="hint_set_keyword">새로 등록할 키워드 입력</string>
+    <string name="To">To.</string>
     </resources>
