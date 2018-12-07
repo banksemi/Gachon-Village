@@ -54,6 +54,7 @@
     <Compile Include="Function\Login.cs" />
     <Compile Include="Function\NPC_Action.cs" />
     <Compile Include="GachonSocket.cs" />
+    <Compile Include="Object\Vector4.cs" />
     <Compile Include="System\FileSystem.cs" />
     <Compile Include="System\KeywordSystem.cs" />
     <Compile Include="Network\AndroidProtocol.cs" />
