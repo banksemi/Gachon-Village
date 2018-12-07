@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("SQL", "디비 목록 추가 시작");
         if (!Mains.containsKey(context)) {
             Log.d("SQL", "디비 목록 추가");
-            DBHelper main = new DBHelper(context, "gavi", null, 9);
+            DBHelper main = new DBHelper(context, "gavi", null, 10);
             Log.d("SQL", "디비 목록 추가2");
             main.testDB();
             Log.d("SQL", "디비 목록 추가3");
@@ -82,7 +82,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         Log.d("SQL", "SQL 추가 ");
     }
-    public List getAllPersonData() {
+    public List getAllData() {
         Log.d("SQL", "SQL 로드  시작");
         StringBuffer sb = new StringBuffer();
         sb.append(" SELECT NO, TITLE, CONTENT, SENDER, SENDER_ID, SDATE FROM POST");
@@ -90,12 +90,23 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sb.toString(), null);
         Log.d("SQL", "SQL 로드 ");
-        List people = new ArrayList();
+        List datalist = new ArrayList();
         while( cursor.moveToNext() )
         {
             Object temp = new Object[]{cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5)};
-            people.add(temp);
-        } return people;
+            datalist.add(temp);
+        } return datalist;
+    }
+    public Object[] GetData(int no)
+    {
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT NO, TITLE, CONTENT, SENDER, SENDER_ID, SDATE FROM POST WHERE NO=?",new String[]{""+no});
+        Object[] temp = null;
+        while( cursor.moveToNext() )
+        {
+            temp = new Object[]{cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5)};
+        } return temp;
     }
     public int getLastNo()
     {

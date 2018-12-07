@@ -55,7 +55,7 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
         DBHelper helper = DBHelper.GetMain(getActivity());
 
         Log.d("SQL", "로딩 완료2");
-        List<Object[]> data = helper.getAllPersonData();
+        List<Object[]> data = helper.getAllData();
 
         Log.d("SQL", "로딩 완료");
         this.view = view;

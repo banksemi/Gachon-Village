@@ -60,9 +60,10 @@ public class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //Intent 추가후 화면 전환하기
-                Intent intent = new Intent(context, LoginActivity.class);
+              Intent intent = new Intent(context, MessageViewActivity.class);
+              intent.putExtra("no",((ListViewItem)getItem(pos)).getNo() );
+              context.startActivity(intent);
 
-                Toast.makeText(context, pos  + "번째 이미지 선택", Toast.LENGTH_SHORT).show();
             }
         });
 
