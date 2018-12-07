@@ -27,25 +27,28 @@ namespace WebSupport
             hreq.ContentType = "application/x-www-form-urlencoded";
             hreq.CookieContainer = Cookie;
             hreq.UserAgent = UserAgent;
-            HttpWebResponse hres;
+            HttpWebResponse hres = null;
+            Stream dataStream = null;
+            StreamReader sr = null;
             try
             {
                 hres = (HttpWebResponse)hreq.GetResponse();
+                if (hres.StatusCode == HttpStatusCode.OK)
+                {
+                    dataStream = hres.GetResponseStream();
+                    sr = new StreamReader(dataStream, encoding);
+                    return sr.ReadToEnd();
+                }
             }
             catch (Exception e)
             {
                 return null;
             }
-            if (hres.StatusCode == HttpStatusCode.OK)
+            finally
             {
-                Stream dataStream = hres.GetResponseStream();
-                StreamReader sr = new StreamReader(dataStream, encoding);
-                string result = sr.ReadToEnd();
-
-                hres.Close();
-                dataStream.Close();
-                sr.Close();
-                return result;
+                if (hres != null) hres.Close();
+                if (dataStream != null) dataStream.Close();
+                if (sr != null) sr.Close();
             }
             return null;
         }
@@ -61,17 +64,28 @@ namespace WebSupport
             StreamWriter sw = new StreamWriter(hreq.GetRequestStream());
             sw.Write(post);
             sw.Close();
-            HttpWebResponse hres = (HttpWebResponse)hreq.GetResponse();
-            if (hres.StatusCode == HttpStatusCode.OK)
+            HttpWebResponse hres = null;
+            Stream dataStream = null;
+            StreamReader sr = null;
+            try
             {
-                Stream dataStream = hres.GetResponseStream();
-                StreamReader sr = new StreamReader(dataStream, Encoding.UTF8);
-                string result = sr.ReadToEnd();
-
-                hres.Close();
-                dataStream.Close();
-                sr.Close();
-                return result;
+                hres = (HttpWebResponse)hreq.GetResponse();
+                if (hres.StatusCode == HttpStatusCode.OK)
+                {
+                    dataStream = hres.GetResponseStream();
+                    sr = new StreamReader(dataStream, Encoding.UTF8);
+                    return sr.ReadToEnd();
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if (hres != null) hres.Close();
+                if (dataStream != null) dataStream.Close();
+                if (sr != null) sr.Close();
             }
             return null;
         }

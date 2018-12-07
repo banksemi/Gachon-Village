@@ -163,6 +163,12 @@ namespace MainServer
                     case NetworkProtocol.Study_FileDownload:
                         Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
                         break;
+                    case NetworkProtocol.SendPost:
+                        PostSystem.SendPost(socket, Message);
+                        break;
+                    case NetworkProtocol.GetFileInPost:
+                        PostSystem.GetFile(socket, Message);
+                        break;
                 }
             }
         }

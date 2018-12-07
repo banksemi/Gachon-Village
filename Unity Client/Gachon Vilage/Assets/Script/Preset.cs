@@ -17,6 +17,7 @@ class Preset : MonoBehaviour
             return preset;
         }
     }
+    public Character Player;
     public GameObject NewGameObject;
     public GameObject NameUI;
     public UITextList ChatBox;
@@ -24,7 +25,7 @@ class Preset : MonoBehaviour
 
 
     // 우편함 !!
-    public Window PostWindow;
+    public PostWindow PostWindow;
     public GameObject PostItem;
     public GameObject PostItems;
     public UILabel PostCount;
@@ -42,9 +43,15 @@ class Preset : MonoBehaviour
     public StudySignUpWindow StudySignUpWindow;
     public StudyWindow StudyWindow;
 
+    public UIGrid HomeworkGrid;
+    public HomeworkItem HomeworkItem;
     void Start()
     {
-        
+
+        // 들어온 다음에 로딩 완료 메세지를 보낸다.
+        JObject json = new JObject();
+        json["type"] = NetworkProtocol.EnterWorld;
+        NetworkMain.SendMessage(json);
     }
     public void PostItem_Add(JObject json)
     {

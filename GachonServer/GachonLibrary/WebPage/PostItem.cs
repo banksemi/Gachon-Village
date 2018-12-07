@@ -8,17 +8,53 @@ namespace GachonLibrary
 {
     public class PostItem
     {
+        /// <summary>
+        /// 공지사항, 강의자료실, 레포트 제출실 등 게시글의 유형을 의미
+        /// </summary>
         public BoardType.PostType posttype;
+        /// <summary>
+        /// Eclass, Cyber Campus, Naver cafe등 사이트의 유형
+        /// </summary>
         public Site source;
+        /// <summary>
+        /// 게시글의 번호
+        /// </summary>
         public int no;
+        /// <summary>
+        /// 메뉴의 이름
+        /// </summary>
         public string board_name;
+        /// <summary>
+        /// 게시글 제목
+        /// </summary>
         public string Title;
+        /// <summary>
+        /// 게시글을 올린 사람
+        /// </summary>
         public string Publisher;
+        /// <summary>
+        /// 게시글 내용
+        /// </summary>
         public string Content = null;
+        /// <summary>
+        /// 게시글 올린 시각
+        /// </summary>
         public DateTime time;
+        /// <summary>
+        /// 게시글의 주소
+        /// </summary>
         public string url;
+        /// <summary>
+        /// 레포트 게시글 올린 날짜
+        /// </summary>
         public DateTime s_time;
+        /// <summary>
+        /// 레포트 게시글 마감 날짜
+        /// </summary>
         public DateTime e_time;
+        /// <summary>
+        /// 레포트 게시글 제출 인원
+        /// </summary>
         public int num_submitted;
         public PostItem(BoardType.PostType postType, string board_name)
         {

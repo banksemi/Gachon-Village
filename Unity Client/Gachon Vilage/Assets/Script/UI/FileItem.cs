@@ -26,7 +26,11 @@ public class FileItem : MonoBehaviour {
     }
     void OnDoubleClick()
     {
-        if (Preset.objects.StudyWindow.isOpen())
+        if (Preset.objects.PostWindow.isOpen())
+        {
+           Preset.objects.PostWindow.InputItem(no, UI_title.text);
+        }
+        else if (Preset.objects.StudyWindow.isOpen())
         {
             // 스터디에 파일 업로드
             JObject json = new JObject();

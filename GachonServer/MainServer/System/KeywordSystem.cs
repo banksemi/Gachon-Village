@@ -12,6 +12,10 @@ namespace MainServer
 {
     public static class KeywordSystem
     {
+        /// <summary>
+        /// 특정 유저에게 입력된 모든 키워드 리스트를 반환합니다.
+        /// </summary>
+        /// <param name="user"></param>
         public static void GetList(User user)
         {
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM keyword WHERE student_id=?id");
@@ -24,12 +28,20 @@ namespace MainServer
                     array.Add(node.GetString("keyword"));
                 }
             }
+            // 메세지 전송
             JObject json = new JObject();
             json["type"] = NetworkProtocol.Keyword_Open;
             json["list"] = array;
             user.socket.Send(json);
         }
-        private static bool test(string keyword, string course_name, string title)
+        /// <summary>
+        /// 해당 키워드가 여기에 입력된 게시글을 가르키는지 여부를 판단하는 함수입니다.
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="course_name"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        private static bool CheckValid(string keyword, string course_name, string title)
         {           
             string[] target;
             string targetKeyword;
@@ -70,6 +82,11 @@ namespace MainServer
             }
             return false;
         }
+        /// <summary>
+        /// 가천 라이브러리에서 새로운 게시글이 올라오면 이 함수를 이벤트로 실행시킵니다.
+        /// </summary>
+        /// <param name="gclass">게시글이 올라온 강의</param>
+        /// <param name="postItem">게시글</param>
         public static void NewPost(GachonClass gclass, PostItem postItem)
         {
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM keyword");
@@ -81,7 +98,7 @@ namespace MainServer
                 {
                     if (ignore_id == node.GetString("student_id")) continue;
                     string keyword = node.GetString("keyword");
-                    if (test(keyword, gclass.Title, postItem.Title))
+                    if (CheckValid(keyword, gclass.Title, postItem.Title))
                     {
                         ignore_id = node.GetString("student_id");
                         PostSystem.SendPost(
