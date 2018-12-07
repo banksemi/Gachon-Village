@@ -109,7 +109,7 @@ public class NetworkService  extends Service {
                 .setContentTitle(Sender)
                 .setContentText(title);
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder)
-                .bigText(content);
+                .bigText(title + "\r\n\r\n" + content);
 
 
         builder.setStyle(style);
@@ -168,7 +168,7 @@ public class NetworkService  extends Service {
                         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item.getString("date"));
                         DBHelper.GetMain(this).AddData(no,title,content,sender,sender_id,date);
                         Test(title,content,sender);
-                        Toast.makeText(getApplicationContext(),title,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),title,Toast.LENGTH_SHORT).show();
                         //AddItem(json.getJSONArray("items").getJSONObject(i));
                     }
                     break;
