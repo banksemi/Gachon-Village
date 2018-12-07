@@ -111,7 +111,8 @@ namespace MainServer
                         item["content"] = mysqlNode.GetString("content");
                         item["no"] = mysqlNode.GetInt("no");
                         item["sender"] = mysqlNode.GetString("sender_name");
-                        item["date"] = mysqlNode.GetDateTime("date");
+                        item["sender_id"] = mysqlNode.GetString("sender");
+                        item["date"] = (mysqlNode.GetDateTime("date")).ToString("yyyy-MM-dd HH:mm:ss");
                         array.Add(item);
                     }
                 }

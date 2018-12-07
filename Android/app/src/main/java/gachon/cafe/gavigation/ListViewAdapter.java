@@ -62,7 +62,7 @@ public class ListViewAdapter extends BaseAdapter {
                 //Intent 추가후 화면 전환하기
                 Intent intent = new Intent(context, LoginActivity.class);
 
-                Toast.makeText(context, pos + "번째 이미지 선택", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, pos  + "번째 이미지 선택", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,15 +90,15 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(Drawable icon, String title, String desc, String sender, String date) {
+    public void addItem(Drawable icon, int no, String title, String sender, String date) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
         item.setSender(sender);
         item.setDate(date);
-
-        listViewItemList.add(item);
+        item.setNo(no);
+        listViewItemList.add(0,item);
     }
 
 }
