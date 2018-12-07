@@ -25,7 +25,7 @@ class Preset : MonoBehaviour
 
 
     // 우편함 !!
-    public Window PostWindow;
+    public PostWindow PostWindow;
     public GameObject PostItem;
     public GameObject PostItems;
     public UILabel PostCount;

@@ -101,6 +101,20 @@ namespace MainServer
                 json["no"] = no;
                 json["sender"] = node.GetString("sender_name");
                 json["sender_id"] = node.GetString("sender");
+
+                if (node.GetString("file") != null) // 스트링으로 null 체크
+                {
+                    MysqlNode filenode = new MysqlNode(private_data.mysqlOption, "SELECT name FROM file WHERE file_no=?no");
+                    filenode["no"] = node.GetInt("file");
+                    json["content"] = string.Format("[000000]{0}[-]", json["content"]);
+                    using (filenode.ExecuteReader())
+                    {
+                        if (filenode.Read())
+                        {
+                            json["content"] = string.Format("[000000]첨부 파일[-]\r\n[url={0}][u][B284FF]{1}[-][/u][/url]\r\n\r\n{2}", "file-" + filenode["no"],filenode.GetString("name"),json["content"]);
+                        }
+                    }
+                }
                 DateTime date = node.GetDateTime("date");
                 if (date.DayOfYear == DateTime.Now.DayOfYear)
                 {
@@ -150,15 +164,19 @@ namespace MainServer
                 return node.GetInt("ncount");
             }
         }
-        public static void SendPost(string title, string content, string sender, string receiver, bool notice = true)
+        public static void SendPost(string title, string content, string sender, string receiver, bool notice = true, int file_no = -1)
         {
             DateTime date = DateTime.Now;
-            MysqlNode Node = new MysqlNode(private_data.mysqlOption, "INSERT INTO post(title, content, sender, receiver, date) VALUES (?title, ?content, ?sender, ?receiver, ?date)");
+            MysqlNode Node = new MysqlNode(private_data.mysqlOption, "INSERT INTO post(title, content, sender, receiver, date, file) VALUES (?title, ?content, ?sender, ?receiver, ?date, ?file)");
             Node["title"] = title;
             Node["content"] = content;
             Node["sender"] = sender;
             Node["receiver"] = receiver;
             Node["date"] = date.ToString("yyyy-MM-dd HH:mm:ss");
+            if (file_no != -1)
+                Node["file"] = file_no;
+            else
+                Node["file"] = null;
             Node.ExecuteNonQuery();
 
             JObject json = new JObject();
@@ -185,6 +203,100 @@ namespace MainServer
                 {
                     AddQueue(receiver, json);
                 }
+            }
+        }
+
+        public static void GetFile(ESocket socket, JObject message)
+        {
+            // 파일 다운로드는 게임에서만 지원
+            if (User.Items.ContainsKey(socket))
+            {
+                User user = User.Items[socket];
+
+                // 요청한 파일, 우편이 실제 있는지 확인
+                MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT 'true' FROM post WHERE no=?no and file=?file_no and receiver=?id");
+                node["no"] = (int)message["post_no"];
+                node["file_no"] = (int)message["file_no"];
+                node["id"] = user.ID;
+                using (node.ExecuteReader())
+                {
+                    if (node.Read())
+                    {
+                        if (user.AddFileItem((int)message["file_no"]))
+                        {
+
+                            NetworkMessageList.TipMessage(socket, "우편함의 첨부파일이 인벤토리에 추가되었습니다.");
+                        }
+                        else
+                        {
+                            NetworkMessageList.TipMessage(socket, "파일이 이미 인벤토리에 존재합니다.");
+                        }
+                    }
+                    else
+                    {
+                        NetworkMessageList.TipMessage(socket, "잘못된 요청입니다.");
+                    }
+                }
+            }
+        }
+
+        public static void SendPost(ESocket socket, JObject message)
+        {
+            // 유효성 검사
+            string id = GachonSocket.GetId(socket);
+            if (id == null)
+            {
+                NetworkMessageList.TipMessage(socket, "로그인 권한을 얻을 수 없습니다. 다시 접속해주세요.");
+                return;
+            }
+            string title = ((string)message["title"]).Trim();
+            if (string.IsNullOrEmpty(title))
+            {
+                NetworkMessageList.TipMessage(socket, "우편 제목을 입력해주세요.");
+                return;
+            }
+            string content = ((string)message["content"]);
+            if (string.IsNullOrEmpty(content))
+            {
+                content = ""; // 우편 내용은 없어도 가능
+            }
+            string receiver = ((string)message["receiver"]);
+            if (string.IsNullOrEmpty(receiver))
+            {
+                NetworkMessageList.TipMessage(socket, "받을 사람을 입력해주세요.");
+                return;
+            }
+            string receiver_id = GachonLibrary.GachonUser.GetID(receiver);
+            if (receiver_id == null)
+            {
+                NetworkMessageList.TipMessage(socket, "데이터베이스에서 해당 유저를 찾을 수 없습니다. (가천빌리지에 한번이라도 로그인 해야함)");
+                return;
+            }
+            else if (receiver_id == "")
+            {
+                NetworkMessageList.TipMessage(socket, "수신자가 중복으로 존재합니다. 이름 뿐만 아니라 학번 또는 아이디 정보를 입력하여 받는 사람을 정확히 지정해주세요.");
+                return;
+            }
+            if (User.Items.ContainsKey(socket))
+            {
+                User user = User.Items[socket];
+                int file_no = -1;
+                if (message["file"] != null)
+                {
+                    file_no = (int)message["file"];
+                    if (!user.HaveItem(file_no))
+                    {
+                        NetworkMessageList.TipMessage(socket, "해당 파일에 대한 권한이 없습니다. 인벤토리를 확인해주세요.");
+                        return;
+                    }
+                }
+                SendPost(title, content, id, receiver_id, true, file_no);
+                NetworkMessageList.TipMessage(socket, "우편을 성공적으로 전송하였습니다.");
+                GetPage(user, 1);
+            }
+            else
+            {
+                SendPost(title, content, id, receiver_id);
             }
         }
     }

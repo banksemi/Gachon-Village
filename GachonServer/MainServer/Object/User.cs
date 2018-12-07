@@ -159,7 +159,7 @@ namespace MainServer
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "INSERT INTO inventory(student_id, file_no) VALUES (?id, ?no)");
             node["id"] = ID;
             node["no"] = no;
-            if (node.ExecuteInsertQuery() < 0) return false;
+            if (node.ExecuteNonQuery() != 1) return false;
             socket.Send(item);
             return true;
         }
