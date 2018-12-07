@@ -101,12 +101,12 @@ namespace MainServer
                 json["no"] = no;
                 json["sender"] = node.GetString("sender_name");
                 json["sender_id"] = node.GetString("sender");
+                json["content"] = string.Format("[000000]{0}[-]", json["content"]); // BBCode를 이용해 글씨가 검정색임을 나타낸다.
 
                 if (node.GetString("file") != null) // 스트링으로 null 체크
                 {
                     MysqlNode filenode = new MysqlNode(private_data.mysqlOption, "SELECT name FROM file WHERE file_no=?no");
                     filenode["no"] = node.GetInt("file");
-                    json["content"] = string.Format("[000000]{0}[-]", json["content"]);
                     using (filenode.ExecuteReader())
                     {
                         if (filenode.Read())
