@@ -37,7 +37,17 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
         }
     }
     public Fragment_Notifications() {
-        NetworkMain.SendTypeMessage(1220);
+        try
+        {
+            JSONObject json = new JSONObject();
+            json.put("type",1220);
+            json.put("no",0);
+            NetworkMain.Send(json);
+        }
+        catch (Exception e)
+        {
+
+        }
         // Required empty public constructor
     }
 
@@ -69,7 +79,7 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
             int type = json.getInt("type");
             switch (type)
             {
-                case 11: // 그룹 정보
+                case 1220: // 그룹 정보
                     for(int i = 0 ; i < json.getJSONArray("items").length();i++)
                     {
                         AddItem(json.getJSONArray("items").getJSONObject(i));

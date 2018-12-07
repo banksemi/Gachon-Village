@@ -1,6 +1,7 @@
 package gachon.cafe.gavigation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -52,6 +54,25 @@ public class ListViewAdapter extends BaseAdapter {
         titleTextView.setText(listViewItem.getTitle());
         senderTextView.setText(listViewItem.getSenderStr());
         dateTextView.setText(listViewItem.getDateStr());
+
+        //버튼을 클릭헀을 때
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent 추가후 화면 전환하기
+                Intent intent = new Intent(context, LoginActivity.class);
+
+                Toast.makeText(context, pos + "번째 이미지 선택", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
+
+
+
 
         return convertView;
     }

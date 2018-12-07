@@ -42,7 +42,7 @@ namespace MainServer
                 System.Threading.Thread.Sleep(4000);
                 string title = "실시간 알림 테스트" + i2++;
                 Console.WriteLine(title);
-                PostSystem.SendPost(title, "Queue 테스트", "admin_keyword", "banksemi");
+                //PostSystem.SendPost(title, "Queue 테스트", "admin_keyword", "banksemi");
             }
         }
 
@@ -99,7 +99,8 @@ namespace MainServer
                         AndroidFunction.NewKeyword(socket,(string)Message["keyword"]);
                         break;
                     case AndroidProtocol.PostList:
-                        AndroidFunction.GetPostList(socket);
+                        if (Message["no"] != null)
+                            AndroidFunction.GetPostList(socket, (int)Message["no"]);
                         break;
 
                 }

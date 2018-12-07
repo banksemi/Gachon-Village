@@ -159,32 +159,25 @@ namespace MainServer
             Node["sender"] = sender;
             Node["receiver"] = receiver;
             Node["date"] = date.ToString("yyyy-MM-dd HH:mm:ss");
-            Node.ExecuteNonQuery();
+            long result = Node.ExecuteInsertQuery();
 
-            JObject json = new JObject();
-            json["type"] = NetworkProtocol.PostAlarm;
-            json["title"] = title;
-            json["content"] = content;
-            json["sender"] = sender;
-            json["receiver"] = receiver;
-            json["date"] = date;
-            if (notice == true)
+            // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
+            ESocket socket = GachonSocket.GetOnlineUser(receiver);
+            if (socket != null)
             {
-                // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
-                ESocket socket = GachonSocket.GetOnlineUser(receiver);
-                if (socket != null)
+                if (notice == true)
                 {
                     if (User.Items.ContainsKey(socket))
                     {
                         User.Items[socket].ToChatMessage("[우편함] 새로운 메세지가 도착했습니다.", ChatType.System);
+                        return;
                     }
-                    else
-                        socket.Send(json);
                 }
-                else
-                {
-                    AddQueue(receiver, json);
-                }
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.PostAlarm;
+                json["no"] = result;
+                socket.Send(json);
+
             }
         }
     }
