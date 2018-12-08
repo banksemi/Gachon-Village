@@ -58,8 +58,9 @@ public class SendMessageActivity extends ESocketActivity {
                 case 28: // 보낸 결과
                     if (json.getBoolean("result")) {
                         Toast.makeText(this, "성공적으로 전송하였습니다.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
+                        onBackPressed();
+                        //Intent intent = new Intent(this, MainActivity.class);
+                        //startActivity(intent);
                     }
                     break;
 
