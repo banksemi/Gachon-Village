@@ -12,10 +12,10 @@ namespace MainServer
     {
         public static void NewStudy(User user, JObject message)
         {
-            string key = (string)message["name"];
-            if (key.Length < 2 || key.Length > 10)
+            string key = ((string)message["name"]).Trim();
+            if (key.Length < 2 || key.Length > 14)
             {
-                NetworkMessageList.TipMessage(user.socket, "스터디 이름은 2글자 이상 10글자 이내입니다.");
+                NetworkMessageList.TipMessage(user.socket, "스터디 이름은 2글자 이상 14글자 이내입니다.");
                 return;
             }
             // 반경 내에 스터디 그룹이 있는지 체크
