@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("SQL", "디비 목록 추가 시작");
         if (!Mains.containsKey(context)) {
             Log.d("SQL", "디비 목록 추가");
-            DBHelper main = new DBHelper(context, "gavi", null, 11);
+            DBHelper main = new DBHelper(context, "gavi", null, 14);
             Log.d("SQL", "디비 목록 추가2");
             main.testDB();
             Log.d("SQL", "디비 목록 추가3");
@@ -49,7 +49,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sb.append(" CONTENT TEXT, ");
         sb.append(" SENDER TEXT , ");
         sb.append(" SENDER_ID TEXT , ");
-        sb.append(" SDATE DATETIME ) "); // SQLite Database로 쿼리 실행
+        sb.append(" SDATE LONG ) "); // SQLite Database로 쿼리 실행
         db.execSQL(sb.toString());
         Log.d("SQL", "SQL 생성 끝 ");
         Toast.makeText(context, "Table 생성완료", Toast.LENGTH_SHORT).show();
@@ -81,7 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
             sb.append(" INSERT INTO POST ( ");
             sb.append(" NO, TITLE, CONTENT, SENDER, SENDER_ID, SDATE ) ");
             sb.append(" VALUES ( ?, ?, ?, ?, ?, ?) "); // sb.append(" VALUES ( #NAME#, #AGE#, #PHONE# ) "); // // // Age는 Integer이기 때문에 홀따옴표(')를 주지 않는다. // String query = sb.toString(); // query.replace("#NAME#", "'" + person.getName() + "'"); // query.replace("#NAME#", person.getAge()); // query.replace("#NAME#", "'" + person.getPhone() + "'"); // // db.execSQL(query); db.execSQL(sb.toString(), new Object[]{ person.getName(), Integer.parseInt(person.getAge()), person.getPhone()});; Toast.makeText(context, "Insert 완료", Toast.LENGTH_SHORT).show(); }
-            db.execSQL(sb.toString(), new Object[]{no, title, content, sender, id, date});
+            db.execSQL(sb.toString(), new Object[]{no, title, content, sender, id, date.getTime()});
 
         }
         catch (Exception e)
@@ -101,7 +101,9 @@ public class DBHelper extends SQLiteOpenHelper {
         List datalist = new ArrayList();
         while( cursor.moveToNext() )
         {
-            Object temp = new Object[]{cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5)};
+            Date date = new Date();
+            date.setTime(cursor.getLong(5));
+            Object temp = new Object[]{cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4), date};
             datalist.add(temp);
         } return datalist;
     }
@@ -113,7 +115,9 @@ public class DBHelper extends SQLiteOpenHelper {
         Object[] temp = null;
         while( cursor.moveToNext() )
         {
-            temp = new Object[]{cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5)};
+            Date date = new Date();
+            date.setTime(cursor.getLong(5));
+            temp = new Object[]{cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),date};
         } return temp;
     }
     public int getLastNo()

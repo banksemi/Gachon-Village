@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SQL_Library;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
+using GachonLibrary;
 namespace MainServer
 {
     class AndroidFunction
@@ -122,6 +123,20 @@ namespace MainServer
                 json["items"] = array;
                 socket.Send(json);
                 return;
+            }
+        }
+
+        public static void ReturnInfo(ESocket socket)
+        {
+            string id = GachonSocket.GetId(socket);
+            if (id != null)
+            {
+                JObject json = new JObject();
+                json["type"] = AndroidProtocol.Info;
+                json["name"] = GachonObjects.AllUser[id].Name;
+                json["department"] = GachonObjects.AllUser[id].Department;
+                json["number"] = GachonObjects.AllUser[id].StudentNumber;
+                socket.Send(json);
             }
         }
     }

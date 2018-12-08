@@ -102,6 +102,9 @@ namespace MainServer
                         if (Message["no"] != null)
                             AndroidFunction.GetPostList(socket, (int)Message["no"]);
                         break;
+                    case AndroidProtocol.Info:
+                        AndroidFunction.ReturnInfo(socket);
+                        break;
 
                 }
             }

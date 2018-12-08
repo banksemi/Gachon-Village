@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NetworkService  extends Service {
     public static List<ESocketActivity> receivers = new ArrayList();
@@ -155,7 +156,7 @@ public class NetworkService  extends Service {
                     GetPost_Last();
 
                     break;
-                case 1220: // 그룹 정보
+                case 1220: // 메세지 수신
                     JSONArray array = json.getJSONArray("items");
                     for(int i = 0 ; i < array.length();i++)
                     {
@@ -165,7 +166,7 @@ public class NetworkService  extends Service {
                         String content = item.getString("content");
                         String sender = item.getString("sender");
                         String sender_id = item.getString("sender_id");
-                        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item.getString("date"));
+                        Date date = new SimpleDateFormat("Z yyyy-MM-dd HH:mm:ss", Locale.KOREA).parse("+0900 "+item.getString("date"));
                         DBHelper.GetMain(this).AddData(no,title,content,sender,sender_id,date);
                         Test(title,content,sender);
                         //Toast.makeText(getApplicationContext(),title,Toast.LENGTH_SHORT).show();
