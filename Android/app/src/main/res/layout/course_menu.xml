@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -32,7 +33,7 @@
             <ListView
                 android:id="@+id/listView_course"
                 android:layout_width="match_parent"
-                android:layout_height="236dp" />
+                android:layout_height="220dp" />
 
 
             <TextView
@@ -44,7 +45,6 @@
                 android:text="@string/menu2_study"
                 android:textColor="@color/textColorMain"
                 android:textSize="18sp" />
-
             <View
                 android:id="@+id/divider2"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
             <ListView
                 android:id="@+id/listView_study"
                 android:layout_width="match_parent"
-                android:layout_height="229dp" />
+                android:layout_height="220dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
