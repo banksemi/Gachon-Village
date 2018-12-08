@@ -1810,7 +1810,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3012
+  startingRenderQueue: 3010
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -14595,6 +14595,7 @@ GameObject:
   - component: {fileID: 654091462}
   - component: {fileID: 654091464}
   - component: {fileID: 654091463}
+  - component: {fileID: 654091465}
   m_Layer: 5
   m_Name: Right
   m_TagString: Untagged
@@ -14724,6 +14725,21 @@ MonoBehaviour:
     mMethodName: RightPage
     mParameters: []
     oneShot: 0
+--- !u!114 &654091465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 654091460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!4 &658823494 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 472700, guid: d638ef2ca2fe20c4c9c08e125692d3f4,
@@ -16921,7 +16937,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3012
+  startingRenderQueue: 3010
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -18218,7 +18234,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3012
+  startingRenderQueue: 3010
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -22264,6 +22280,7 @@ GameObject:
   - component: {fileID: 1096158016}
   - component: {fileID: 1096158018}
   - component: {fileID: 1096158017}
+  - component: {fileID: 1096158019}
   m_Layer: 5
   m_Name: New Study
   m_TagString: Untagged
@@ -22380,6 +22397,21 @@ MonoBehaviour:
     mMethodName: Open
     mParameters: []
     oneShot: 0
+--- !u!114 &1096158019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1096158014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!1 &1096731492
 GameObject:
   m_ObjectHideFlags: 0
@@ -26588,6 +26620,7 @@ GameObject:
   - component: {fileID: 1275287491}
   - component: {fileID: 1275287493}
   - component: {fileID: 1275287494}
+  - component: {fileID: 1275287495}
   m_Layer: 5
   m_Name: Close Button
   m_TagString: Untagged
@@ -26710,6 +26743,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46fa5a0b30ee7e3459ced51e2187ad22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1275287495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1275287489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!4 &1278663039 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 429508, guid: 9c74caa742791864f9c678287121e6c9,
@@ -32349,6 +32397,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 429508, guid: 9c74caa742791864f9c678287121e6c9,
     type: 2}
   m_PrefabInternal: {fileID: 548562211}
+--- !u!1 &1670775209 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1920167295015900, guid: 2a9197c1c1b23094f9aec6ca15ef9083,
+    type: 2}
+  m_PrefabInternal: {fileID: 1787481083}
+--- !u!114 &1670775210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1670775209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!1001 &1671597160
 Prefab:
   m_ObjectHideFlags: 0
@@ -34312,6 +34380,7 @@ GameObject:
   - component: {fileID: 1778406231}
   - component: {fileID: 1778406230}
   - component: {fileID: 1778406229}
+  - component: {fileID: 1778406232}
   m_Layer: 5
   m_Name: File Inventory
   m_TagString: Untagged
@@ -34428,6 +34497,21 @@ MonoBehaviour:
   mAtlas: {fileID: 114788531562805944, guid: 4893e8202da7b1243935573982a3ee86, type: 2}
   mSpriteName: file_inventory
   mFillCenter: 1
+--- !u!114 &1778406232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1778406227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!1001 &1786081467
 Prefab:
   m_ObjectHideFlags: 0
@@ -37569,6 +37653,7 @@ GameObject:
   - component: {fileID: 1981543706}
   - component: {fileID: 1981543707}
   - component: {fileID: 1981543708}
+  - component: {fileID: 1981543709}
   m_Layer: 5
   m_Name: Left
   m_TagString: Untagged
@@ -37698,6 +37783,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 14, y: 32, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1981543709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1981543704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!4 &1981594549 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 442488, guid: ec78ebca7517fb745a45a931cb06d2bd,

@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114763584571995338}
   - component: {fileID: 114456218548863682}
   - component: {fileID: 65019577973271174}
+  - component: {fileID: 114537055302791538}
   m_Layer: 5
   m_Name: TabMenu
   m_TagString: Untagged
@@ -108,13 +109,22 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick:
-  - mTarget: {fileID: 0}
-    mMethodName: MoveTabSend
-    mParameters:
-    - obj: {fileID: 1920167295015900}
-      field: 
-    oneShot: 0
+  onClick: []
+--- !u!114 &114537055302791538
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1920167295015900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!114 &114763584571995338
 MonoBehaviour:
   m_ObjectHideFlags: 1

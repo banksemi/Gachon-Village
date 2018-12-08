@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114940948119233860}
   - component: {fileID: 114661000216648980}
   - component: {fileID: 65661628765025702}
+  - component: {fileID: 114078428643176340}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -84,6 +85,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 180, y: 40, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114078428643176340
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1922726922954430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 513502c2dd5b8014fb9bcd2e01debc0b, type: 3}
+  trigger: 3
+  volume: 1
+  pitch: 1
 --- !u!114 &114173693830844952
 MonoBehaviour:
   m_ObjectHideFlags: 1
