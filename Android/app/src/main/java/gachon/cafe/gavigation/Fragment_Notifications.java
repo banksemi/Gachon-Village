@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Fragment_Notifications extends Fragment implements ReceiveFragment {
     private View view = null;
@@ -61,7 +63,9 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
         this.view = view;
         for(Object[] object : data)
         {
-            AddItem((int)object[0],(String)object[1],(String)object[3],(String)object[5]);
+            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            date.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+            AddItem((int)object[0],(String)object[1],(String)object[3],date.format((Date)object[5]));
         }
         return view;
     }
@@ -80,7 +84,7 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
                         int no = item.getInt("no");
                         String title = item.getString("title");
                         String sender = item.getString("sender");
-                        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item.getString("date"));
+                        Date date = new SimpleDateFormat("Z yyyy-MM-dd HH:mm:ss").parse("+0900 "+ item.getString("date"));
                         AddItem(no, title, sender, date.toString());
                     }
                     break;

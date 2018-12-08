@@ -7,6 +7,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class MessageViewActivity extends ESocketActivity{
     private String receiver;
     private String receiver_id;
@@ -24,6 +29,8 @@ public class MessageViewActivity extends ESocketActivity{
         }
 
         Object[] data = DBHelper.GetMain(this).GetData(no);
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        date.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         // 하나씩 대입
         TextView post_content_title = (TextView) findViewById(R.id.post_content_title);
         TextView post_content_sender = (TextView) findViewById(R.id.post_content_sender);
@@ -33,7 +40,7 @@ public class MessageViewActivity extends ESocketActivity{
         post_content_title.setText(data[1].toString());
         post_content_content.setText(data[2].toString());
         post_content_sender.setText(data[3].toString());
-        post_content_date.setText(data[5].toString());
+        post_content_date.setText(date.format((Date)data[5]));
 
         receiver = data[3].toString();
         receiver_id = data[4].toString();

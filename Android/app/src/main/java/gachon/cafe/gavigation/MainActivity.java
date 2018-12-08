@@ -48,7 +48,6 @@ public class MainActivity extends ESocketActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         SwitchView(Fragment_home.class);
-
     }
     private void SwitchView(Class fragment)
     {
