@@ -9,6 +9,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 public class MessageViewActivity extends ESocketActivity{
     private String receiver;
+    private String receiver_id;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_item_content);
@@ -35,6 +36,7 @@ public class MessageViewActivity extends ESocketActivity{
         post_content_date.setText(data[5].toString());
 
         receiver = data[3].toString();
+        receiver_id = data[4].toString();
         /*
         Button login_button = (Button) findViewById(R.id.login_button);
         login_button.setOnClickListener(new Button.OnClickListener() {
@@ -65,6 +67,7 @@ public class MessageViewActivity extends ESocketActivity{
             public void onClick(View view) {
                 Intent reply_intent = new Intent(getApplicationContext(), SendMessageActivity.class);
                 reply_intent.putExtra("receiver",receiver);
+                reply_intent.putExtra("receiver_id",receiver_id);
                 startActivity(reply_intent);
             }
         });

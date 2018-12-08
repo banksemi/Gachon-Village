@@ -164,7 +164,7 @@ namespace MainServer
                         Study.Items[(string)Message["group_name"]].FileDownload(User.Items[socket], (int)Message["no"]);
                         break;
                     case NetworkProtocol.SendPost:
-                        PostSystem.SendPost(socket, Message);
+                        NetworkMessageList.SendMessageResult(socket, PostSystem.SendPost(socket, Message));
                         break;
                     case NetworkProtocol.GetFileInPost:
                         PostSystem.GetFile(socket, Message);
