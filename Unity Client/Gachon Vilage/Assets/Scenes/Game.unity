@@ -15836,7 +15836,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3018
+  startingRenderQueue: 3016
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
@@ -21364,21 +21364,23 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 0, g: 0, b: 0, a: 1}
   mPivot: 1
-  mWidth: 430
+  mWidth: 488
   mHeight: 120
   mDepth: 1
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 3.5833333
+  aspectRatio: 4.0666666
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 12800000, guid: 2c8809c68e4f68f42bfaf7f23439771f, type: 3}
   mFont: {fileID: 0}
   mText: "\uC911\uAC04\uACE0\uC0AC : \uBAA8\uB4E0 \uAC8C\uC2DC\uAE00\uC911 \uC911\uAC04\uACE0\uC0AC\uAC00
-    \uD3EC\uD568\uB41C \uAC8C\uC2DC\uAE00\uB9CC \uD655\uC778\n[\uB124\uD2B8\uC6CC\uD06C]\uD504\uB85C\uC81D\uD2B8
-    : \uAC15\uC758 \uC774\uB984\uC774 \uB124\uD2B8\uC6CC\uD06C(\uC77C\uBD80 \uD3EC\uD568)\uC778
-    \uAC15\uC758\uC758 \"\uD504\uB85C\uC81D\uD2B8\" \uD0A4\uC6CC\uB4DC\uB9CC \uD655\uC778\n\n\uC6B0\uD074\uB9AD\uC73C\uB85C
+    \uD3EC\uD568\uB41C \uAC8C\uC2DC\uAE00\uB9CC \uD655\uC778\n[\uB124\uD2B8\uC6CC\uD06C]
+    \uD504\uB85C\uC81D\uD2B8 : \uAC15\uC758 \uC774\uB984\uC774 \uB124\uD2B8\uC6CC\uD06C(\uC77C\uBD80
+    \uD3EC\uD568)\uC778 \uAC15\uC758\uC758 \"\uD504\uB85C\uC81D\uD2B8\" \uD0A4\uC6CC\uB4DC\uB9CC
+    \uD655\uC778\n[\uD559\uACFC\uC774\uB984 \uB610\uB294 \uAC15\uC758 \uC774\uB984]
+    : \uD574\uB2F9 \uADF8\uB8F9\uC758 \uC804\uCCB4 \uACF5\uC9C0\uC0AC\uD56D \uC218\uC2E0\n\uC6B0\uD074\uB9AD\uC73C\uB85C
     \uB4F1\uB85D\uB41C \uD0A4\uC6CC\uB4DC\uB97C \uC0AD\uC81C\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   mFontSize: 16
   mFontStyle: 0
@@ -21394,7 +21396,7 @@ MonoBehaviour:
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: 0.7, g: 0.7, b: 0.7, a: 1}
   mSpacingX: 0
-  mSpacingY: 4
+  mSpacingY: 6
   mUseFloatSpacing: 0
   mFloatSpacingX: 0
   mFloatSpacingY: 0
@@ -24420,7 +24422,7 @@ MonoBehaviour:
   rawValue: 1
   direction: 2
   mInverted: 0
-  mSize: 0.51330066
+  mSize: 0.5146586
   mScroll: 0
   mDir: 2
 --- !u!65 &1182663129
@@ -33593,8 +33595,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 15, y: 98.28771, z: 0}
-  m_Center: {x: -7.5, y: 41.856144, z: 0}
+  m_Size: {x: 15, y: 98.52127, z: 0}
+  m_Center: {x: -7.5, y: 41.739365, z: 0}
 --- !u!114 &1756999534
 MonoBehaviour:
   m_ObjectHideFlags: 0
