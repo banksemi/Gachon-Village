@@ -2643,8 +2643,6 @@ GameObject:
   m_Component:
   - component: {fileID: 182770782}
   - component: {fileID: 182770785}
-  - component: {fileID: 182770784}
-  - component: {fileID: 182770783}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -2666,38 +2664,6 @@ Transform:
   m_Father: {fileID: 1652951619}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &182770783
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 182770781}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 254, y: 30, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &182770784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 182770781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b90fc8427bee38c478f5b2f6f0ae9580, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1741779406}
-  panelRegion: {fileID: 0}
-  scrollMomentum: {x: 0, y: 0, z: 0}
-  restrictWithinPanel: 1
-  contentRect: {fileID: 0}
-  dragEffect: 2
-  momentumAmount: 35
-  scale: {x: 1, y: 1, z: 0}
-  scrollWheelFactor: 0
 --- !u!114 &182770785
 MonoBehaviour:
   m_ObjectHideFlags: 0

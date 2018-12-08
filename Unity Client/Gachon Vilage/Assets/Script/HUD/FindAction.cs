@@ -4,13 +4,12 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 public class FindAction : MonoBehaviour {
-
-    private float dist;
+    
     private Character select_action = null;
     public UILabel label;
     // Use this for initialization
     void Start () {
-        InvokeRepeating("getClosestNPC", 0, 0.2f);
+        InvokeRepeating("getClosestNPC", 0, 0.3f);
 
     }
 	
@@ -34,19 +33,28 @@ public class FindAction : MonoBehaviour {
     void getClosestNPC()
     {
         select_action = null;
+        float dist = 0;
+        float last_dist = 0;
         foreach (Character tNPC in NetworkMain.gameObjects.Values)
         {
             if (tNPC.function == null) continue;
             Vector3 objectPos = tNPC.transform.position;
             dist = (objectPos - transform.position).sqrMagnitude;
-            if (dist < 140.0f)
+            if (dist < 140.0f && (select_action == null || last_dist > dist))
             {
+                last_dist = dist;
                 select_action = tNPC;
             }
         }
         if (select_action != null)
+        {
+            label.gameObject.SetActive(true);
             label.text = "'" + select_action.function + "' 선택 (F키)";
+        }
         else
+        {
+            label.gameObject.SetActive(false);
             label.text = "";
+        }
     }
 }
