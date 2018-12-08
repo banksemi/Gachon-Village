@@ -110,7 +110,17 @@ namespace MainServer
                         ESocket socket = GachonSocket.GetOnlineUser(ignore_id);
                         if (socket != null)
                         {
-                            if (User.Items.ContainsKey(socket)) User.Items[socket].ToChatMessage("[" + gclass.Title + "] 에 새로운 게시글이 등록되었습니다.", ChatType.System);
+                            if (User.Items.ContainsKey(socket))
+                            {
+                                User.Items[socket].ToChatMessage("[" + gclass.Title + "] 에 새로운 게시글이 등록되었습니다.", ChatType.System);
+                                if (postItem.posttype == BoardType.PostType.Homework)
+                                {
+                                    NetworkMessageList.AddHomework(socket,
+                                    gclass.Title,
+                                    postItem.Title,
+                                    postItem.e_time);
+                                }
+                            }
                         }
                     }
                 }

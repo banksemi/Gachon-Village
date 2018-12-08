@@ -98,11 +98,10 @@ namespace MainServer
             {
                 while (node.Read())
                 {
-                    JObject item = new JObject();
-                    item["type"] = NetworkProtocol.Homework_Add;
-                    item["title"] = "[" + GachonObjects.AllClass[node.GetString("course_no")].Title + "] "  + node.GetString("title");
-                    item["date"] = node.GetDateTime("end_date");
-                    socket.Send(item);
+                    NetworkMessageList.AddHomework(socket,
+                        GachonObjects.AllClass[node.GetString("course_no")].Title,
+                        node.GetString("title"),
+                        node.GetDateTime("end_date"));
                 }
             }
             NetworkMessageList.TipMessage(socket, "가천 빌리지에 오신것을 환영합니다!");
