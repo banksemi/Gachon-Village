@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
     public float movetime = 0;
     public bool moveok = false;
 
+    public UILabel DrawPoint;
     float q = 0;
     private BoxCollider col;
     void Start () {
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour {
             }
         }
         Run();
+        DrawPoint.text = "(" + (int)transform.position.x + ", " + (int)transform.position.z +")";
     }
     void Run()
     {

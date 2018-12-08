@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 65874513137807370}
   - component: {fileID: 114882411708092476}
   - component: {fileID: 114271898294439836}
+  - component: {fileID: 114690246738223910}
   m_Layer: 5
   m_Name: KeywordItem
   m_TagString: Untagged
@@ -148,6 +149,19 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &114690246738223910
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1571680919087542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f02842fa4878db54f9587ff4de7d9f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollView: {fileID: 0}
+  draggablePanel: {fileID: 0}
 --- !u!114 &114882411708092476
 MonoBehaviour:
   m_ObjectHideFlags: 1

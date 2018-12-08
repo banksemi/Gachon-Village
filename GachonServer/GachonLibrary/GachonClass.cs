@@ -73,28 +73,43 @@ namespace GachonLibrary
                 Initialization(Title, DateTime.Now.Year, key, "001");
             }
         }
+        /// <summary>
+        /// 해당 강의에 대한 객체를 반환해 줍니다.
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="key"></param>
+        /// <param name="Formal"></param>
+        /// <param name="want_insert_sql">데이터베이스에 새로운 강의를 등록해야 할 경우</param>
+        /// <returns></returns>
         public static GachonClass GetObject(string Title, string key, bool Formal = false, bool want_insert_sql = true)
         {
-            
+            // 이미 존재하는 강의일 경우에는 바로 그 강의객체를 찾아 리턴해줌
             if (GachonObjects.AllClass.ContainsKey(key)) return GachonObjects.AllClass[key];
             else
             {
+                //새로운 강의일 때 & Database에 Insert하기를 원하는 경우
                 if (want_insert_sql)
                 {
+                    //Databse의 Course Table에 Insert
                     MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "INSERT into course (no, type, name) values (?key, 'Class', ?tit)");
                     node["key"] = key;
                     node["tit"] = Title;
                     node.ExecuteNonQuery();                  
                 }
+                //존재하지 않는 강의이기 때문에 강의 이름, 고유번호를 가진 새로운 객체 생성 후 AllClass 리스트에 추가
                 GachonClass gachonClass = new GachonClass(Title, key, Formal);
                 GachonObjects.AllClass.Add(key, gachonClass);
                 return gachonClass;
             }
         }
+        /// <summary>
+        /// 해당 유저를 강의 수강생으로 연결해주는 과정입니다.
+        /// </summary>
+        /// <param name="gachonUser"></param>
         public void CombineTakeUser(GachonUser gachonUser)
         {
-            if (!gachonUser.Takes.Contains(this)) gachonUser.Takes.Add(this);
-            if (!Users.Contains(gachonUser)) Users.Add(gachonUser);
+            if (!gachonUser.Takes.Contains(this)) gachonUser.Takes.Add(this); //해당 강의를 유저가 수강하는 강의 목록에 추가
+            if (!Users.Contains(gachonUser)) Users.Add(gachonUser); //해당 강의에도 수강 학생 등록
         }
         private void Initialization(string Title, int year, string ID, string Sec_ID)
         {
@@ -122,8 +137,10 @@ namespace GachonLibrary
         {
             lock(Sites)
             {
+                // 해당 강의의 연결된 사이트 정보를 데이터베이스에 저장하고 싶다면
                 if (want_insert_sql)
                 {
+                    // Database Course Table에 있는 해당 강의를 찾아 사이트 정보를 Update 해줌 
                     MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "UPDATE course set "+ site.Type.ToLower() + " = ?site_id where no = ?key ");
                     node["site_id"] = site.ID;
                     node["key"] = Key;
@@ -151,12 +168,12 @@ namespace GachonLibrary
         /// <param name="postItem"></param>
         private void Site_NewPost(PostItem postItem)
         {
-            //여기에 SQL추가하기~ Insert
-
+            // Database Article 테이블에 새로운 post의 tuple을 삽입해줌
             MysqlNode node = new MysqlNode(GachonOption.MysqlOption,
                 "INSERT INTO article (course_no, board_name, no, category, publisher, title, date, content, url, sitetype, siteid)" +
                                     "VALUES (?course_no, ?board_name, ?no, ?posttype, ?publisher, ?title, ?date, ?content, ?url, ?sitetype, ?siteid) ");
 
+            //일반 게시글의 경우엔 강의번호, 게시판이름, 게시글번호 등의 attribute가 있음
             node["course_no"] = this.Key;
             node["board_name"] = postItem.board_name;
             node["no"] = postItem.no;
@@ -170,12 +187,15 @@ namespace GachonLibrary
             node["siteid"] = postItem.source.ID;
             node.ExecuteNonQuery();
 
+            // 게시판의 유형이 레포트 제출실일 경우 형식이 다름
             if (postItem.posttype == BoardType.PostType.Homework)
             {
+                // 과제에 관한 게시글은 따로 Homework Table에 저장한다.
                 MysqlNode hwnode = new MysqlNode(GachonOption.MysqlOption,
                  "INSERT INTO homework (course_no, article_no, start_date, end_date)" +
                                      "VALUES (?course_no, ?article_no, ?start_date, ?end_date) ");
 
+                // 레포트 게시글이기 때문에 마감기한도 추가
                 hwnode["course_no"] = this.Key;
                 hwnode["article_no"] = postItem.no;
                 hwnode["start_date"] = postItem.s_time;
@@ -203,6 +223,9 @@ namespace GachonLibrary
                 }
             }
         }
+        /// <summary>
+        /// 새로운 게시글이 있는지 확인합니다.
+        /// </summary>
         private void CheckNewPost_Thread()
         {
             while(true)

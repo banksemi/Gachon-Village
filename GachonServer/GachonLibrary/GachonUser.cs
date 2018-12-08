@@ -158,6 +158,7 @@ namespace GachonLibrary
                 {
                     if (!search_id.Read())
                     {
+                        // Account 테이블에 유저의 id값 저장
                         MysqlNode idnode = new MysqlNode(GachonOption.MysqlOption, "INSERT INTO account (id) VALUES (?id) ");
                         idnode["id"] = ID;
                         idnode.ExecuteNonQuery();
@@ -167,6 +168,7 @@ namespace GachonLibrary
                 if (First_Login) // 첫 접속시 수강중인 강의를 새로 등록
                 {
                     List<GachonClass> need_eclass_info = new List<GachonClass>();
+                    // 웹 페이지에서 강의정보를 읽어온다.
                     foreach (HtmlNode node in data.DocumentNode.SelectNodes("//div[@class='course_box']"))
                     {
                         JObject box = ParseSupport.CyberCampusTitle(node.SelectSingleNode(".//div[@class='course-title']/h3").InnerText);
@@ -174,19 +176,23 @@ namespace GachonLibrary
                         string key = (string)box["key"];
                         lock (GachonObjects.AllClass)
                         {
+                            
                             if (!GachonObjects.AllClass.ContainsKey(key))
                             {
+                                //새로운 GachonClass 객체를 생성
                                 GachonClass newclass = GachonClass.GetObject(title, key, true);
                                 JObject urlq = ParseSupport.UrlQueryParser(node.SelectSingleNode(".//a[@class='course_link']").Attributes["href"].Value);
+                                //사이버캠퍼스 site를 해당 강의에 연결
                                 newclass.CombineSite(new GachonCyberCampus(urlq["id"].ToString()));
                                 need_eclass_info.Add(newclass);
                             }
+                            // Database Takes_course 테이블에 해당유저에 해당 강의 수강정보를 넣음
                             MysqlNode insertNode = new MysqlNode(GachonOption.MysqlOption,
                                 "INSERT into takes_course(student_id, course_no) values (?id, ?course_no)");
                             insertNode["id"] = ID;
                             insertNode["course_no"] = key;
                             insertNode.ExecuteNonQuery();
-
+                            // 해당 유저에 강의를 연결                           
                             CombineClass(GachonObjects.AllClass[key]);
                         }
                     }
@@ -249,6 +255,7 @@ namespace GachonLibrary
         public void GetUserInfo()
         {
             if (LoginOk == false) return; // 마지막 로그인을 실패했을경우
+            // Account table에서 해당 유저의 정보가 있는지 확인
             MysqlNode node = new MysqlNode(GachonOption.MysqlOption, "SELECT * FROM account WHERE id = ?ID");  //수정? 
             node["ID"] = ID;
 
@@ -257,9 +264,9 @@ namespace GachonLibrary
                 node.Read();
                 StudentNumber = node.GetString("studentnumber");
 
+                    // 바로 Database에서 얻어온 tuple 정보로 학생 정보를 저장
                 if ((!String.IsNullOrEmpty(StudentNumber)) && Int32.Parse(StudentNumber)!=0)
-                {
-                    //StudentNumber = node.GetString("studentnumber");                 
+                {             
                     Name = node.GetString("name");
                     Email = node.GetString("email");
                     Phone = node.GetString("phone");
@@ -267,6 +274,7 @@ namespace GachonLibrary
                 }
                 else
                 {
+                    // DB에 없다면 사이버캠퍼스 홈페이지에 들어가서 유저의 정보를 읽어옴
                     HtmlDocument data = WebPacket.Web_GET_Html(Encoding.UTF8, cookie, "https://cyber.gachon.ac.kr/user/user_edit.php");
                     StudentNumber = data.DocumentNode.SelectSingleNode("//div[@class='felement fstatic']").InnerText;
                     Name = data.GetElementbyId("id_firstname").Attributes["value"].Value;
@@ -274,6 +282,7 @@ namespace GachonLibrary
                     Phone = data.GetElementbyId("id_phone2").Attributes["value"].Value;
                     Department = data.DocumentNode.SelectSingleNode("//p[@class='department']").InnerText;
 
+                    // 읽은 후 그 정보를 Databse account 테이블에 저장해줌
                     MysqlNode insert = new MysqlNode(GachonOption.MysqlOption, "UPDATE  account SET studentnumber = ?num, name = ?name, department = ?dept"+
                                                                                ",phone = ?phone , email = ?email where id = ?id ");
                     insert["id"] = ID;
@@ -353,12 +362,18 @@ namespace GachonLibrary
             string number = null;
             string name = null;
 
-            Regex number_regex = new Regex(@"([0-9]+)");
+            // input에서 숫자정보를 읽기 위함
+            Regex number_regex = new Regex(@"([0-9]+)"); 
+            // input에서 한글(이름) 정보를 읽기 위함
             Regex name_regex = new Regex(@"([가-힣]+)");
+
+            // 숫자 정보를 읽었을 때 일치하는게 있다면 number에 저장 (학번)
             Match match = number_regex.Match(input);
             if (match.Groups.Count > 1) number = match.Groups[1].Value;
+            // 이름 정보도 동일
             match = name_regex.Match(input);
             if (match.Groups.Count > 1) name = match.Groups[1].Value;
+
             string SQL = "SELECT id FROM account";
             MysqlNode node = new MysqlNode(GachonOption.MysqlOption, null);
             Dictionary<string, string> list = new Dictionary<string, string>();
@@ -393,6 +408,7 @@ namespace GachonLibrary
                 }
             }
 
+            // input에 값에 따라서 select 문장의 형을 다르게 함
             for(int i = 0; i < list.Count;i++)
             {
                 if (i == 0)
@@ -406,6 +422,7 @@ namespace GachonLibrary
             node.ChangeSql(SQL);
             node.ExecuteReader();
 
+            // ID를 database에서 검색을 한 후 id값을 반환해줌
             using (node.ExecuteReader())
             {
                 if (node.Read())

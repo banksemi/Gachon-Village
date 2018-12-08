@@ -24,12 +24,25 @@ namespace MainServer
             json["message"] = message;
             socket.Send(json);
         }
+
         public static void SendMessageResult(ESocket socket, bool result)
         {
             JObject json = new JObject();
             json["type"] = NetworkProtocol.SendPost;
             json["result"] = result;
             socket.Send(json);
+        }
+
+        /// <summary>
+        /// 유저에게 새로운 홈워크 정보를 알립니다.
+        /// </summary>
+        public static void AddHomework(ESocket socket, string course_name, string title, DateTime end)
+        {
+            JObject item = new JObject();
+            item["type"] = NetworkProtocol.Homework_Add;
+            item["title"] = "[" + course_name + "] " + title;
+            item["date"] = end;
+            socket.Send(item);
         }
     }
 }

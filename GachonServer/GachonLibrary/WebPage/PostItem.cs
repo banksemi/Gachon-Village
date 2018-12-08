@@ -66,6 +66,9 @@ namespace GachonLibrary
             this.posttype = board.type;
             this.board_name = board.name;
         }
+        /// <summary>
+        /// 게시글 내용을 30자 이내로 줄임 (미리보기)
+        /// </summary>
         public string Content_Briefly
         {
             get
