@@ -62,11 +62,11 @@ namespace GachonLibrary
                 {
                     while (node.Read())
                     {
-                        string find_menuName = node.GetString("board_name");
-                        int find_count = node.GetInt("no");
+                        string find_menuName = node.GetString("board_name"); //각 개시판에
+                        int find_count = node.GetInt("no"); // max(no)인 가장 최근 게시글 번호
                         foreach (BoardType board in boards)
                         {
-                            if(board.name == find_menuName)
+                            if(board.name == find_menuName) // 각 게시판마다 최근에 읽은 게시글 번호를 갱신해준다
                             {
                                 board.LastNo = find_count;
                                 break;
@@ -88,6 +88,7 @@ namespace GachonLibrary
                 {
                     for (int i = 0; i < items.Count; i++)
                     {
+                        //게시판이 마지막에 읽은 번호보다 최신의 게시글이 등록되면
                         if (board.LastNo < items[i].no)
                         {
                             if (GachonOption.VisitPage) GetPage(guser, items[i]); //아이템 정보를 읽어서 갱신
