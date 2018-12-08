@@ -106,9 +106,6 @@ namespace MainServer
             }
             NetworkMessageList.TipMessage(socket, "가천 빌리지에 오신것을 환영합니다!");
             ToChatMessage("가천 빌리지에 오신것을 환영합니다!", ChatType.Notice);
-            ToChatMessage("[컴퓨터 네트워크] 과목에 새로운 게시글이 등록되었습니다.", ChatType.System);
-            ToChatMessage("이승화 : 귓속말 테스트~~~", ChatType.Whisper);
-            ToChatMessage("위의 2개의 메세지는 디버그를 위해 출력되었습니다.", ChatType.Notice);
             int NewMessage = PostSystem.GetNewMessageCount(ID);
             if (NewMessage > 0)
             {
