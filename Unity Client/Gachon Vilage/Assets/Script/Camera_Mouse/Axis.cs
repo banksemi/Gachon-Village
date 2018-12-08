@@ -23,7 +23,10 @@ public class Axis : MonoBehaviour
         CameraVector = transform.parent;
         TargetRotation = Quaternion.Euler(Gap);
 
-        transform.rotation = TargetRotation;
+        Quaternion q = TargetRotation;
+        q.x = q.z = 0;
+
+        CameraVector.transform.rotation = q;
     }
 
     // Update is called once per frame
@@ -68,7 +71,7 @@ public class Axis : MonoBehaviour
             Gap.x += axis.y * RotationSpeed * -1;
             Gap.y += axis.x * RotationSpeed;
             // 카메라 회전범위 제한.
-            Gap.x = Mathf.Clamp(Gap.x, -5f, 85f);
+            Gap.x = Mathf.Clamp(Gap.x, 3f, 85f);
             // 회전 값을 변수에 저장.
             TargetRotation = Quaternion.Euler(Gap);
 
@@ -77,11 +80,6 @@ public class Axis : MonoBehaviour
             q.x = q.z = 0;
             CameraVector.transform.rotation = q;
            //Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
-        {
-
-            //Cursor.lockState = CursorLockMode.None;
         }
     }
 
