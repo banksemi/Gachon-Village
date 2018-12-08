@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+
+import java.io.File;
 
 public class MainActivity extends ESocketActivity {
 
@@ -50,6 +54,63 @@ public class MainActivity extends ESocketActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         SwitchView(Fragment_Home.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 메뉴 추가
+        getMenuInflater().inflate(R.menu.actionbar_actions,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                Logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    private void Logout()
+    {
+        //FileFunction.LoginRemove();
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists())
+        {
+            String[] children = appDir.list();
+            for(String s : children)
+            {
+                if (!s.equals("lib") && !s.equals("files"))
+                {
+                    Log.d("파일",new File(appDir,s).getAbsolutePath());
+                    deleteFile_Seunghwa(new File(appDir,s).getAbsolutePath());
+                }
+            }
+        }
+        ResetNetwork(); // 연결 소켓을 초기화
+        DBHelper.ResetMain(); // 열린 데이터베이스를 종료해줘야 다음번에 새로 가져옴
+        finishAffinity();
+    }
+    public static void deleteFile_Seunghwa(String path) {
+        File deleteFolder = new File(path);
+
+        if(deleteFolder.exists()){
+            if (deleteFolder.isDirectory()) {
+                File[] deleteFolderList = deleteFolder.listFiles();
+                for (int i = 0; i < deleteFolderList.length; i++) {
+                    if (deleteFolderList[i].isFile()) {
+                        deleteFolderList[i].delete();
+                    } else {
+                        deleteFile_Seunghwa(deleteFolderList[i].getPath());
+                    }
+                    deleteFolderList[i].delete();
+                }
+            }
+            deleteFolder.delete();
+        }
     }
     private void SwitchView(Class fragment)
     {

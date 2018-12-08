@@ -30,6 +30,10 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("SQL", "디비 목록 끝");
         return Mains.get(context);
     }
+    public static void ResetMain()
+    {
+        Mains.clear();
+    }
     private Context context;
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version)
     {

@@ -45,6 +45,7 @@ public class NetworkService  extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
         String Classname = null;
+        boolean Reset = false;
         try {
             Classname = intent.getExtras().getString("Class");
         }
