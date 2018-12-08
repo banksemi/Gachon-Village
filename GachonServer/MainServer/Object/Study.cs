@@ -170,7 +170,7 @@ namespace MainServer
                 user.ToChatMessage(key + "그룹에 가입 신청을 완료했습니다.", ChatType.Notice);
 
                 // 마스터에게 가입 메세지 전송
-                PostSystem.SendPost("그룹 가입 신청", "스터디 그룹\r\n[[-]" + key + "]\r\n\r\n가입 신청자\r\n" + user.name + " (" + user.gachonAccount.StudentNumber + ")\r\n\r\n새로운 회원가입 요청이 있습니다. 해당 그룹의 구역에서 가입 요청을 처리할 수 있습니다.", "admin_group", master);
+                PostSystem.SendPost("그룹 가입 신청", "스터디 그룹\r\n[" + key + "]\r\n\r\n가입 신청자\r\n" + user.name + " (" + user.gachonAccount.StudentNumber + ")\r\n\r\n새로운 회원가입 요청이 있습니다. 해당 그룹의 구역에서 가입 요청을 처리할 수 있습니다.", "admin_group", master);
             }
         }
         /// <summary>
@@ -397,14 +397,14 @@ namespace MainServer
                 NetworkMessageList.TipMessage(user.socket, "요청이 정상적으로 처리되었습니다.");
                 if ((bool)json["positive"]) // 긍정적인 요청
                 {
-                    PostSystem.SendPost("그룹에 가입되었습니다.", "스터디 그룹 [[-]" + name + "] 에 가입되었습니다!\r\n\r\n해당 그룹에서 많은 활동 부탁드립니다.", master, (string)json["id"]);
+                    PostSystem.SendPost("그룹에 가입되었습니다.", "스터디 그룹 [" + name + "] 에 가입되었습니다!\r\n\r\n해당 그룹에서 많은 활동 부탁드립니다.", master, (string)json["id"]);
                 }
                 else // 부정적인 요청 (탈퇴)
                 {
                     if (old_level == 1) // 이전에 해당 유저가 회원이었을 경우
-                        PostSystem.SendPost("그룹에서 강퇴되었습니다.", "스터디 그룹 [[-]" + name + "] 에서 강퇴되었음을 알립니다.", master, (string)json["id"]);
+                        PostSystem.SendPost("그룹에서 강퇴되었습니다.", "스터디 그룹 [" + name + "] 에서 강퇴되었음을 알립니다.", master, (string)json["id"]);
                     else // 이전에 해당 유저가 회원이 아니었던 경우
-                        PostSystem.SendPost("그룹 가입 신청이 거절되었습니다.", "스터디 그룹 [[-]" + name + "] 에서 가입 신청이 거절됨을 알립니다.", master, (string)json["id"]);
+                        PostSystem.SendPost("그룹 가입 신청이 거절되었습니다.", "스터디 그룹 [" + name + "] 에서 가입 신청이 거절됨을 알립니다.", master, (string)json["id"]);
                 }
             }
             else
