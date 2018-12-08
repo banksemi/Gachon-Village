@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-  
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="280dp"
+        android:layout_width="match_parent"
+        android:layout_height="282dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@color/subColor"
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/login_logo" />
@@ -28,14 +30,14 @@
         android:layout_margin="10dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="@color/subColor"
+        android:background="@color/colorAccent"
         android:fadingEdge="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.256" />
+        app:layout_constraintVertical_bias="0.36" />
 
 
     <ImageView
@@ -60,7 +62,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="소프트웨어 학과"
+        android:text="loading"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -81,7 +83,7 @@
         android:layout_marginEnd="88dp"
         android:layout_marginRight="88dp"
         android:layout_marginBottom="8dp"
-        android:text="(201735888)"
+        android:text="loading"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -101,7 +103,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="최은아"
+        android:text="loading"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:textStyle="bold"

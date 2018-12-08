@@ -22,7 +22,7 @@ public class MainActivity extends ESocketActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    SwitchView(Fragment_home.class);
+                    SwitchView(Fragment_Home.class);
                     return true;
                 case R.id.navigation_notifications:
                     SwitchView(Fragment_Notifications.class);
@@ -47,7 +47,7 @@ public class MainActivity extends ESocketActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        SwitchView(Fragment_home.class);
+        SwitchView(Fragment_Home.class);
     }
     private void SwitchView(Class fragment)
     {
