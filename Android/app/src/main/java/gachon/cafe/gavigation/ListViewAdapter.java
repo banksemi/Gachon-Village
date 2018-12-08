@@ -1,6 +1,7 @@
 package gachon.cafe.gavigation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -39,11 +41,10 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.post_message_icon) ;
         TextView titleTextView = (TextView) convertView.findViewById(R.id.post_title) ;
-        TextView descTextView = (TextView) convertView.findViewById(R.id.post_desc) ;
-        TextView dateTextView = (TextView) convertView.findViewById(R.id.post_sender) ;
-        TextView senderTextView = (TextView) convertView.findViewById(R.id.post_date) ;
+        TextView dateTextView = (TextView) convertView.findViewById(R.id.post_date) ;
+        TextView senderTextView = (TextView) convertView.findViewById(R.id.post_sender) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ListViewItem listViewItem = listViewItemList.get(position);
@@ -51,9 +52,28 @@ public class ListViewAdapter extends BaseAdapter {
         // 아이템 내 각 위젯에 데이터 반영
         iconImageView.setImageDrawable(listViewItem.getIcon());
         titleTextView.setText(listViewItem.getTitle());
-        descTextView.setText(listViewItem.getDesc());
         senderTextView.setText(listViewItem.getSenderStr());
         dateTextView.setText(listViewItem.getDateStr());
+
+        //버튼을 클릭헀을 때
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent 추가후 화면 전환하기
+              Intent intent = new Intent(context, MessageViewActivity.class);
+              intent.putExtra("no",((ListViewItem)getItem(pos)).getNo() );
+              context.startActivity(intent);
+
+            }
+        });
+
+
+
+
+
+
+
+
 
         return convertView;
     }
@@ -71,16 +91,15 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(Drawable icon, String title, String desc, String sender, String date) {
+    public void addItem(Drawable icon, int no, String title, String sender, String date) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
-        item.setDesc(desc);
         item.setSender(sender);
         item.setDate(date);
-
-        listViewItemList.add(item);
+        item.setNo(no);
+        listViewItemList.add(0,item);
     }
 
 }

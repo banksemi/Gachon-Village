@@ -156,7 +156,7 @@ namespace GachonLibrary
             //게시글의 제목과 내용을 읽어옵니다.
             HtmlDocument dom = guser.VisitPage(post.url);
             post.Title = ParseSupport.StringFromHtml(dom.DocumentNode.SelectSingleNode("//td[@class='tit']").InnerText);
-            post.Content = ParseSupport.StringFromHtml(dom.DocumentNode.SelectSingleNode("//td[contains(@class,'text')]").InnerText);
+            post.Content = ParseSupport.StringFromHtmlNode(dom.DocumentNode.SelectSingleNode("//td[contains(@class,'text')]"));
         }
     }
 }

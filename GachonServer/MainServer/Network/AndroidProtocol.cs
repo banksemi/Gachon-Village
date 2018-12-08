@@ -14,5 +14,7 @@ namespace MainServer
         public const int KeywordList = 1202; // 안드로이드 프로젝트 개발날짜
         public const int KeywordAdd = 1225; // 크리스마스
         public const int PostList = 1220; // 종강!!!!!!!!!!!!!!!!
+
+        public const int Info = 1208;
     }
 }

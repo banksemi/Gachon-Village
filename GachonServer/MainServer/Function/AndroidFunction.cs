@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SQL_Library;
 using NetworkLibrary;
 using Newtonsoft.Json.Linq;
+using GachonLibrary;
 namespace MainServer
 {
     class AndroidFunction
@@ -93,12 +94,49 @@ namespace MainServer
                 socket.Send(json);
             }
         }
-        public static void GetPostList(ESocket socket)
+        public static void GetPostList(ESocket socket, int no)
         {
             string id = GachonSocket.GetId(socket);
             if (id != null)
             {
-                PostSystem.GetPage(socket,id, 1);
+                MysqlNode mysqlNode = new MysqlNode(private_data.mysqlOption, "SELECT * FROM post_name where receiver=?id and no > ?no order by date");
+                mysqlNode["no"] = no;
+                mysqlNode["id"] = id;
+                JArray array = new JArray();
+                using (mysqlNode.ExecuteReader())
+                {
+                    while (mysqlNode.Read())
+                    {
+                        JObject item = new JObject();
+                        item["title"] = mysqlNode.GetString("title");
+                        item["content"] = mysqlNode.GetString("content");
+                        item["no"] = mysqlNode.GetInt("no");
+                        item["sender"] = mysqlNode.GetString("sender_name");
+                        item["sender_id"] = mysqlNode.GetString("sender");
+                        item["date"] = (mysqlNode.GetDateTime("date")).ToString("yyyy-MM-dd HH:mm:ss");
+                        array.Add(item);
+                    }
+                }
+
+                JObject json = new JObject();
+                json["type"] = AndroidProtocol.PostList;
+                json["items"] = array;
+                socket.Send(json);
+                return;
+            }
+        }
+
+        public static void ReturnInfo(ESocket socket)
+        {
+            string id = GachonSocket.GetId(socket);
+            if (id != null)
+            {
+                JObject json = new JObject();
+                json["type"] = AndroidProtocol.Info;
+                json["name"] = GachonObjects.AllUser[id].Name;
+                json["department"] = GachonObjects.AllUser[id].Department;
+                json["number"] = GachonObjects.AllUser[id].StudentNumber;
+                socket.Send(json);
             }
         }
     }

@@ -101,12 +101,12 @@ namespace MainServer
                 json["no"] = no;
                 json["sender"] = node.GetString("sender_name");
                 json["sender_id"] = node.GetString("sender");
+                json["content"] = string.Format("[000000]{0}[-]", json["content"]); // BBCode를 이용해 글씨가 검정색임을 나타낸다.
 
                 if (node.GetString("file") != null) // 스트링으로 null 체크
                 {
                     MysqlNode filenode = new MysqlNode(private_data.mysqlOption, "SELECT name FROM file WHERE file_no=?no");
                     filenode["no"] = node.GetInt("file");
-                    json["content"] = string.Format("[000000]{0}[-]", json["content"]);
                     using (filenode.ExecuteReader())
                     {
                         if (filenode.Read())
@@ -177,32 +177,25 @@ namespace MainServer
                 Node["file"] = file_no;
             else
                 Node["file"] = null;
-            Node.ExecuteNonQuery();
+            long result = Node.ExecuteInsertQuery();
 
-            JObject json = new JObject();
-            json["type"] = NetworkProtocol.PostAlarm;
-            json["title"] = title;
-            json["content"] = content;
-            json["sender"] = sender;
-            json["receiver"] = receiver;
-            json["date"] = date;
-            if (notice == true)
+            // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
+            ESocket socket = GachonSocket.GetOnlineUser(receiver);
+            if (socket != null)
             {
-                // 받는사람이 게임 또는 스마트폰을 통해 접속중인가
-                ESocket socket = GachonSocket.GetOnlineUser(receiver);
-                if (socket != null)
+                if (notice == true)
                 {
                     if (User.Items.ContainsKey(socket))
                     {
                         User.Items[socket].ToChatMessage("[우편함] 새로운 메세지가 도착했습니다.", ChatType.System);
+                        return;
                     }
-                    else
-                        socket.Send(json);
                 }
-                else
-                {
-                    AddQueue(receiver, json);
-                }
+                JObject json = new JObject();
+                json["type"] = NetworkProtocol.PostAlarm;
+                json["no"] = result;
+                socket.Send(json);
+
             }
         }
 
@@ -240,20 +233,20 @@ namespace MainServer
             }
         }
 
-        public static void SendPost(ESocket socket, JObject message)
+        public static bool SendPost(ESocket socket, JObject message)
         {
             // 유효성 검사
             string id = GachonSocket.GetId(socket);
             if (id == null)
             {
                 NetworkMessageList.TipMessage(socket, "로그인 권한을 얻을 수 없습니다. 다시 접속해주세요.");
-                return;
+                return false;
             }
             string title = ((string)message["title"]).Trim();
             if (string.IsNullOrEmpty(title))
             {
                 NetworkMessageList.TipMessage(socket, "우편 제목을 입력해주세요.");
-                return;
+                return false;
             }
             string content = ((string)message["content"]);
             if (string.IsNullOrEmpty(content))
@@ -264,20 +257,20 @@ namespace MainServer
             if (string.IsNullOrEmpty(receiver))
             {
                 NetworkMessageList.TipMessage(socket, "받을 사람을 입력해주세요.");
-                return;
+                return false;
             }
             string receiver_id = GachonLibrary.GachonUser.GetID(receiver);
             if (receiver_id == null)
             {
                 NetworkMessageList.TipMessage(socket, "데이터베이스에서 해당 유저를 찾을 수 없습니다. (가천빌리지에 한번이라도 로그인 해야함)");
-                return;
+                return false;
             }
             else if (receiver_id == "")
             {
                 NetworkMessageList.TipMessage(socket, "수신자가 중복으로 존재합니다. 이름 뿐만 아니라 학번 또는 아이디 정보를 입력하여 받는 사람을 정확히 지정해주세요.");
-                return;
+                return false;
             }
-            if (User.Items.ContainsKey(socket))
+            if (User.Items.ContainsKey(socket)) // 게임 접속 유저일경우
             {
                 User user = User.Items[socket];
                 int file_no = -1;
@@ -287,16 +280,18 @@ namespace MainServer
                     if (!user.HaveItem(file_no))
                     {
                         NetworkMessageList.TipMessage(socket, "해당 파일에 대한 권한이 없습니다. 인벤토리를 확인해주세요.");
-                        return;
+                        return false;
                     }
                 }
                 SendPost(title, content, id, receiver_id, true, file_no);
                 NetworkMessageList.TipMessage(socket, "우편을 성공적으로 전송하였습니다.");
-                GetPage(user, 1);
+                GetPage(user, 1); // 우편 리스트를 보며주는 UI로 연결
+                return true;
             }
-            else
+            else // 게임 유저가 아닐경우 (안드로이드)
             {
                 SendPost(title, content, id, receiver_id);
+                return true;
             }
         }
     }

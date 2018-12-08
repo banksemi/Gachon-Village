@@ -10,29 +10,12 @@ import java.util.Scanner;
 
 public class FileFunction {
     public static void LoginSave(String data) {
-        try {
-            Log.d("테스트2", "파일 여는중");
-            File file = new File("Gachon-Village");
-            if( !file.exists() ) {
-                file.mkdirs();
-            }
-            PrintWriter pw = new PrintWriter(ESocketActivity.path.getAbsolutePath() + "iddata.txt");
-            pw.write(data + "\r\n");
-            pw.flush();
-            pw.close();
-        } catch (Exception e) {
-            Log.d("테스트2", "에러" + e.getMessage());
-            e.printStackTrace();
-        }
+        Save("iddata.txt",data);
     }
 
     public static void LoginLoad() {
         try {
-            File file = new File(ESocketActivity.path.getAbsolutePath() + "iddata.txt");
-            Scanner sc = new Scanner(file);
-            String data = sc.nextLine();
-            sc.close();
-            String[] data2 = data.split(":");
+            String[] data2 = Load("iddata.txt").split(":");
             JSONObject json = new JSONObject();
             json.put("type", 1115);
             json.put("id", data2[0]);
@@ -45,6 +28,10 @@ public class FileFunction {
             e.printStackTrace();
 
         }
+    }
+    public static void LoginRemove()
+    {
+        Remove("iddata.txt");
     }
     private static void Save(String file, String data)
     {
@@ -73,6 +60,19 @@ public class FileFunction {
 
         }
         return null;
+    }
+    public static void Remove(String file2)
+    {
+        try {
+            File file = new File(ESocketActivity.path.getAbsolutePath() + file2);
+            file.delete();
+        }
+        catch (Exception e)
+        {
+            Log.d("테스트2", "2에러" + e.getMessage());
+            e.printStackTrace();
+
+        }
     }
     public static int NextNo()
     {

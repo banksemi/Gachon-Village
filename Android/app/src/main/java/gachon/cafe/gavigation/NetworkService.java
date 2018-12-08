@@ -16,10 +16,14 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NetworkService  extends Service {
     public static List<ESocketActivity> receivers = new ArrayList();
@@ -41,6 +45,7 @@ public class NetworkService  extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
         String Classname = null;
+        boolean Reset = false;
         try {
             Classname = intent.getExtras().getString("Class");
         }
@@ -106,7 +111,7 @@ public class NetworkService  extends Service {
                 .setContentTitle(Sender)
                 .setContentText(title);
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder)
-                .bigText(content);
+                .bigText(title + "\r\n\r\n" + content);
 
 
         builder.setStyle(style);
@@ -114,6 +119,20 @@ public class NetworkService  extends Service {
         NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         manager.notify(FileFunction.NextNo(),builder.build());
 
+    }
+    private void GetPost_Last()
+    {
+        try
+        {
+            JSONObject json2 = new JSONObject();
+            json2.put("type",1220);
+            json2.put("no",DBHelper.GetMain(this).getLastNo());
+            NetworkMain.Send(json2);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
     private void ReceiveMessage(JSONObject json)
     {
@@ -125,20 +144,41 @@ public class NetworkService  extends Service {
                     Toast.makeText(getApplicationContext(),json.getString("message"),Toast.LENGTH_SHORT).show();
                     break;
                 case 9: // 우편함 내용 실시간 알림
-                    Test(json.getString("title"),json.getString("content"),json.getString("sender"));
-                    Toast.makeText(getApplicationContext(),json.getString("title"),Toast.LENGTH_SHORT).show();
+                    // 새로운 우편이 도착함. 혹시 그동안 수신 못한 데이터가 있는지 요청
+                    GetPost_Last();
+                    //Test(json.getString("title"),json.getString("content"),json.getString("sender"));
+                    //Toast.makeText(getApplicationContext(),json.getString("title"),Toast.LENGTH_SHORT).show();
                     break;
                 case 1115: // 로그인
                     // 로그인에 성공했습니다!!
                     FileFunction.LoginSave(json.getString("data"));
                     Toast.makeText(getApplicationContext(),"로그인에 성공했습니다!!",Toast.LENGTH_SHORT).show();
+                    // 로그인했을때 최근 게시글이 있는지 요청
+                    GetPost_Last();
+
+                    break;
+                case 1220: // 메세지 수신
+                    JSONArray array = json.getJSONArray("items");
+                    for(int i = 0 ; i < array.length();i++)
+                    {
+                        JSONObject item = (JSONObject)array.get(i);
+                        int no = item.getInt("no");
+                        String title = item.getString("title");
+                        String content = item.getString("content");
+                        String sender = item.getString("sender");
+                        String sender_id = item.getString("sender_id");
+                        Date date = new SimpleDateFormat("Z yyyy-MM-dd HH:mm:ss", Locale.KOREA).parse("+0900 "+item.getString("date"));
+                        DBHelper.GetMain(this).AddData(no,title,content,sender,sender_id,date);
+                        Test(title,content,sender);
+                        //Toast.makeText(getApplicationContext(),title,Toast.LENGTH_SHORT).show();
+                        //AddItem(json.getJSONArray("items").getJSONObject(i));
+                    }
                     break;
 
             }
         }
         catch (Exception e)
-        {
-
+        {e.printStackTrace();
         }
         for(ESocketActivity item : receivers)
         {

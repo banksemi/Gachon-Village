@@ -11,34 +11,25 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Fragment_Notifications extends Fragment implements ReceiveFragment {
+    private View view = null;
     private ListViewAdapter adapter;
-    public void AddItem(String title, String content, String sender, String date)
+    public void AddItem(int no, String title, String sender, String date)
     {
-        ListView listview = getView().findViewById(R.id.post_listView);
-        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact),title,content, sender, date);
+        ListView listview = view.findViewById(R.id.post_listView);
+        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.contact), no, title, sender, date);
         listview.setAdapter(adapter);
     }
-    public void AddItem(JSONObject json)
-    {
-        try
-        {
-            Log.d("테스트3", json.toString());
-            AddItem(json.getString("title"), json.getString("content"), json.getString("sender"), json.getString("date"));
-        }
-        catch (Exception e)
-        {
-            Log.d("테스트3", e.getMessage());
-        }
-    }
     public Fragment_Notifications() {
-        NetworkMain.SendTypeMessage(1220);
-        // Required empty public constructor
     }
 
     @Override
@@ -58,10 +49,24 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
 
                 String titleStr =  item.getTitle();
-                String descStr = item.getDesc();
                 Drawable iconDrawable = item.getIcon();
             }
         });
+
+        Log.d("SQL", "로딩 완료");
+        DBHelper helper = DBHelper.GetMain(getActivity());
+
+        Log.d("SQL", "로딩 완료2");
+        List<Object[]> data = helper.getAllData();
+
+        Log.d("SQL", "로딩 완료");
+        this.view = view;
+        for(Object[] object : data)
+        {
+            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            date.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+            AddItem((int)object[0],(String)object[1],(String)object[3],date.format((Date)object[5]));
+        }
         return view;
     }
     @Override
@@ -70,10 +75,17 @@ public class Fragment_Notifications extends Fragment implements ReceiveFragment 
             int type = json.getInt("type");
             switch (type)
             {
-                case 11: // 그룹 정보
-                    for(int i = 0 ; i < json.getJSONArray("items").length();i++)
+                case 1220: // 그룹 정보
+
+                    JSONArray array = json.getJSONArray("items");
+                    for(int i = 0 ; i < array.length();i++) // 새로 들어온 자료에 대해서 리스트 추가
                     {
-                        AddItem(json.getJSONArray("items").getJSONObject(i));
+                        JSONObject item = (JSONObject)array.get(i);
+                        int no = item.getInt("no");
+                        String title = item.getString("title");
+                        String sender = item.getString("sender");
+                        Date date = new SimpleDateFormat("Z yyyy-MM-dd HH:mm:ss").parse("+0900 "+ item.getString("date"));
+                        AddItem(no, title, sender, date.toString());
                     }
                     break;
             }

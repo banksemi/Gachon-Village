@@ -29,6 +29,14 @@ public class ESocketActivity extends AppCompatActivity
         if (!NetworkService.receivers.contains(this))
             NetworkService.receivers.add(this);
     }
+    protected  void ResetNetwork()
+    {
+        // 소켓 연결을 재시도
+        Intent intent = new Intent(
+                getApplicationContext(),//현재제어권자
+                NetworkService.class); // 이동할 컴포넌트
+        startService(intent); // 서비스 시작
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
