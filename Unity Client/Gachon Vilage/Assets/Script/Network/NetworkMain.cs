@@ -18,6 +18,7 @@ public class NetworkMain : MonoBehaviour {
     public GameObject NewGameObject;
     public static int myNo;
     public static float MoveDeley = 0.1f;
+    private GameObject TipMessage_Last = null;
     public static void SendMessage(JObject json)
     {
         server.Send(json);
@@ -46,7 +47,10 @@ public class NetworkMain : MonoBehaviour {
 
     private void TipMessage(string Message)
     {
+        // 유니티는 연결된 객체가 삭제되면 자동으로 그 변수는 NULL로 지정됨.
+        if (TipMessage_Last != null) Destroy(TipMessage_Last);
         GameObject gameObject = Instantiate(TipMessageObject);
+        TipMessage_Last = gameObject;
         gameObject.transform.parent = GameObject.Find("TIPList").transform;
         gameObject.transform.localScale = new Vector3(1, 1, 1);
         UILabel label = gameObject.transform.GetChild(0).GetComponent<UILabel>();
