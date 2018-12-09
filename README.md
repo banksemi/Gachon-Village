@@ -21,10 +21,11 @@ So, The following table and view will be created.
 
 ## Server Start
 
-### 5. Open the file to /Gachon-Server/MainServer/private_data(git).cs
+### 5. Create the file to /Gachon-Server/MainServer/private_data(git).cs
 
-### 6. Please Enter your database setting.
+### 6. Please Enter your database setting. and Save it!
 <pre>
+using SQL_Library;
 namespace MainServer
 {
     class private_data
@@ -54,6 +55,7 @@ If the build succeeds, your network library will be connected to Unity because o
 However, if NGUI is not set, nothing will be visible.
 
 ### 11. Import your NGUI file.
+
 Run the NGUI file with the Unity running!
 [NGUI_Temp.zip](https://github.com/banksemi/Gachon-Village/files/2660174/NGUI_Temp.zip)
 

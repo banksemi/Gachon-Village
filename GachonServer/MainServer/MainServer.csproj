@@ -55,6 +55,7 @@
     <Compile Include="Function\NPC_Action.cs" />
     <Compile Include="GachonSocket.cs" />
     <Compile Include="Object\Vector4.cs" />
+    <Compile Include="private_data%28git%29.cs" />
     <Compile Include="System\FileSystem.cs" />
     <Compile Include="System\KeywordSystem.cs" />
     <Compile Include="Network\AndroidProtocol.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="Object\NPC.cs" />
     <Compile Include="Object\Study.cs" />
     <Compile Include="System\PostSystem.cs" />
-    <Compile Include="private_data%28git%29.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Object\User.cs" />
