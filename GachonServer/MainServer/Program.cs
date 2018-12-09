@@ -28,7 +28,7 @@ namespace MainServer
 
             Server server = new Server(1119);
             server.Connect += Server_Connect;
-            server.Receive += Server_Receive;
+            server.Receive += Server_Receive_Try;
             server.Exit += Server_Exit;
             server.FileInfoReceive += Server_FileInfoReceive;
             new System.Threading.Thread(UpdateThread).Start();
@@ -67,8 +67,19 @@ namespace MainServer
                 User.Items[socket].Dispose();
             }
         }
+        private static void Server_Receive_Try(ESocket socket, JObject Message)
+        {
+            try
+            {
+                Server_Receive(socket, Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message + "\r\n" + e.StackTrace);
+            }
+        }
 
-        private static void Server_Receive(ESocket socket, Newtonsoft.Json.Linq.JObject Message)
+        private static void Server_Receive(ESocket socket, JObject Message)
         {
             if ((int)Message["type"] >= 1000)
             {
