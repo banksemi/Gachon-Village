@@ -174,6 +174,7 @@ namespace GachonLibrary
                         JObject box = ParseSupport.CyberCampusTitle(node.SelectSingleNode(".//div[@class='course-title']/h3").InnerText);
                         string title = (string)box["title"];
                         string key = (string)box["key"];
+                        if (string.IsNullOrEmpty(title)) continue;
                         lock (GachonObjects.AllClass)
                         {
                             
