@@ -185,7 +185,8 @@ namespace MainServer
         /// </summary>
         /// <param name="no">MYSQL에 등록된 파일 번호입니다</param>
         /// <param name="user_path">해당 클라이언트에 저장될 경로입니다.</param>
-        public bool DownloadItem(int no, string user_path)
+        /// <param name="open">클라이언트가 다운로드 완료시 파일 자동 오픈을 요청했는지 여부입니다.</param>
+        public bool DownloadItem(int no, string user_path, bool open)
         {
             // 인벤토리에 해당 파일이 존재하는지 확인
             MysqlNode node = new MysqlNode(private_data.mysqlOption, "SELECT * FROM inventory WHERE student_id=?id AND file_no=?no");
@@ -209,6 +210,7 @@ namespace MainServer
                     NServerFile file = new NServerFile(socket,node.GetString("path"));
                     JObject json = new JObject();
                     json["path"] = user_path;
+                    json["open"] = open; // 유저가 파일 열기를 눌렀는 지 여부로 반환해준다.
                     socket.SendFile(json, file);
                     return true;
                 }

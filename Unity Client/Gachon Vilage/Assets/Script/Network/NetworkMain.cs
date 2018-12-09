@@ -41,7 +41,17 @@ public class NetworkMain : MonoBehaviour {
 
     private void Server_FileInfoReceive(ESocket socket, JObject Message, NetworkFile file)
     {
+        // 파일에 대해 진행바 딜리게이트 연결
         SocketFile.NewFile(file);
+
+        if ((bool)Message["open"]) // 내가 파일 오픈을 요청했는지 여부가 담겨있다.
+        {
+            // 성공적으로 파일을 받았을 경우 실행되는 이벤트
+            file.Success += delegate (NetworkFile files)
+            {
+                System.Diagnostics.Process.Start(files.Path);
+            };
+        }
         file.Accept((string)Message["path"]);
     }
 

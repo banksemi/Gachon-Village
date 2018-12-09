@@ -22,7 +22,7 @@ public class FileMenu : MonoBehaviour {
         json["no"] = no;
         NetworkMain.SendMessage(json);
     }
-    public void Save(string path = null)
+    public void Save(string path = null, bool open = false)
     {
         if (path == null)
         {
@@ -47,10 +47,12 @@ public class FileMenu : MonoBehaviour {
         json["type"] = NetworkProtocol.File_Download;
         json["no"] = no;
         json["path"] = path;
+        json["open"] = open;
         NetworkMain.SendMessage(json);
     }
     public void SaveAs()
     {
+        // IME를 꺼주는 이유 : 한글 입력상태일때 활성 윈도우가 바뀌면 플레이어 이동 키 입력이 안되기때문에
         Input.imeCompositionMode = IMECompositionMode.Auto;
         FileItem item = Preset.objects.InventoryWindow.Items[no];
         string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Gachon-Files\\";
@@ -68,5 +70,9 @@ public class FileMenu : MonoBehaviour {
             Save(path);
             gameObject.SetActive(false);
         });
+    }
+    public void Open()
+    {
+        Save(null, true);
     }
 }

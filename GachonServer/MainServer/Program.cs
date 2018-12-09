@@ -148,7 +148,7 @@ namespace MainServer
                         User.Items[socket].RemoveItem((int)Message["no"]);
                         break;
                     case NetworkProtocol.File_Download:
-                        User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"]);
+                        User.Items[socket].DownloadItem((int)Message["no"], (string)Message["path"], (bool)Message["open"]);
                         break;
                     case NetworkProtocol.Study_SignUp:
                         Study.Items[(string)Message["name"]].SignUpRequest(User.Items[socket]);
