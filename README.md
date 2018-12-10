@@ -15,6 +15,13 @@ Welcome our virtual world which contains gachon life!
 ### 3. Create Mysql Database (gachon_village).
 Please set the encoding setting to <code>utf8 -- UTF-8 Unicode</code>.
 
+If it is MYSQL 5.6 or MariaDB 10.1 or higher version, <br>
+Modify my.cnf because MYSQL doesn't default value about Not Null attribute.
+<pre>
+[mysqld] 
+sql_mode=NO_ENGINE_SUBSTITUTION
+</pre>
+
 ### 4. Run gachon_village.sql to your database!
 So, The following table and view will be created.
 ![image](https://user-images.githubusercontent.com/17453822/49692299-61d9d000-fb9a-11e8-8f0f-648de9bed255.png)
