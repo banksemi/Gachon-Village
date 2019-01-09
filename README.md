@@ -63,8 +63,7 @@ However, if NGUI is not set, nothing will be visible.
 
 ### 11. Import your NGUI file.
 
-Run the NGUI file with the Unity running!
-[NGUI_Temp.zip](https://github.com/banksemi/Gachon-Village/files/2660174/NGUI_Temp.zip)
+Run the NGUI file with the Unity running! (Version 3.11)
 
 ![image](https://user-images.githubusercontent.com/17453822/49692397-81bec300-fb9d-11e8-9525-ac8a55133bf3.png)
 
