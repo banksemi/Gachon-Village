@@ -2,6 +2,10 @@
 Welcome our virtual world which contains gachon life!
 
 
+**YouTube**
+
+[![Video](http://img.youtube.com/vi/WUVoYc3FhDw/0.jpg)](https://www.youtube.com/watch?v=WUVoYc3FhDw)
+
 # How to build
 
 ### 1. Unzip to the appropriate path.
